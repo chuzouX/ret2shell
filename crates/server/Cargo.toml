@@ -1,5 +1,5 @@
 [package]
-description = "Server for Ret2Shell - A feature-riches CTF challenge platform."
+description = "Backend server for Rhythm Arena."
 name        = "r2s-server"
 
 authors      = { workspace = true }
@@ -52,11 +52,8 @@ tracing-subscriber = { workspace = true }
 
 # local crates
 r2s-auditor  = { workspace = true }
-r2s-bucket   = { workspace = true }
 r2s-cache    = { workspace = true }
 r2s-captcha  = { workspace = true }
-r2s-checker  = { workspace = true }
-r2s-cluster  = { workspace = true }
 r2s-config   = { workspace = true }
 r2s-database = { workspace = true }
 r2s-email    = { workspace = true }

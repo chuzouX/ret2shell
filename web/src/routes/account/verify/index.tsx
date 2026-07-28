@@ -1,4 +1,4 @@
-import { useVerifyEmailMutation } from "@api/account";
+﻿import { useVerifyEmailMutation } from "@api/account";
 import Spin from "@assets/animates/spin";
 import { useNavigate, useSearchParams } from "@solidjs/router";
 import { Title } from "@storage/header";
@@ -16,7 +16,7 @@ export default function () {
       navigate("/account/settings", { replace: true });
     },
     onError: () => {
-      navigate("/sigtrap/412", { replace: true });
+      navigate("/error/412", { replace: true });
     },
   });
   onMount(() => {
@@ -29,7 +29,7 @@ export default function () {
           description: t("account.verify.status.broken.title"),
           duration: 5000,
         });
-        navigate("/sigtrap/418", { replace: true });
+        navigate("/error/418", { replace: true });
       }
     }, 1000);
   });

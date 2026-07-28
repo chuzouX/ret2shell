@@ -6,7 +6,7 @@ use ret2shell::oauth::cas;
 /// CAS login URL
 const AUTH_SERVER_URL = "https://ids.example.edu/authserver/serviceValidate";
 /// CAS callback URL, please replace the origin with your own
-const ORIGINAL_SERVER_URL = "https://ctf.ret.sh.cn/account/oauth/";
+const ORIGINAL_SERVER_URL = "https://rhythm.example.com/account/oauth/";
 
 /// Login with CAS ticket
 ///

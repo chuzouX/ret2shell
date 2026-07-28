@@ -104,30 +104,6 @@ false
 {{- end -}}
 {{- end -}}
 
-{{- define "ret2shell.registryServer" -}}
-{{- if eq .Values.registry.mode "internal" -}}
-{{ printf "%s:%d" (include "ret2shell.registryName" .) (int .Values.registry.service.port) }}
-{{- else -}}
-{{ .Values.registry.external.server }}
-{{- end -}}
-{{- end -}}
-
-{{- define "ret2shell.registryExternal" -}}
-{{- if eq .Values.registry.mode "internal" -}}
-{{ .Values.registry.externalAccess.host }}
-{{- else -}}
-{{ .Values.registry.external.external }}
-{{- end -}}
-{{- end -}}
-
-{{- define "ret2shell.registryInsecure" -}}
-{{- if eq .Values.registry.mode "internal" -}}
-{{- if .Values.registry.externalAccess.insecure -}}true{{- else -}}false{{- end -}}
-{{- else -}}
-{{- if .Values.registry.external.insecure -}}true{{- else -}}false{{- end -}}
-{{- end -}}
-{{- end -}}
-
 {{- define "ret2shell.victoriaUrl" -}}
 {{- if eq .Values.victoriaLogs.mode "internal" -}}
 {{ printf "http://%s:%d" (include "ret2shell.victoriaLogsName" .) (int .Values.victoriaLogs.service.port) }}
@@ -145,9 +121,6 @@ buffer_time = {{ .Values.platform.config.auth.bufferTime }}
 expires_time = {{ .Values.platform.config.auth.expiresTime }}
 signing_key = {{ .Values.platform.config.auth.signingKey | quote }}
 
-[bucket]
-path = '/var/lib/ret2shell/bucket'
-
 [cache]
 url = {{ include "ret2shell.cacheUrl" . | quote }}
 
@@ -155,34 +128,6 @@ url = {{ include "ret2shell.cacheUrl" . | quote }}
 enabled = {{ .Values.platform.config.captcha.enabled }}
 difficulty = {{ .Values.platform.config.captcha.difficulty }}
 validator = {{ .Values.platform.config.captcha.validator | quote }}
-
-[cluster]
-enabled = {{ .Values.platform.config.cluster.enabled }}
-try_default = true
-auto_infer = false
-node_selector = {{ .Values.platform.config.cluster.nodeSelector | quote }}
-enable_capture = {{ .Values.platform.config.cluster.enableCapture }}
-capture_directory = '/var/lib/ret2shell/captures'
-{{- if .Values.platform.config.cluster.traffic }}
-traffic = {{ .Values.platform.config.cluster.traffic | quote }}
-{{- end }}
-{{- if .Values.platform.config.cluster.lifecycle }}
-lifecycle = {{ .Values.platform.config.cluster.lifecycle | quote }}
-{{- end }}
-{{- if ne .Values.registry.mode "disabled" }}
-
-[cluster.registry]
-enabled = true
-server = {{ include "ret2shell.registryServer" . | quote }}
-external = {{ include "ret2shell.registryExternal" . | quote }}
-insecure = {{ include "ret2shell.registryInsecure" . }}
-{{- if .Values.registry.external.username }}
-username = {{ .Values.registry.external.username | quote }}
-{{- end }}
-{{- if .Values.registry.external.password }}
-password = {{ .Values.registry.external.password | quote }}
-{{- end }}
-{{- end }}
 
 [database]
 host = {{ include "ret2shell.databaseHost" . | quote }}
@@ -261,10 +206,6 @@ hide_maker = {{ .Values.platform.config.server.hideMaker }}
 {{- if .Values.platform.config.server.highlightBanner }}
 highlight_banner = {{ .Values.platform.config.server.highlightBanner | quote }}
 {{- end }}
-{{- if gt (int .Values.platform.config.server.zenGame) 0 }}
-zen_game = {{ .Values.platform.config.server.zenGame }}
-{{- end }}
-
 [server.rate_limit]
 burst_limit = {{ .Values.platform.config.server.rateLimit.burstLimit }}
 burst_restore_rate = {{ .Values.platform.config.server.rateLimit.burstRestoreRate }}

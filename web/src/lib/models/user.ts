@@ -7,7 +7,7 @@ export enum Permission {
   Calendar = 2,
   Wiki = 3,
   Bulletin = 4,
-  Game = 5,
+  Tournament = 5,
   Host = 6,
   User = 7,
   Statistics = 8,
@@ -41,8 +41,8 @@ export function permissionToString(permission: Permission): string {
       return t("account.permission.wiki");
     case Permission.Bulletin:
       return t("account.permission.bulletin");
-    case Permission.Game:
-      return t("account.permission.game");
+    case Permission.Tournament:
+      return t("account.permission.tournament");
     case Permission.Host:
       return t("account.permission.host");
     case Permission.User:
@@ -66,8 +66,8 @@ export function permissionToIcon(permission: Permission): string {
       return "icon-[fluent--book-number-20-filled] w-5 h-5 text-info";
     case Permission.Bulletin:
       return "icon-[fluent--megaphone-20-filled] w-5 h-5 text-info";
-    case Permission.Game:
-      return "icon-[fluent--flag-20-filled] w-5 h-5 text-info";
+    case Permission.Tournament:
+      return "icon-[fluent--trophy-20-filled] w-5 h-5 text-info";
     case Permission.Host:
       return "icon-[fluent--desktop-20-filled] w-5 h-5 text-info";
     case Permission.User:

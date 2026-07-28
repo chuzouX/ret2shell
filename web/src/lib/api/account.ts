@@ -586,6 +586,33 @@ export async function bindWithOAuth(query: string) {
   return await safeJson(api.post(`${api_root}/account/oauth/bind${query}`).json());
 }
 
+export type PhiraBindRequest = {
+  email: string;
+  password: string;
+};
+
+export async function bindPhira(req: PhiraBindRequest) {
+  return await safeJson(api.post(`${api_root}/account/phira`, { json: req }).json());
+}
+
+export function useBindPhiraMutation(props: { onSuccess?: () => void; onError?: (err: Error) => void } = {}) {
+  return useMutation(() => ({
+    mutationFn: bindPhira,
+    onSuccess: () => {
+      addToast({
+        level: "success",
+        description: t("account.phira.status.success"),
+        duration: 5000,
+      });
+      props.onSuccess?.();
+    },
+    onError: (err: Error) => {
+      handleHttpError(err, t("account.phira.errors.bind.title"));
+      props.onError?.(err);
+    },
+  }));
+}
+
 export function useBindWithOAuthMutation(props: { onSuccess?: () => void; onError?: (err: Error) => void } = {}) {
   return useMutation(() => ({
     mutationFn: bindWithOAuth,

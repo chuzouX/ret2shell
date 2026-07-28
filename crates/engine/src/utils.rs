@@ -1,5 +1,5 @@
 //! Diagnostics util function for rune scripts
-//! Originally from https://github.com/ElaBosak233/cdsctf/blob/main/crates/checker
+//! Adapted from the upstream cdsctf Rune implementation.
 
 use rune::{
   Sources,

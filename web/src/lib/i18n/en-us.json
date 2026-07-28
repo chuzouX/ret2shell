@@ -249,10 +249,11 @@
       "accept": {
         "title": "Accept"
       }
-    }
+    },
+    "updated": "Rhythm Arena has received an incompatible update and this page has been reloaded. You may need to sign in again."
   },
   "platform": {
-    "name": "Ret 2 Shell",
+    "name": "Rhythm Arena",
     "subject": "Return-oriented programming built the world",
     "cookiePolicy": "We do not use any cookies to track you.",
     "updated": "Ret 2 Shell has done an incompatible update and this page has been reloaded to apply the update. Please note that you need to log in again.",
@@ -427,7 +428,7 @@
     }
   },
   "wiki": {
-    "title": "Wiki",
+    "title": "Charts",
     "placeholder": "What would you like to read?",
     "form": {
       "title": {
@@ -471,42 +472,6 @@
     },
     "unknownPublisher": "Anonymous"
   },
-  "training": {
-    "title": "Training",
-    "list": "Training playgrounds",
-    "empty": "No playgrounds yet",
-    "noArchives": "No archived games yet",
-    "placeholder": "Start today's training!",
-    "openForever": "Open forever",
-    "errors": {
-      "fetchList": {
-        "title": "Failed to fetch training playgrounds"
-      },
-      "fetchArchives": {
-        "title": "Failed to fetch archived games"
-      },
-      "fetchTraining": {
-        "title": "Failed to fetch training playground"
-      },
-      "gameNotArchived": {
-        "title": "This game is not archived",
-        "message": "Please be patient"
-      }
-    },
-    "form": {
-      "name": {
-        "label": "Playground title",
-        "placeholder": "Please enter a title",
-        "required": "Title cannot be empty"
-      },
-      "brief": {
-        "label": "Playground brief",
-        "placeholder": "Please enter a brief",
-        "required": "Brief cannot be empty"
-      }
-    },
-    "gotoGamePage": "View game information"
-  },
   "calendar": {
     "day": {
       "sun": "Sun",
@@ -536,937 +501,6 @@
     },
     "startAt": "Start at",
     "endAt": "End at"
-  },
-  "game": {
-    "title": "Game",
-    "list": "Game list",
-    "noGameHosted": "No games hosted yet",
-    "otherGames": "Other games",
-    "noOtherGames": "No other games",
-    "pending": "Not started",
-    "notStarted": "Not started yet, please wait",
-    "started": "In progress",
-    "start": "Start",
-    "ended": "Ended",
-    "end": "End",
-    "archived": "Archived",
-    "archive": "Archive",
-    "welcome": "Welcome",
-    "join": "Join game",
-    "introduction": {
-      "title": "Game introduction",
-      "empty": "The organizer is lazy, nothing is here",
-      "form": {
-        "content": {
-          "label": "Content",
-          "placeholder": "Please enter content",
-          "required": "Content cannot be empty"
-        }
-      }
-    },
-    "rules": {
-      "title": "Game rules"
-    },
-    "scoreboard": {
-      "title": "Scoreboard",
-      "empty": "No participating teams yet",
-      "selectInstitute": "Select an institute...",
-      "currentPeriod": "Current time period",
-      "errors": {
-        "fetchScoreboard": {
-          "title": "Failed to fetch scoreboard"
-        }
-      }
-    },
-    "writeups": {
-      "title": "Write-ups",
-      "empty": "No write-ups available"
-    },
-    "statistics": {
-      "title": "Statistics",
-      "errors": {
-        "fetch": "Failed to fetch game statistics",
-        "export": "Failed to export game statistics"
-      },
-      "selectInstitute": "Select an institute...",
-      "submission": "Submission stats",
-      "challengeStats": "Challenge solving stats",
-      "players": "Player statistics",
-      "institutePlayers": "Institute player stats",
-      "others": "Others",
-      "teams": "Team statistics",
-      "instituteTeams": "Institute team stats"
-    },
-    "monitor": {
-      "title": "Event monitor",
-      "empty": "No audit logs",
-      "status": {
-        "pending": {
-          "title": "Waiting for review"
-        },
-        "misjudged": {
-          "title": "Misjudgment"
-        },
-        "confirmed": {
-          "title": "Confirmed"
-        }
-      },
-      "errors": {
-        "fetchAudit": {
-          "title": "Failed to fetch audit logs"
-        },
-        "fetchSubmission": {
-          "title": "Failed to fetch submissions"
-        }
-      },
-      "autoRefreshEnabled": "Auto refresh enabled",
-      "submissions": "Submissions",
-      "audits": "Audit events"
-    },
-    "git": {
-      "title": "Challenge repository",
-      "status": {
-        "readonly": {
-          "message": "When the game is visible to players, the repository is in read-only mode and local changes cannot be pushed or branches merged. Please use the web interface to manage game data."
-        },
-        "writable": {
-          "message": "The game has been hidden, and the repository here can be written to via a Git client. Please note that directly operating on the original data may cause damage to the game data. Please make sure you know what you are doing. After pushing local changes, the platform will automatically perform database synchronization and availability checks. Please wait for the synchronization to complete before performing other operations."
-        }
-      },
-      "cloneTip": "Using the following link, you can clone the game data to your local machine. The account used to access the repository should be consistent with the platform account, which makes it easier to back up and migrate later. Please note that user and team information is not included here.",
-      "listTip": "This area is for viewing the basic file structure and commit history. Due to the potentially large size of the repository, organizing the Git database may take a long time.",
-      "errors": {
-        "fetchRepo": {
-          "title": "Failed to fetch repository"
-        }
-      }
-    },
-    "form": {
-      "title": "Edit Information",
-      "name": {
-        "label": "Game name",
-        "placeholder": "Please enter the game name",
-        "required": "Game name cannot be empty"
-      },
-      "brief": {
-        "label": "Game brief",
-        "placeholder": "Please enter a summary",
-        "required": "Summary cannot be empty"
-      },
-      "startAt": {
-        "label": "Start time",
-        "placeholder": "Please select a start time",
-        "required": "Start time cannot be empty",
-        "canNotLaterThanEnd": "Start time cannot be later than end time"
-      },
-      "endAt": {
-        "label": "End time",
-        "placeholder": "Please select an end time",
-        "required": "End time cannot be empty",
-        "canNotEarlierThanStart": "End time cannot be earlier than start time"
-      },
-      "registerAt": {
-        "label": "Registration time",
-        "placeholder": "Please select the registration time",
-        "required": "Registration time cannot be empty",
-        "canNotLaterThanEnd": "Registration time cannot be later than the end time"
-      },
-      "archiveAt": {
-        "label": "Archive time",
-        "placeholder": "Please select the archive time",
-        "required": "Archive time cannot be empty",
-        "canNotEarlierThanStart": "Archive time cannot be earlier than the start time"
-      },
-      "weight": {
-        "label": "Weight"
-      },
-      "misc": {
-        "label": "Misc settings"
-      },
-      "awardRate": {
-        "label": "Extra reward score ratio",
-        "firstBlood": "First blood reward score ratio",
-        "secondBlood": "Second blood reward score ratio",
-        "thirdBlood": "Third Blood Reward Ratio",
-        "placeholder": "Please enter the reward ratio",
-        "required": "Reward ratio cannot be empty",
-        "mustBeNumber": "Reward ratio must be a number",
-        "mustBePositiveNumber": "Reward ratio must be a positive number"
-      },
-      "hidden": {
-        "label": "Hidden",
-        "placeholder": "Whether to hide the game",
-        "message": "After hiding, only administrators can see this game"
-      },
-      "frozen": {
-        "label": "Frozen",
-        "placeholder": "Whether to freeze the game",
-        "message": "After freezing, players will temporarily be unable to access the challenges"
-      },
-      "offline": {
-        "label": "Enable offline game features"
-      },
-      "teamSize": {
-        "label": "Team size",
-        "placeholder": "Enter team size, 0 for unlimited",
-        "required": "Team size cannot be empty",
-        "mustBeNumber": "Team size must be a number",
-        "mustBePositiveNumber": "Team size must be a positive number",
-        "minimum": "Team size cannot be less than 0",
-        "maximum": "Team size cannot be more than 99"
-      },
-      "envLimit": {
-        "label": "Env limit",
-        "placeholder": "Leave empty to fall back to team size (1 if unlimited)",
-        "minimum": "Env limit cannot be less than 1",
-        "maximum": "Env limit cannot be more than 99"
-      },
-      "enableTeamAudit": {
-        "label": "Enable team audit",
-        "placeholder": "Whether to enable team audit",
-        "message": "After enabling, teams need to be reviewed before joining"
-      },
-      "canRegisterAfterStart": {
-        "label": "Allow joining after game starts",
-        "placeholder": "Whether to allow joining after game starts",
-        "message": "After checking it, player can join the game after it starts"
-      },
-      "introduction": {
-        "label": "Game introduction",
-        "required": "Game introduction cannot be empty"
-      },
-      "enableHammer": {
-        "label": "Enable hammer",
-        "placeholder": "Whether to enable hammer",
-        "message": "After enabling, participants can communicate with the challenge setter through the hammer feedback system"
-      },
-      "outerHammerUrl": {
-        "label": "Outer feedback URL",
-        "placeholder": "Please input the outer feedback URL",
-        "message": "If the hammer feedback is not enabled, the platform will guide the player to an external feedback system through the link here."
-      },
-      "outerHammerLabel": {
-        "label": "Outer feedback label",
-        "placeholder": "Please input the outer feedback label",
-        "message": "If the hammer feedback is not enabled, the platform will guide the player to the external feedback system based on the label here."
-      }
-    },
-    "admin": {
-      "title": "Management",
-      "gotoChallenges": "Go to challenge management"
-    },
-    "administrator": {
-      "errors": {
-        "fetchList": {
-          "title": "Failed to fetch administrator list"
-        },
-        "noPermission": {
-          "title": "No basic permissions"
-        },
-        "alreadyAdded": {
-          "title": "Already added"
-        }
-      },
-      "title": "Game admins",
-      "form": {
-        "search": {
-          "title": "Add game admin",
-          "placeholder": "Search by account or email"
-        },
-        "confirm": {
-          "message": "Confirm adding {{name}} as a game administrator?"
-        }
-      },
-      "empty": "No administrators, please contact devops to add manually"
-    },
-    "registerNotStarted": "Registration is not open yet, please wait patiently",
-    "registerEnded": "Registration has ended, please wait for the game to be archived",
-    "policies": {
-      "title": "Game policies",
-      "form": {
-        "challenge": {
-          "showAnswer": {
-            "label": "Allow viewing write-ups after archiving"
-          },
-          "showHints": {
-            "label": "Allow free access to hints after archiving"
-          }
-        }
-      }
-    },
-    "timeline": {
-      "title": "Time periods",
-      "form": {
-        "label": {
-          "label": "Time period label",
-          "required": "Time period label cannot be empty",
-          "placeholder": "Please enter a time period label"
-        },
-        "startAt": {
-          "required": "Start time of time period cannot be empty"
-        },
-        "endAt": {
-          "required": "End time cannot be empty"
-        },
-        "startEndTime": {
-          "label": "Start and end time",
-          "placeholder": "Please select start and end time"
-        }
-      },
-      "empty": "No defined time periods",
-      "deleteWarning": "Are you sure you want to delete this time period? Deleting it will not affect the current challenge's time control."
-    },
-    "hammer": {
-      "title": "Hammers",
-      "errors": {
-        "fetchSessions": {
-          "title": "Failed to fetch chat sessions"
-        }
-      },
-      "empty": "No chats yet",
-      "status": {
-        "adminUnread": {
-          "title": "Admin unread"
-        },
-        "playerUnread": {
-          "title": "Player unread"
-        },
-        "notReply": {
-          "title": "Read but no reply"
-        }
-      },
-      "placeholder": "Please select a chat session to view and reply to messages",
-      "newMessages": "The challenge setter in {{challenge}} has replied to your message"
-    },
-    "delete": {
-      "title": "Delete game",
-      "warning": "Are you sure you want to delete this game? Once deleted, it cannot be recovered, and related data will be cleared.",
-      "requirements": "Please note that you must delete all challenges in this game before deleting it. You cannot delete the game if there are any challenges present.",
-      "confirm": "If you decide to delete the game, please enter the game name {{name}} below"
-    },
-    "events": {
-      "title": "Event pushing",
-      "errors": {
-        "fetchDevices": {
-          "title": "Failed to fetch connected devices"
-        }
-      },
-      "howto": "Connect to the following WebSocket address to access the platform event API subscription. You can find the method for connecting to the event API here:",
-      "tokenWarning": "Please note that the event API only authorizing via this token. Be careful not to leak this link.",
-      "regenerateTokenWarning": "Are you sure you want to regenerate the game token? The connected devices will lose their connection.",
-      "linkedDevices": "Connected devices",
-      "emptyDevices": "No devices are connected"
-    },
-    "organize": {
-      "title": "Organizing",
-      "actions": {
-        "restrict": {
-          "confirm": "Are you sure to block users outside the selected institutes? (Take effect immediately after clicking!)",
-          "title": "Limit this game"
-        }
-      },
-      "instituteEnabled": "Institute scoreboard"
-    },
-    "errors": {
-      "fetch": {
-        "title": "Failed to fetch game"
-      },
-      "fetchList": {
-        "title": "Failed to fetch games"
-      },
-      "regenerateToken": {
-        "title": "Failed to generate game token"
-      },
-      "fetchDoc": {
-        "title": "Failed to fetch game document"
-      },
-      "fetchIntroduction": {
-        "title": "Failed to fetch game introduction"
-      }
-    },
-    "seeOtherInteresting": "Check other places",
-    "notArchived": "This game is not archived",
-    "canNotParticipate": "Cannot join",
-    "adminMode": "Admin mode",
-    "miscSettings": "Misc settings",
-    "register": "Register",
-    "timeLast": "{{period}} remaining for",
-    "accessPolicy": {
-      "open": "Open game"
-    },
-    "gotoTraining": "Archived, please go to the training page",
-    "enterChallenge": "Solve the challenge!",
-    "manageChallenges": "Manage challenges",
-    "loginThenBack": "Join it after logging in",
-    "notification": {
-      "errors": {
-        "fetch": {
-          "title": "Failed to fetch notification message"
-        }
-      },
-      "form": {
-        "title": {
-          "required": "Notification title cannot be empty",
-          "placeholder": "Please enter the notification title",
-          "label": "Notification title"
-        },
-        "content": {
-          "required": "Notification content cannot be empty",
-          "label": "Notification content"
-        }
-      },
-      "empty": "No notifications"
-    }
-  },
-  "challenge": {
-    "title": "Challenges",
-    "list": "Challenges",
-    "empty": "No challenges here",
-    "tag": {
-      "title": "Challenge tags",
-      "unknown": "Unknown"
-    },
-    "search": {
-      "placeholder": "Search by name or tag",
-      "hideSolved": "Hide solved challenges",
-      "solved": "Solved",
-      "hideArchived": "Hide archived challenges",
-      "archived": "Archived"
-    },
-    "status": {
-      "solved": {
-        "title": "Solved",
-        "message": "Congratulations, you have captured the flag!"
-      },
-      "archived": {
-        "title": "Archived",
-        "message": "No points after archive."
-      },
-      "inPeriod": {
-        "title": "In progress",
-        "message": "Time-limited challenge, you can only solve it during the current time period",
-        "countdown": "Challenge archiving countdown"
-      },
-      "unreleased": {
-        "title": "Not Published",
-        "message": "This challenge has not been published, players cannot see it",
-        "countdown": "Challenge publishing countdown"
-      },
-      "hidden": {
-        "title": "Hidden",
-        "message": "This challenge is hidden, only for admin testing.",
-        "alert": "Please click the \"Up\" button when the challenge is ready. The platform will not automatically change the visibility of the challenge. The auto-publishing function will use time points and the hidden state to calculate the final visibility for players."
-      }
-    },
-    "actions": {
-      "up": {
-        "title": "Up",
-        "message": "Are you sure you want to make this challenge public? Once it is public, players can view and solve it after the game starts (please ensure all challenges are in a public state when the game starts, the platform will calculate player visibility based on time points, it won't change this state), and the challenge cannot be modified once published."
-      },
-      "down": {
-        "title": "Down",
-        "message": "Are you sure to hide this challenge? You can modify the challenge and make it public again after hiding. Players cannot view or solve the challenge in the hidden state, the platform will never change this state."
-      }
-    },
-    "form": {
-      "name": {
-        "label": "Challenge name",
-        "placeholder": "Please enter a name",
-        "required": "Name cannot be empty"
-      },
-      "tag": {
-        "label": "Challenge tags",
-        "placeholder": "Please enter tags, separated by /, the first tag will become the category",
-        "required": "Tags cannot be empty"
-      },
-      "scoreRule": {
-        "initial": {
-          "label": "Initial score",
-          "placeholder": "Please enter score"
-        },
-        "minimum": {
-          "label": "Minimum score",
-          "placeholder": "Please enter a score"
-        },
-        "range": {
-          "label": "Score range"
-        },
-        "decay": {
-          "label": "Decay count",
-          "placeholder": "Please enter the decay count"
-        }
-      },
-      "scoringPeriod": {
-        "label": "Scoring period",
-        "placeholder": "Please select a scoring period"
-      },
-      "content": {
-        "label": "Challenge content",
-        "placeholder": "Please enter content",
-        "required": "Content cannot be empty"
-      }
-    },
-    "errors": {
-      "fetchList": {
-        "title": "Failed to fetch challenges"
-      },
-      "fetch": {
-        "title": "Failed to fetch challenge"
-      },
-      "up": {
-        "title": "Failed to publish challenge"
-      },
-      "down": {
-        "title": "Failed to hide challenge"
-      }
-    },
-    "terminal": {
-      "title": "Terminal"
-    },
-    "hint": {
-      "title": "Hints",
-      "empty": "The challenge setter has not released a hint yet, think it by yourself",
-      "unlockConfirm": "Are you sure to use {{cost}} pts to unlock this hint?",
-      "form": {
-        "content": {
-          "required": "Hint content cannot be empty",
-          "label": "Hint content",
-          "placeholder": "Please enter the hint content"
-        },
-        "cost": {
-          "label": "Score",
-          "placeholder": "Score"
-        }
-      },
-      "errors": {
-        "fetch": {
-          "title": "Failed to fetch hint"
-        },
-        "unlock": {
-          "title": "Failed to unlock hint"
-        }
-      }
-    },
-    "file": {
-      "title": "Attachments",
-      "empty": "No attachments",
-      "type": {
-        "static": {
-          "title": "Static attachments",
-          "tip": "The files here will be provided to the game players AS THEY ARE."
-        },
-        "mapped": {
-          "title": "Dynamic attachments",
-          "tip": "The file will be assigned to one of the players in the form of a hash map. If you need to dynamically distribute multiple attachments, please pack them into a zip file."
-        },
-        "checker": {
-          "title": "Checker attachments",
-          "tip": "This file is used for checking and will never be accessed by player."
-        }
-      },
-      "errors": {
-        "fetchFiles": {
-          "title": "Failed to fetch files"
-        },
-        "uploadFiles": {
-          "title": "Failed to upload file"
-        },
-        "deleteFiles": {
-          "title": "Failed to delete file"
-        }
-      }
-    },
-    "answer": {
-      "title": "Answer",
-      "empty": "No answer available",
-      "errors": {
-        "fetchAnswer": {
-          "title": "Failed to fetch answer"
-        },
-        "invisibleBeforeArchive": {
-          "title": "Answer is not visible",
-          "message": "The answer is not visible before the challenge is archived"
-        }
-      }
-    },
-    "hammer": {
-      "title": "Hammer",
-      "solved": "The challenge has been solved, congratulations!",
-      "adminGoto": "Administrators please go to the game management page to view hammer chat messages.",
-      "outerGoto": "Hammer is not enabled for this game. Please send your ticket or feedback here",
-      "outerFollow": "Hammer is not enabled for this game. Please follow the organizer's requirements and provide feedback through other channels.",
-      "tips": {
-        "0": "The message you send here will be forwarded to the challenge setter along with your status. The challenge setter may reply here or contact you through other IMs.",
-        "1": "Please note that before the challenge setter replies, you can only send three messages, so please try to combine your questions in one message.",
-        "2": "For long messages such as logs and code, it is recommended to use an online clipboard to send, for example:"
-      },
-      "role": {
-        "admin": "Admin",
-        "player": "Player"
-      },
-      "freeMessages": "{{last}} messages last",
-      "markdownHoto": "How to write Markdown?",
-      "markdownSupport": "Please enter the question you want to know, supports Markdown syntax",
-      "errors": {
-        "send": {
-          "title": "Failed to send message"
-        },
-        "fetch": {
-          "title": "Failed to fetch chat history"
-        },
-        "fetchSolve": {
-          "title": "Failed to fetch solve status"
-        },
-        "maxMessageLimit": {
-          "title": "Message limit reached, please wait for response..."
-        }
-      }
-    },
-    "submission": {
-      "submit": "Submitted",
-      "status": {
-        "pending": {
-          "title": "Pending"
-        },
-        "solved": {
-          "title": "Solved"
-        },
-        "failed": {
-          "title": "Failed"
-        }
-      },
-      "errors": {
-        "submit": {
-          "title": "Failed to submit flag"
-        },
-        "fetchSolves": {
-          "title": "Failed to fetch solves"
-        },
-        "fetchSolveStatus": {
-          "title": "Failed to fetch solve-status"
-        }
-      },
-      "title": "Submissions",
-      "total": "Total"
-    },
-    "statistics": {
-      "title": "Statistics",
-      "empty": "No statistics available",
-      "showAll": "Show all",
-      "solves": {
-        "title": "Statistics for solved one",
-        "subject": "Who solved my challenge?"
-      },
-      "commits": {
-        "title": "Commit history",
-        "subject": "Who committed my challenge?"
-      },
-      "errors": {
-        "fetchStatistics": {
-          "title": "Failed to fetch statistics"
-        },
-        "fetchSubmission": {
-          "title": "Failed to fetch challenge submissions"
-        },
-        "fetchCommitHistory": "Failed to fetch challenge commits"
-      }
-    },
-    "instance": {
-      "title": "Instances",
-      "empty": "No instances here",
-      "delete": "After deleting the instance configuration, the challenge will revert to an attachment-based challenge.",
-      "internet": "Allow Internet access",
-      "restrict": "Restrict root privileges",
-      "privileged": "Run as privileged",
-      "registrySecret": "Registry secret (must be configured in cluster)",
-      "runningContainers": "Running instances",
-      "status": {
-        "idle": {
-          "title": "This challenge has online instance"
-        },
-        "running": {
-          "title": "The challenge instance is started"
-        },
-        "pending": {
-          "title": "The challenge instance is starting, please wait..."
-        },
-        "failed": {
-          "title": "Failed to start challenge instance"
-        }
-      },
-      "image": {
-        "label": "Challenge instance image",
-        "upload": "Upload to image repository",
-        "empty": "No image configuration",
-        "form": {
-          "containerName": {
-            "label": "Container name",
-            "placeholder": "Please enter the container name",
-            "required": "Container name cannot be empty",
-            "mustBeValidName": "Use 3-40 characters, start with a lowercase letter, only use lowercase letters, numbers, or hyphens (-), and do not end with a hyphen"
-          },
-          "tag": {
-            "label": "Image tag",
-            "placeholder": "Please enter the image tag",
-            "required": "The image tag cannot be empty"
-          },
-          "version": {
-            "label": "Image version",
-            "placeholder": "Please enter the image version"
-          },
-          "restrict": {
-            "label": "Restrict root privileges",
-            "placeholder": "Whether to restrict root privileges",
-            "message": "After restriction, non-root users inside the container will not be able to use privileged ports or features"
-          },
-          "service": {
-            "description": {
-              "label": "Service description",
-              "placeholder": "Please enter the service description, it can be left blank when no ports are open",
-              "requiredWhenHavePort": "The service description cannot be empty when a service port is open"
-            },
-            "type": {
-              "label": "Service type",
-              "placeholder": "Please select a service type",
-              "items": {
-                "tcp": "Raw (TCP)",
-                "http": "HTTP",
-                "udp": "UDP"
-              },
-              "udpNotWorkingWithWsrx": "Because the cluster's port forwarding feature does not support UDP forwarding, UDP services cannot be accessed with platform proxy and WSRX. Please configure the traffic forwarding script properly.",
-              "requiredWhenHavePort": "The service type cannot be empty when a service port is open"
-            },
-            "protocol": {
-              "label": "Transport protocol",
-              "placeholder": "Please select a transport protocol",
-              "items": {
-                "tcp": "TCP",
-                "stcp": "STCP",
-                "udp": "UDP"
-              },
-              "udpNotWorkingWithWsrx": "Because the cluster's port forwarding feature does not support UDP forwarding, UDP services cannot be accessed with platform proxy and WSRX. Please configure the traffic forwarding script properly.",
-              "requiredWhenHavePort": "The transport protocol cannot be empty when a service port is open"
-            },
-            "appProtocol": {
-              "label": "Application protocol",
-              "placeholder": "Please select an application protocol",
-              "items": {
-                "raw": "Raw",
-                "http": "HTTP"
-              },
-              "requiredWhenHavePort": "The application protocol cannot be empty when a service port is open"
-            },
-            "port": {
-              "label": "Service port",
-              "placeholder": "Please enter the service port",
-              "required": "The service port cannot be empty when the service is enabled",
-              "mustBeNumber": "The service port must be a number",
-              "mustBeInRange": "The service port must be between 1 and 65535",
-              "conflict": "The service port conflicts with another service port"
-            },
-            "cpu": {
-              "label": "CPU limit",
-              "required": "CPU limit cannot be empty"
-            },
-            "mem": {
-              "label": "Memory limit",
-              "required": "Memory limit cannot be empty"
-            },
-            "storage": {
-              "label": "Storage limit",
-              "required": "Storage limit cannot be empty"
-            }
-          }
-        }
-      },
-      "actions": {
-        "addImage": {
-          "title": "Add image",
-          "message": "After adding the image, the image will be automatically pulled to the cluster."
-        },
-        "start": {
-          "title": "Start!"
-        },
-        "delay": {
-          "title": "Extend by one hour"
-        },
-        "stop": {
-          "title": "Stop"
-        },
-        "copy": {
-          "title": "Copy the instance address"
-        }
-      },
-      "errors": {
-        "fetchInstances": {
-          "title": "Failed to fetch challenge instances"
-        },
-        "fetchConfigImages": {
-          "title": "Failed to fetch cluster registry images"
-        },
-        "fetchRegistry": {
-          "title": "Failed to fetch cluster registry"
-        },
-        "toggleNetworkConfig": {
-          "title": "Failed to change network configuration"
-        },
-        "toggleRestrict": {
-          "title": "Failed to change root privilege restrictions"
-        },
-        "noExportedServices": {
-          "title": "External service not yet specified",
-          "message": "Please add at least one service port to the instance config."
-        },
-        "start": {
-          "title": "Failed to start instance"
-        },
-        "stop": {
-          "title": "Failed to stop instance"
-        },
-        "delay": {
-          "title": "Failed to extend instance"
-        },
-        "calmdown": {
-          "title": "Refactoring cargo crates"
-        },
-        "managedByMate": {
-          "title": "Team member's environment, only accessible"
-        },
-        "noConfig": {
-          "title": "This challenge does not provide an online instance"
-        },
-        "singleton": {
-          "title": "You have reached the limit of challenge instances you can start at the same time",
-          "current": "The instance currently running",
-          "action": "Stop other challenge instances and start the current one?",
-          "stop": "Please select a challenge instance to stop and start the current one"
-        },
-        "noAction": {
-          "title": "No action will be taken."
-        }
-      }
-    },
-    "checker": {
-      "title": "Checker",
-      "script": "Checker script",
-      "preset": {
-        "placeholder": "Please select a script preset",
-        "simple": {
-          "label": "Simple match"
-        },
-        "leet": {
-          "label": "Dynamic env variables (Leet)"
-        },
-        "uuid": {
-          "label": "Dynamic env variables (UUID)"
-        },
-        "mapped": {
-          "label": "Dynamic attachment dists"
-        }
-      },
-      "errors": {
-        "fetchCheckerScript": {
-          "title": "Failed to fetch check script"
-        },
-        "fetchScript": {
-          "title": "Failed to fetch checker script"
-        }
-      }
-    },
-    "settings": {
-      "title": "Settings"
-    },
-    "inGame": "In-game challenges",
-    "total": "All challenges"
-  },
-  "wsrx": {
-    "title": "WebSocket Reflector X",
-    "status": {
-      "invalid": {
-        "title": "WSRX is not connected"
-      },
-      "pending": {
-        "title": "Waiting for local authorization"
-      },
-      "usable": {
-        "title": "WSRX is connected"
-      },
-      "connecting": {
-        "title": "Connecting..."
-      }
-    },
-    "retry": "Retry connection",
-    "download": {
-      "title": "Download WSRX client",
-      "message": "Please go to GitHub to download the latest version of WSRX"
-    },
-    "actions": {
-      "copy": {
-        "title": "Copy WebSocket link"
-      },
-      "copyLocal": {
-        "title": "Copy local address"
-      },
-      "retry": {
-        "title": "Retry connection"
-      },
-      "resetDefault": {
-        "title": "Reset to default"
-      },
-      "refresh": {
-        "title": "Refresh route"
-      },
-      "openAll": {
-        "title": "Open all routes"
-      },
-      "deleteAll": {
-        "title": "Close all routes"
-      },
-      "deleteOutdated": {
-        "title": "Close expired routes"
-      }
-    },
-    "settings": {
-      "title": "WSRX Settings",
-      "address": {
-        "label": "WSRX Control Address",
-        "placeholder": "Please enter WSRX control address",
-        "required": "WSRX control address cannot be empty",
-        "invalid": "WSRX control address is invalid"
-      }
-    },
-    "errors": {
-      "versionMismatch": {
-        "title": "WSRX version is too low",
-        "message": "Please update to the latest version to use the platform integration"
-      },
-      "daemonOffline": {
-        "title": "WSRX daemon offline",
-        "message": "If the desktop client is already running, please check if the WSRX control address in the platform settings is correct"
-      },
-      "disconnected": {
-        "title": "WSRX daemon disconnected",
-        "message": "Please check the status of the local client"
-      },
-      "daemonError": {
-        "title": "WSRX daemon error",
-        "message": "Please check the status of the local client"
-      },
-      "fetchTunnel": {
-        "title": "Failed to fetch WSRX tunnels",
-        "message": "Please check the local client logs"
-      },
-      "deleteTunnel": {
-        "title": "Failed to delete WSRX tunnel",
-        "message": "Please check the local client logs"
-      },
-      "createTunnel": {
-        "title": "Failed to create WSRX tunnel",
-        "message": "Please check the local client log"
-      }
-    },
-    "downloadClient": "Download client",
-    "tunnels": "Tunnels"
   },
   "captcha": {
     "title": "Captcha protection",
@@ -1529,23 +563,7 @@
       "title": "Personal Introduction",
       "empty": "This mysterious hacker left nothing here..."
     },
-    "joinedGames": "Joined games",
-    "gameJournal": "Joined in {{game}} as a member of {{team}}.",
     "moreJournal": "Life continues, exploration never stops...",
-    "solvedProblems": "Solved Problems",
-    "stats": {
-      "title": "Career Stats",
-      "allGames": "All Games",
-      "empty": "No submission records yet",
-      "solved": "Solved",
-      "failed": "Failed"
-    },
-    "statusFilter": {
-      "all": "All Challenges",
-      "notAttempted": "Not Attempted",
-      "attempted": "Attempted",
-      "solved": "Solved"
-    },
     "gotoAdminPanel": "Go to User Management",
     "registeredAt": "Registered at {{time}}",
     "title": "Users",
@@ -1571,9 +589,9 @@
       "basic": "Basic",
       "verified": "Verified",
       "calendar": "Calendar",
-      "wiki": "Wiki",
+      "wiki": "Charts",
       "bulletin": "Bulletin",
-      "game": "Game",
+      "tournament": "Tournament",
       "host": "Hosting",
       "statistics": "Statistics",
       "devOps": "DevOps",
@@ -1730,11 +748,40 @@
         }
       }
     },
+    "phira": {
+      "title": "Bind Phira",
+      "description": "Verify your account with your Phira email and password. Only your Phira user ID is stored; your password and tokens are not saved.",
+      "form": {
+        "email": {
+          "label": "Phira email",
+          "placeholder": "Enter your Phira email",
+          "required": "Phira email is required"
+        },
+        "password": {
+          "label": "Phira password",
+          "placeholder": "Enter your Phira password",
+          "required": "Phira password is required"
+        }
+      },
+      "actions": {
+        "bind": "Bind Phira",
+        "unbind": "Unbind Phira"
+      },
+      "status": {
+        "bound": "Phira account bound: {{name}}",
+        "success": "Phira account bound successfully"
+      },
+      "errors": {
+        "bind": {
+          "title": "Failed to bind Phira account"
+        }
+      }
+    },
     "register": {
       "tips": "No account? Register now!",
       "status": {
         "success": {
-          "message": "Successfully registered, welcome to the CTF world!"
+          "message": "Successfully registered. Welcome to Rhythm Arena!"
         }
       },
       "errors": {
@@ -1817,277 +864,6 @@
       "title": "Verify email"
     }
   },
-  "shell": {
-    "cat": {
-      "man": "View file content.",
-      "errors": {
-        "noFileSpecified": {
-          "title": "No file specified."
-        },
-        "tooManyFiles": {
-          "title": "Too many arguments!"
-        },
-        "fileNotFound": {
-          "title": "No such file or directory."
-        },
-        "read": {
-          "title": "Error reading file."
-        }
-      }
-    },
-    "errors": {
-      "noGameSpecified": {
-        "title": "Not in a valid game path."
-      },
-      "permissionDenied": {
-        "title": "Insufficient permissions, access denied."
-      },
-      "noChallengeSpecified": {
-        "title": "Not in a valid challenge path."
-      },
-      "traversalDetected": {
-        "title": "Remote host rejected directory traversal."
-      },
-      "commandInvalid": {
-        "title": "Command has syntax error"
-      }
-    },
-    "help": {
-      "man": "Print help information.",
-      "commands": "The following commands are available:"
-    },
-    "welcome": "Welcome to {{shell}}!",
-    "tip": "Enter a valid {{flag}} directly in this terminal to submit. You can enter {{help}} to get more usage help.",
-    "clear": {
-      "man": "Clear the terminal output and start over."
-    },
-    "echo": {
-      "man": "Output your input as-is."
-    },
-    "ls": {
-      "man": "List information about <file> (default is current directory).",
-      "errors": {
-        "invalidOption": {
-          "title": "Invalid option -- {{option}}"
-        },
-        "tooManyArgs": {
-          "title": "Too many arguments!"
-        },
-        "traversalDetected": {
-          "title": "The remote host rejected directory traversal."
-        },
-        "fileNotFound": {
-          "title": "No such file or directory."
-        },
-        "list": {
-          "title": "Error accessing the directory."
-        }
-      }
-    },
-    "service": {
-      "man": "Manage the challenge instance service.",
-      "errors": {
-        "needAction": {
-          "title": "An operation is required."
-        }
-      },
-      "usage": "Usage:",
-      "actions": {
-        "start": {
-          "title": "Start the challenge instance service."
-        },
-        "stop": {
-          "title": "Stop the challenge instance service. This command can be used to stop instance service of other challenges here."
-        },
-        "restart": {
-          "title": "Restart the challenge instance service. Use this when you accidentally damage the challenge instance."
-        },
-        "status": {
-          "title": "Display the status of the challenge instance service."
-        },
-        "delay": {
-          "title": "Extend the existence time of the challenge instance. The default service time after starting the challenge instance is one hour. If you think the time is not enough, you can use this command to extend it."
-        }
-      },
-      "starting": "Starting {{service}}...",
-      "stopping": "Stopping {{service}}..."
-    },
-    "submit": {
-      "man": "Submit the flag for this challenge to the platform.",
-      "submitting": "Submitting...",
-      "waitingForChecking": "Submitted, waiting for checker...",
-      "errors": {
-        "timeout": {
-          "title": "The checking queue is too long. Please refresh after about five minutes to view the results. Do not resubmit."
-        }
-      }
-    },
-    "wget": {
-      "man": "Download the specified file.",
-      "usage": "Usage: wget \\\"<filename>\\\"",
-      "downloading": "Downloading",
-      "errors": {
-        "fileNotFound": {
-          "title": "No such file or directory."
-        }
-      }
-    },
-    "whoami": {
-      "man": "Displays the account associated with the current effective user ID."
-    },
-    "commandNotFound": "Unknown command: {{command}}"
-  },
-  "about": {
-    "contact": "Platform support",
-    "donate": "Donate",
-    "source": "Support"
-  },
-  "docs": {
-    "title": "Developer Documentation",
-    "tip": "Ret 2 Shell - Developer docs",
-    "forVersion": "Applicable version",
-    "intro": "Introduction"
-  },
-  "magic": {
-    "about": {
-      "license": {
-        "commercial": "Commercial services allowed",
-        "copyleft": "Strong copyleft",
-        "description": "Ret2Shell uses a GPL-3.0-derived strong copyleft license. The GPL baseline remains in place, with limited extra restrictions on paid user access and similar user-facing monetization.",
-        "gplBase": "GPL-3.0-derived",
-        "noUserFees": "No paid access tiers",
-        "view": "Read full license"
-      },
-      "thanks": "Thank you for using my software",
-      "title": "About"
-    },
-    "sakana": {
-      "title": "Sakana~",
-      "illustration": "Illustration",
-      "source": "Code"
-    }
-  },
-  "team": {
-    "status": {
-      "pending": {
-        "title": "Pending",
-        "message": "The team name contains sensitive words, please contact the administrator for review",
-        "placeholder": "Team is waiting for review"
-      },
-      "banned": {
-        "message": "The team has been banned due to cheating behavior",
-        "title": "Banned"
-      },
-      "empty": {
-        "message": "Not participated yet, please participate first"
-      },
-      "hidden": {
-        "title": "Hidden"
-      },
-      "title": "Team status",
-      "passed": {
-        "title": "Normal"
-      }
-    },
-    "errors": {
-      "fetchList": {
-        "title": "Failed to fetch teams"
-      },
-      "fetch": {
-        "title": "Failed to fetch team information"
-      },
-      "join": {
-        "title": "Failed to join team"
-      },
-      "fetchMember": {
-        "title": "Failed to fetch team members"
-      },
-      "fetchSolves": {
-        "title": "Failed to fetch solve status"
-      },
-      "fetchExtra": {
-        "title": "Failed to fetch extra score changes"
-      }
-    },
-    "title": "Participating teams",
-    "coming": "Come on!",
-    "empty": "No teams here",
-    "join": {
-      "title": "Join team",
-      "tips": "Join an existing team. You can join a team by entering the team token shared by other teammates.",
-      "form": {
-        "token": {
-          "required": "Team token cannot be empty",
-          "label": "Team token",
-          "placeholder": "Please enter the team token"
-        }
-      }
-    },
-    "create": {
-      "title": "Create team",
-      "tips": "Create a new team. After creating the team, you will become the team leader and have the authority to manage the team."
-    },
-    "choose": {
-      "title": "Choose join method"
-    },
-    "solo": "Solo game",
-    "collab": "{{size}}-person collab game",
-    "unlimited": "Unlimited team game",
-    "list": {
-      "title": "Teams",
-      "selectInstitute": "Select Institute...",
-      "filter": "Filter team name"
-    },
-    "sortBy": "Sort by",
-    "form": {
-      "name": {
-        "label": "Team name",
-        "required": "Team name cannot be empty",
-        "maximumLength": "Name can be at most 32 characters",
-        "customDisabled": "Team name cannot be changed",
-        "placeholder": "Please enter team name",
-        "chuunibyouGenerator": "Chuunibyou Generator"
-      },
-      "institute": {
-        "label": "Affiliated institute",
-        "placeholder": "Please select affiliated institute"
-      },
-      "state": {
-        "label": "Team status"
-      },
-      "tag": {
-        "maximumLength": "Tag cannot exceed 32 characters",
-        "label": "Tag text",
-        "placeholder": "Please enter tag text"
-      },
-      "acceptRules": {
-        "required": "Please agree to the game rules",
-        "label": "Agree to game rules",
-        "title": "Game rules",
-        "ok": "Game rules agreed"
-      },
-      "extraScore": {
-        "placeholder": "Please enter additional score changes",
-        "required": "Additional score changes cannot be empty"
-      },
-      "extraReason": {
-        "placeholder": "Please enter reason for additional score changes",
-        "required": "Reason for additional score changes cannot be empty"
-      }
-    },
-    "selfManagement": "Team Management",
-    "token": "Team token",
-    "scoreChart": "Score curve",
-    "solves": "Challenge solves",
-    "noSolves": "No solves yet",
-    "solvesJournal": "Player {{user}} solved challenge {{challenge}}.",
-    "extras": "Extra score changes",
-    "noExtras": "No extra score changes here"
-  },
-  "notification": {
-    "empty": "No unread messages",
-    "title": "Notifications"
-  },
   "bulletin": {
     "title": "Bulletin",
     "errors": {
@@ -2127,71 +903,6 @@
   },
   "license": {
     "title": "Ret2Shell Public License"
-  },
-  "traffic": {
-    "title": "Traffic",
-    "nodeSelector": "Node selector",
-    "preset": {
-      "title": "Script presets",
-      "singleNodeDirectScript": "Single node direct connection",
-      "multiNodeDirectScript": "Multi-node direct connection"
-    }
-  },
-  "lifecycle": {
-    "title": "Lifecycle",
-    "functions": "Functions: on_start(ctx) / on_delay(ctx) / on_stop(ctx)",
-    "preset": {
-      "title": "Script presets",
-      "webhookExample": "Webhook example",
-      "reservedBlank": "Reserved blank"
-    }
-  },
-  "cluster": {
-    "title": "Cluster management",
-    "status": {
-      "available": {
-        "title": "Cluster is running"
-      },
-      "unavailable": {
-        "title": "Cluster is offline"
-      }
-    },
-    "nodeInfo": {
-      "title": "Node information",
-      "architecture": "Architecture",
-      "bootID": "Boot ID",
-      "containerRuntimeVersion": "Container runtime",
-      "kernelVersion": "Kernel version",
-      "machineID": "Machine ID",
-      "operatingSystem": "Operating System",
-      "osImage": "OS Image",
-      "systemUUID": "System UUID",
-      "kubeletVersion": "Kubelet",
-      "kubeProxyVersion": "Kube proxy"
-    },
-    "selectNode": "Select node",
-    "actions": {
-      "refreshNode": {
-        "title": "Refresh node"
-      },
-      "updateNode": {
-        "title": "Update node"
-      },
-      "disconnectNode": {
-        "title": "Disconnect node"
-      }
-    },
-    "nodeResources": {
-      "title": "Node resources"
-    },
-    "errors": {
-      "fetchNodes": {
-        "title": "Failed to fetch cluster node information"
-      },
-      "fetchConfig": {
-        "title": "Failed to fetch cluster configuration"
-      }
-    }
   },
   "oauth": {
     "title": "3rd auth",
@@ -2242,9 +953,6 @@
       }
     }
   },
-  "captures": {
-    "title": "Instance traffics"
-  },
   "institute": {
     "errors": {
       "fetchList": {
@@ -2270,5 +978,172 @@
     "title": "Institute management",
     "manual": "Manual",
     "withOAuth": "Use 3rd auth service"
+  },
+  "tournament": {
+    "title": "Rhythm tournaments",
+    "listSubtitle": "Create, enter, and operate rhythm game competitions.",
+    "past": "Past tournaments",
+    "pastSubtitle": "Finished and archived events remain available for review.",
+    "emptyPast": "No past tournaments yet.",
+    "introduction": "Tournament introduction",
+    "noDescription": "No tournament introduction has been published.",
+    "empty": "No tournaments yet.",
+    "noBrief": "No summary",
+    "actions": {
+      "create": "Create tournament"
+    },
+    "errors": {
+      "create": "Failed to create tournament",
+      "action": "Tournament operation failed"
+    },
+    "fields": {
+      "name": "Tournament name",
+      "brief": "Summary",
+      "mode": "Competition mode",
+      "evidence": "Screenshot policy",
+      "teamSize": "Team size",
+      "lifecycle": "Lifecycle",
+      "visibility": "Leaderboard visibility",
+      "description": "Description",
+      "basicInfo": "Basic Info",
+      "save": "Save",
+      "cover": "Cover image",
+      "teamSizeMin": "Min size",
+      "teamSizeMax": "Max size"
+    },
+    "lifecycle": {
+      "draft": "Draft",
+      "registration": "Registration",
+      "running": "Running",
+      "review": "Review",
+      "finished": "Finished",
+      "archived": "Archived"
+    },
+    "mode": {
+      "individual": "Individual",
+      "team": "Team",
+      "both": "Individual + team"
+    },
+    "evidence": {
+      "required": "Required",
+      "optional": "Optional",
+      "disabled": "Disabled"
+    },
+    "visibility": {
+      "live": "Live",
+      "frozen": "Frozen",
+      "after_end": "After finish"
+    },
+    "nav": {
+      "overview": "Overview",
+      "charts": "Charts",
+      "results": "Results",
+      "individual": "Individual board",
+      "team": "Team board",
+      "admin": "Manage"
+    },
+    "registration": {
+      "title": "Registration",
+      "loginRequired": "Sign in to register.",
+      "displayName": "Display name",
+      "join": "Register",
+      "withdraw": "Withdraw",
+      "status": {
+        "pending": "Pending",
+        "approved": "Approved",
+        "rejected": "Rejected",
+        "withdrawn": "Withdrawn"
+      }
+    },
+    "pool": {
+      "title": "Rounds and chart pool",
+      "empty": "No charts published.",
+      "rounds": "Rounds",
+      "tags": "Tags",
+      "tagName": "Tag name",
+      "chooseTag": "Choose tag",
+      "noTags": "No tags in this round",
+      "charts": "Charts",
+      "roundName": "Round name",
+      "chooseRound": "Choose round",
+      "chartTitle": "Chart title",
+      "difficulty": "Difficulty"
+    },
+    "charts": {
+      "library": "Chart library",
+      "search": "Search charts or tags",
+      "select": "Select a chart",
+      "selectHint": "Choose a chart from the round and tag tree.",
+      "artist": "Artist",
+      "charter": "Charter",
+      "constant": "Level constant",
+      "weight": "Scoring weight"
+    },
+    "teams": {
+      "title": "Teams",
+      "name": "Team name",
+      "create": "Create team",
+      "join": "Join",
+      "empty": "No teams yet."
+    },
+    "results": {
+      "title": "Result submission",
+      "subtitle": "Submit a play for judge review and keep its evidence.",
+      "chart": "Chart",
+      "score": "Score",
+      "accuracy": "Accuracy",
+      "combo": "Max combo",
+      "evidence": "Add screenshot",
+      "evidenceReady": "Screenshot ready",
+      "submit": "Submit result",
+      "history": "Submission history",
+      "status": "Status",
+      "playedAt": "Played at",
+      "empty": "No submitted results.",
+      "uploadError": "Screenshot upload failed",
+      "submitError": "Result submission failed",
+      "states": {
+        "pending": "Pending",
+        "approved": "Approved",
+        "rejected": "Rejected",
+        "voided": "Voided"
+      }
+    },
+    "leaderboard": {
+      "individual": "Individual leaderboard",
+      "team": "Team leaderboard",
+      "subtitle": "Competition ranking with stable tie handling.",
+      "stale": "Recalculation failed; showing the last successful scores.",
+      "empty": "The leaderboard is not available yet."
+    },
+    "roles": {
+      "owner": "Owner",
+      "organizer": "Organizer",
+      "judge": "Judge"
+    },
+    "admin": {
+      "title": "Tournament management",
+      "subtitle": "Configure operations, review results, and control publishing.",
+      "settings": "Settings",
+      "staff": "Staff",
+      "pool": "Chart pool",
+      "scripts": "Scoring",
+      "review": "Review",
+      "import": "Import",
+      "advance": "Advance lifecycle",
+      "recompute": "Recompute",
+      "userId": "User ID",
+      "role": "Role",
+      "scriptName": "Version name",
+      "createVersion": "Create immutable version",
+      "activate": "Activate",
+      "active": "Active",
+      "noPending": "No pending results.",
+      "approve": "Approve",
+      "reject": "Reject",
+      "selectFile": "Select CSV/XLSX",
+      "valid": "Valid",
+      "commitImport": "Commit atomic import"
+    }
   }
 }

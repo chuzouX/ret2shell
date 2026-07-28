@@ -1,5 +1,5 @@
 [package]
-description = "Media storage for Ret2Shell - A feature-riches CTF challenge platform."
+description = "Media storage for Rhythm Arena."
 name        = "r2s-media"
 
 authors      = { workspace = true }

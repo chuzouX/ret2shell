@@ -1,5 +1,5 @@
 [package]
-description = "Event pusher for Ret2Shell - A feature-riches CTF challenge platform."
+description = "Tournament event service for Rhythm Arena."
 name        = "r2s-event"
 
 authors      = { workspace = true }

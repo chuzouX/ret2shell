@@ -1,4 +1,4 @@
-import { useResetPasswordMutation } from "@api/account";
+﻿import { useResetPasswordMutation } from "@api/account";
 import Captcha from "@blocks/captcha";
 import { createForm, email, minLength, pattern, required } from "@modular-forms/solid";
 import { useNavigate, useSearchParams } from "@solidjs/router";
@@ -37,7 +37,7 @@ export default function () {
       description: t("account.reset.errors.invalidLink.title"),
       duration: 5000,
     });
-    navigate("/sigtrap/403", { replace: true });
+    navigate("/error/403", { replace: true });
     return null;
   }
   const [timestamp, setTimestamp] = createSignal(DateTime.now().toMillis());

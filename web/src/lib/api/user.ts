@@ -1,6 +1,6 @@
 import type { Ip } from "@models/ip";
 import type { OAuth } from "@models/oauth";
-import type { Team } from "@models/team";
+import type { TournamentTeam } from "@models/tournament";
 import type { User } from "@models/user";
 import { t } from "@storage/theme";
 import { useMutation, useQuery } from "@tanstack/solid-query";
@@ -98,7 +98,7 @@ export function useUser({
 }
 
 export async function getUserTeams(id: number) {
-  return await api.get(`${api_root}/user/${id}/team`).json<Team[]>();
+  return await api.get(`${api_root}/user/${id}/team`).json<TournamentTeam[]>();
 }
 
 export function useUserTeams({
@@ -219,48 +219,39 @@ export function useUserOAuthList({
   );
 }
 
-export type ChallengeStat = {
-  challenge_id: number;
-  challenge_name: string;
-  total: number;
-  solved: number;
+export type UserTournamentStatistics = {
+  registrations: number;
+  approved_results: number;
 };
 
-export type GameStat = {
-  game_id: number;
-  game_name: string;
-  total: number;
-  solved: number;
-};
-
-export async function getUserSubmissionStats(id: number, game_id?: number) {
+export async function getUserTournamentStats(id: number, tournament_id?: number) {
   return await api
     .get(`${api_root}/user/${id}/stats`, {
       searchParams: JSON.parse(
         JSON.stringify({
-          game_id,
+          tournament_id,
         })
       ) as SearchParamsOption,
     })
-    .json<ChallengeStat[] | GameStat[]>();
+    .json<UserTournamentStatistics>();
 }
 
-export function useUserSubmissionStats({
+export function useUserTournamentStats({
   id,
-  game_id,
+  tournament_id,
   enabled,
   onError,
 }: {
   id: () => number;
-  game_id?: () => number | null;
+  tournament_id?: () => number | null;
   enabled?: () => boolean;
   onError?: (err: Error) => boolean;
 }) {
-  const keys = createMemo(() => ["user", id(), "submission-stats", game_id?.()]);
+  const keys = createMemo(() => ["user", id(), "tournament-stats", tournament_id?.()]);
   return useQuery(
     () => ({
       queryKey: keys(),
-      queryFn: async () => await getUserSubmissionStats(id(), game_id?.() ?? undefined),
+      queryFn: async () => await getUserTournamentStats(id(), tournament_id?.() ?? undefined),
       enabled: enabled?.(),
       throwOnError: (err: Error) => {
         handleHttpError(err, t("user.errors.fetchStats.title"));

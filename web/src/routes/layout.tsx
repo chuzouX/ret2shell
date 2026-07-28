@@ -1,4 +1,4 @@
-import { handleHttpError } from "@api";
+﻿import { handleHttpError } from "@api";
 import { getVersion, usePlatformInfo } from "@api/platform";
 import Background from "@blocks/background";
 import { Permission } from "@models/user";
@@ -42,7 +42,7 @@ export default function (props: { children?: JSX.Element }) {
   const platformName = createMemo(() => `\xa0\xa0[\xa0${platformInfo.data?.name || t("platform.name")}\xa0]\xa0`);
   const [platformTyped, setPlatformTyped] = createSignal("");
   const [hideAnimation, setHideAnimation] = createSignal(false);
-  let showAnimation = useLocation().pathname === "/" && useSearchParams()[0].event === undefined;
+  const showAnimation = useLocation().pathname === "/" && useSearchParams()[0].event === undefined;
   const navigate = useNavigate();
   function checkEmailVerification() {
     if (accountStore.token && !accountStore.permissions.includes(Permission.Verified)) {
@@ -69,20 +69,19 @@ export default function (props: { children?: JSX.Element }) {
           level: "error",
           description: `${t("platform.errors.offline.title")}: ${t("platform.errors.offline.message")}`,
         });
-        navigate(`/sigtrap/${err.response?.status || 502}`);
+        navigate(`/error/${err.response?.status || 502}`);
       } else if (err instanceof HTTPError) {
         addToast({
           level: "error",
           description: `${t("platform.errors.internal.title")}: ${err.response?.statusText || err.message}`,
         });
-        navigate(`/sigtrap/${err.response?.status || 500}`);
+        navigate(`/error/${err.response?.status || 500}`);
       } else {
         handleHttpError(err as Error, t("platform.errors.internal.title"));
-        navigate("/sigtrap/unknown");
+        navigate("/error/unknown");
       }
       setPlatformStore({ backend_online: false });
     }
-    showAnimation = showAnimation && !platformInfo.data?.zen_game;
 
     setTimeout(checkCookiePolicy, 1000);
 
@@ -122,7 +121,7 @@ export default function (props: { children?: JSX.Element }) {
         });
       }
       console.log(
-        `\n%cR%cet %c2 %cS%chell %cv%c${version}\n\n%cCopyright (c) 2022 - ${new Date().getFullYear()} %cRet 2 Shell%c, licensed under the Ret2Shell Public License 2.0, a GPL-3.0-derived copyleft license with limited user-facing monetization restrictions.\n\n%cHaving issue? You can open a ticket on https://github.com/ret2shell, any bug reports or feature requests are welcome.\n\n%cSee /license for details.\n`,
+        `\n%cRhythm %cArena %cv%c${version}\n\n%cCopyright (c) 2022 - ${new Date().getFullYear()} %cRhythm Arena%c, licensed under the Ret2Shell Public License 2.0, a GPL-3.0-derived copyleft license with limited user-facing monetization restrictions.\n\n%cSee /license for details.\n`,
         "color: #0078D6; font-weight: bold; font-size: 1.5rem;",
         "color: currentColor; font-weight: bold; font-size: 1.5rem;",
         "color: #808080; font-weight: bold; font-size: 1.5rem;",

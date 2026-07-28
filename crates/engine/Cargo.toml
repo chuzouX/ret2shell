@@ -1,5 +1,5 @@
 [package]
-description = "Base scripting engine for Ret2Shell - A feature-riches CTF challenge platform."
+description = "Scoring script engine for Rhythm Arena."
 name        = "r2s-engine"
 
 authors      = { workspace = true }

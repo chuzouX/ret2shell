@@ -34,23 +34,15 @@ use crate::{
 mod account;
 mod bulletin;
 mod calendar;
-mod cluster;
 mod event;
-mod game;
 mod media;
 mod platform;
 mod rpc;
-mod traffic;
+mod tournament;
 mod user;
 mod wiki;
 
 mod web;
-
-pub async fn run_post_receive(
-  session_id: &str, auth_key: &str, base_url: &str, repo_path: &std::path::Path,
-) -> anyhow::Result<()> {
-  game::hook::run_post_receive(session_id, auth_key, base_url, repo_path).await
-}
 
 pub async fn initialize(
   config: Option<server::Config>, state: GlobalState,
@@ -87,15 +79,12 @@ fn construct_router(state: &GlobalState) -> Router<GlobalState> {
     .nest("/bulletin", bulletin::router(state))
     .nest("/calendar", calendar::router(state))
     .nest("/event", event::router(state))
-    .nest("/game", game::router(state))
-    .nest("/internal", game::repo_sync::router())
-    .nest("/cluster", cluster::router(state))
     .nest("/media", media::router(state))
     .nest("/platform", platform::router(state))
     .nest("/user", user::router(state))
     .nest("/wiki", wiki::router(state))
     .nest("/rpc", rpc::router(state))
-    .nest("/traffic", traffic::router(state))
+    .nest("/tournaments", tournament::router(state))
     .route("/ping", get(ping))
     .route_layer(from_fn_with_state(state.clone(), ip_record))
     .route_layer(from_fn_with_state(state.clone(), extract_user_info))
@@ -113,20 +102,9 @@ fn construct_router(state: &GlobalState) -> Router<GlobalState> {
             "user-id"=tracing::field::Empty,
             "user-account"=tracing::field::Empty,
             "user-nickname"=tracing::field::Empty,
-            "team-id"=tracing::field::Empty,
-            "team-name"=tracing::field::Empty,
-            "data-challenge-id"=tracing::field::Empty,
-            "data-challenge-name"=tracing::field::Empty,
-            "data-game-id"=tracing::field::Empty,
-            "data-game-name"=tracing::field::Empty,
-            "data-team-id"=tracing::field::Empty,
-            "data-team-name"=tracing::field::Empty,
             "data-user-id"=tracing::field::Empty,
             "data-user-account"=tracing::field::Empty,
             "data-user-nickname"=tracing::field::Empty,
-            "data-notification-id"=tracing::field::Empty,
-            "data-notification-title"=tracing::field::Empty,
-            "data-audit-id"=tracing::field::Empty,
             "data-institute-id"=tracing::field::Empty,
             "data-institute-name"=tracing::field::Empty,
 

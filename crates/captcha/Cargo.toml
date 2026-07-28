@@ -1,5 +1,5 @@
 [package]
-description = "Captcha generator for Ret2Shell - A feature-riches CTF challenge platform."
+description = "Captcha generator for Rhythm Arena."
 name        = "r2s-captcha"
 
 authors      = { workspace = true }

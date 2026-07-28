@@ -1,1 +1,0 @@
-# Checker scripts and contents

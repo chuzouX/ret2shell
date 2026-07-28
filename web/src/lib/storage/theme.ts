@@ -1,4 +1,4 @@
-import { fetchDictionary, hasLocale, type Locale } from "@lib/i18n";
+import { defaultDict, fetchDictionary, hasLocale, type Locale } from "@lib/i18n";
 import { resolveTemplate, translator } from "@solid-primitives/i18n";
 import { createPrefersDark } from "@solid-primitives/media";
 import { makePersisted } from "@solid-primitives/storage";
@@ -25,7 +25,9 @@ const themeRoot = createRoot(() => {
     }),
     { name: "theme" }
   );
-  const [dict] = createResource(() => themeStore.locale || systemPrefersLocale, fetchDictionary);
+  const [dict] = createResource(() => themeStore.locale || systemPrefersLocale, fetchDictionary, {
+    initialValue: defaultDict,
+  });
   return { prefersDark, themeStore, setThemeStore, dict };
 });
 
@@ -78,11 +80,7 @@ export function initTheme() {
   window.onbeforeprint = onBeforePrint;
   window.onafterprint = onAfterPrint;
 }
-// biome-ignore lint/suspicious/noExplicitAny: disable typescript lint
-export const t = translator(dict as any, resolveTemplate) as (
-  key: string,
-  vars?: Record<string, string | number>
-) => string;
+export const t = translator(dict, resolveTemplate);
 export const colorPalette = {
   fg: () => (themeStore.colorScheme === "dark" ? "#eee" : "#121212"),
   primary: "#0991ed",

@@ -70,8 +70,13 @@ export default function (props: TextInputProps & ComponentProps<"input">) {
               onClick={() => setType(type() === "password" ? "text" : "password")}
               type="button"
             >
-              {/* icon-[fluent--eye-20-regular] icon-[fluent--eye-off-20-regular] */}
-              <span class={clsx(`icon-[fluent--${type() === "password" ? "eye" : "eye-off"}-20-regular]`, "w-5 h-5")} />
+              <span
+                class="w-5 h-5"
+                classList={{
+                  "icon-[fluent--eye-20-regular]": type() === "password",
+                  "icon-[fluent--eye-off-20-regular]": type() !== "password",
+                }}
+              />
             </button>
           </Show>
           <Show when={props.extraBtn}>{props.extraBtn}</Show>

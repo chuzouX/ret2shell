@@ -44,18 +44,6 @@ services:
     volumes:
       - vlogs:/vlogs
 
-  # container registry
-  registry:
-    image: registry:3
-    restart: unless-stopped
-    environment:
-      REGISTRY_STORAGE_DELETE_ENABLED: "true"
-      REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /var/lib/registry
-    volumes:
-      - registry:/var/lib/registry
-    ports:
-      - "5000:5000"
-
   # back-end platform
   platform:
     image: ret2shell:latest
@@ -65,7 +53,6 @@ services:
       - cache
       - message_queue
       - vlogs
-      - registry # if internal registry is used
     volumes:
       - platform:/var/lib/ret2shell
       - ./config:/etc/ret2shell:ro
@@ -96,7 +83,6 @@ volumes:
   cache:
   message_queue:
   vlogs:
-  registry:
   platform:
 
 networks:

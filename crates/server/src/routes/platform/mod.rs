@@ -10,12 +10,11 @@ use axum::{
 use chrono::{DateTime, Utc};
 use futures::future::join_all;
 use r2s_database::{
-  challenge, config,
-  game::{self, HostType},
-  institute, ip, submission,
+  chart, config, institute, ip, registration, result,
+  tournament::{self, Lifecycle},
   user::{self, Permission},
 };
-use sea_orm::DbErr;
+use sea_orm::{ColumnTrait, DbErr, EntityTrait, PaginatorTrait, QueryFilter};
 use serde::{Deserialize, Serialize};
 use tokio::fs;
 use tracing::{debug, error, warn};
@@ -98,24 +97,25 @@ struct UserStatistics {
 }
 
 #[derive(Serialize)]
-struct SubmissionStatistics {
+struct ResultStatistics {
   pub total: u64,
-  pub solved: u64,
+  pub approved: u64,
 }
 
 #[derive(Serialize)]
-struct ChallengeStatistics {
+struct TournamentStatistics {
   pub total: u64,
-  pub training: u64,
+  pub active: u64,
 }
 
 #[derive(Serialize)]
 struct Statistics {
   pub users: UserStatistics,
   pub institutes: Vec<institute::Model>,
-  pub games: Vec<game::StatisticsModel>,
-  pub submissions: SubmissionStatistics,
-  pub challenges: ChallengeStatistics,
+  pub tournaments: TournamentStatistics,
+  pub registrations: u64,
+  pub charts: u64,
+  pub results: ResultStatistics,
 }
 
 async fn get_platform_statistics(
@@ -124,35 +124,44 @@ async fn get_platform_statistics(
   let db = &state.db;
   let institutes = institute::get_list(&db.conn).await?;
   let users = UserStatistics {
-    total: user::count(&db.conn, true, None, None, true).await?,
-    valid: user::count(&db.conn, false, None, None, true).await?,
-    institutes: join_all(institutes.iter().map(|i| async {
-      Ok((
-        i.id,
-        user::count(&db.conn, true, Some(i.id), None, true).await?,
-      ))
-    }))
+    total: user::count(&db.conn, true, None).await?,
+    valid: user::count(&db.conn, false, None).await?,
+    institutes: join_all(
+      institutes
+        .iter()
+        .map(|i| async { Ok((i.id, user::count(&db.conn, true, Some(i.id)).await?)) }),
+    )
     .await
     .into_iter()
     .map(|r: Result<(i64, u64), DbErr>| r.unwrap_or((0, 0)))
     .collect(),
     ips: ip::count(&db.conn).await?,
   };
-  let games = game::get_statistics(&db.conn).await?;
-  let submissions = SubmissionStatistics {
-    total: submission::count(&db.conn, false, None, None, None, None, None, true).await?,
-    solved: submission::count(&db.conn, true, None, None, None, None, None, true).await?,
+  let tournaments = TournamentStatistics {
+    total: tournament::Entity::find().count(&db.conn).await?,
+    active: tournament::Entity::find()
+      .filter(tournament::Column::Lifecycle.is_in([
+        Lifecycle::Registration,
+        Lifecycle::Running,
+        Lifecycle::Review,
+      ]))
+      .count(&db.conn)
+      .await?,
   };
-  let challenges = ChallengeStatistics {
-    total: challenge::count(&db.conn, None, None, true).await?,
-    training: challenge::count(&db.conn, None, Some(HostType::Training), true).await?,
+  let results = ResultStatistics {
+    total: result::Entity::find().count(&db.conn).await?,
+    approved: result::Entity::find()
+      .filter(result::Column::Status.eq(result::ResultStatus::Approved))
+      .count(&db.conn)
+      .await?,
   };
   let statistics = Statistics {
     users,
     institutes,
-    games,
-    submissions,
-    challenges,
+    tournaments,
+    registrations: registration::Entity::find().count(&db.conn).await?,
+    charts: chart::Entity::find().count(&db.conn).await?,
+    results,
   };
   Ok(Json(statistics))
 }
@@ -299,7 +308,7 @@ async fn get_license(
     spdx_id: "LicenseRef-Ret2Shell-Public-2.0",
     name: "Ret2Shell Public License 2.0",
     url: "/license",
-    notice: "Ret2Shell is released under the Ret2Shell Public License 2.0, a GPL-3.0-derived copyleft license with limited user-facing monetization restrictions.",
+    notice: "Rhythm Arena is released under the Ret2Shell Public License 2.0, a GPL-3.0-derived copyleft license with limited user-facing monetization restrictions.",
     content: R2S_PUBLIC_LICENSE_TEXT,
   }))
 }

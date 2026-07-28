@@ -1,5 +1,5 @@
 [package]
-description = "Command line client for Ret2Shell."
+description = "Command line client for Rhythm Arena."
 name        = "r2s-cli"
 
 authors      = { workspace = true }

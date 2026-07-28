@@ -1,5 +1,4 @@
 import type { AuthConfig, Config, ServerConfig } from "@models/config";
-import type { HostType } from "@models/game";
 import type { Institute } from "@models/institute";
 import { luxonReplacer } from "@models/utils";
 import { t } from "@storage/theme";
@@ -64,23 +63,15 @@ export type PlatformStatistics = {
     ips: number;
   };
   institutes: Institute[];
-  games: {
-    id: number;
-    name: string;
-    start_at: DateTime;
-    end_at: DateTime;
-    register_at: DateTime;
-    archive_at: DateTime;
-    host_type: HostType;
-    teams: number;
-  }[];
-  submissions: {
+  tournaments: {
     total: number;
-    solved: number;
+    active: number;
   };
-  challenges: {
+  registrations: number;
+  charts: number;
+  results: {
     total: number;
-    training: number;
+    approved: number;
   };
 };
 

@@ -1,5 +1,5 @@
 [package]
-description = "OAuth/OAuth2 wrapper for Ret2Shell - A feature-riches CTF challenge platform."
+description = "OAuth and OAuth2 integration for Rhythm Arena."
 name        = "r2s-oauth"
 
 authors      = { workspace = true }

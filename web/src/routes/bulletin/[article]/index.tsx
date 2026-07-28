@@ -1,4 +1,4 @@
-import { handleHttpError } from "@api";
+﻿import { handleHttpError } from "@api";
 import { useBulletin, useDeleteBulletinMutation } from "@api/bulletin";
 import Spin from "@assets/animates/spin";
 import { Permission } from "@models/user";
@@ -18,14 +18,14 @@ export default function () {
   const inEdit = () => searchParams.edit === "true";
   const navigate = useNavigate();
 
-  if (Number.isNaN(articleId)) navigate("/sigtrap/404", { replace: true });
+  if (Number.isNaN(articleId)) navigate("/error/404", { replace: true });
 
   const article = useBulletin({
     id: () => articleId,
     onError: (err) => {
       handleHttpError(err as Error, t("bulletin.errors.fetch.title"));
-      if (err instanceof HTTPError) navigate(`/sigtrap/${err.response.status}`, { replace: true });
-      else navigate("/sigtrap/unknown", { replace: true });
+      if (err instanceof HTTPError) navigate(`/error/${err.response.status}`, { replace: true });
+      else navigate("/error/unknown", { replace: true });
       return false;
     },
   });

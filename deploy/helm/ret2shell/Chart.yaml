@@ -1,6 +1,6 @@
 apiVersion: v2
 name: ret2shell
-description: Self-maintained Helm chart for Ret2Shell and its optional dependencies
+description: Self-maintained Helm chart for Rhythm Arena and its optional dependencies
 type: application
 version: 3.11.3
 appVersion: "3.11.3"

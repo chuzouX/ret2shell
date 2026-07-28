@@ -4,19 +4,14 @@ platform:
   ingress:
     className: nginx
     hosts:
-      - host: ctf.example.com
+      - host: rhythm.example.com
         paths:
           - path: /
             pathType: Prefix
     tls:
       - secretName: ret2shell-tls
         hosts:
-          - ctf.example.com
+          - rhythm.example.com
   config:
     server:
-      externalDomain: ctf.example.com
-
-registry:
-  mode: internal
-  externalAccess:
-    host: registry.example.com:30310
+      externalDomain: rhythm.example.com

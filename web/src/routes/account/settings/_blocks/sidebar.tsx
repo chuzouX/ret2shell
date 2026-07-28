@@ -23,6 +23,12 @@ export default function SideBar() {
           <span>{t("account.oauth.title")}</span>
         </Link>
       </li>
+      <li class="w-full">
+        <Link activeMatch="exact" class="w-full" ghost href="/account/settings/phira" justify="start">
+          <span class="shrink-0 icon-[fluent--games-20-regular] w-5 h-5" />
+          <span>{t("account.phira.title")}</span>
+        </Link>
+      </li>
       <Divider />
       <li class="w-full">
         <Link

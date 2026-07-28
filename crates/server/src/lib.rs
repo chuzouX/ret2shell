@@ -28,7 +28,7 @@ include!(concat!(env!("OUT_DIR"), "/constants.rs"));
 pub fn greet() {
   println!(
     "[START UP] {} {}",
-    "Ret 2 Shell".bold(),
+    "Rhythm Arena".bold(),
     R2S_FULL_VERSION.dimmed()
   );
   println!(
@@ -37,12 +37,10 @@ pub fn greet() {
   );
 }
 
-pub use routes::run_post_receive;
-
 pub async fn up(config: GlobalConfig) -> anyhow::Result<()> {
   let guards = logger::initialize(&config.logging).await?;
   info!(">> server initialization started <<");
-  info!("Ret2Shell is distributed under the Ret2Shell Public License 2.0.");
+  info!("Rhythm Arena is distributed under the Ret2Shell Public License 2.0.");
   info!(
     "It is a GPL-3.0-derived copyleft license with limited user-facing monetization restrictions."
   );
@@ -72,20 +70,14 @@ pub async fn up(config: GlobalConfig) -> anyhow::Result<()> {
   let (db, migrated) = r2s_migrator::initialize(&config.database).await?;
   info!("loading module: < Cache >");
   let cache = r2s_cache::initialize(&config.cache, Some(migrated)).await?;
-  info!("loading module: < Bucket >");
-  let bucket = r2s_bucket::initialize(&config.bucket).await?;
   info!("loading module: < Message Queue >");
   let queue = r2s_queue::initialize(&config.queue).await?;
   info!("loading module: < Event Manager >");
   let event = r2s_event::initialize();
   info!("loading module: < OAuth >");
   let oauth = r2s_oauth::initialize(&config.auth).await;
-  info!("loading module: < Cluster >");
-  let cluster = r2s_cluster::initialize(&config.cluster).await?;
   info!("loading module: < Media Storage >");
   let media = r2s_media::initialize(&config.media).await?;
-  info!("loading module: < Checker >");
-  let checker = r2s_checker::initialize().await;
   info!("starting workers: < Email Worker >");
   worker::email::spawn(queue.subscribe("email").await?, db.clone());
   info!("starting workers: < Event Worker >");
@@ -103,13 +95,10 @@ pub async fn up(config: GlobalConfig) -> anyhow::Result<()> {
     db,
     cache,
     auditor,
-    bucket,
     engine,
     event,
     queue,
     oauth,
-    cluster,
-    checker,
     media,
     version: R2S_VERSION.to_string(),
   };
@@ -177,9 +166,6 @@ pub async fn down(config: GlobalConfig) -> anyhow::Result<()> {
   info!("cleanup done: < Database >");
   r2s_cache::down(&config.cache).await?;
   info!("cleanup done: < Cache >");
-  r2s_bucket::down(&config.bucket).await?;
-  info!("cleanup done: < Bucket >");
-
   warn!(">> server cleanup finished <<");
 
   drop(guards);
@@ -196,11 +182,9 @@ async fn push_panic_event(queue: r2s_queue::Queue) {
           panic.column = location.column(),
       );
       let event = EventContainer {
-        game_id: 0,
-        event: Event::Devops(Box::new(DevopsEvent {
+        tournament_id: 0,
+        event: Event::Devops(DevopsEvent {
           event_type: DevopsEventType::ServerPanic,
-          running: None,
-          pending: None,
           message: Some(format!(
             "Panic at: file={}, line={}:{}, message={}",
             location.file(),
@@ -208,7 +192,7 @@ async fn push_panic_event(queue: r2s_queue::Queue) {
             location.column(),
             panic
           )),
-        })),
+        }),
       };
       let queue = queue.clone();
       tokio::spawn(async move {
@@ -217,13 +201,11 @@ async fn push_panic_event(queue: r2s_queue::Queue) {
     } else {
       error!(message = %panic);
       let event = EventContainer {
-        game_id: 0,
-        event: Event::Devops(Box::new(DevopsEvent {
+        tournament_id: 0,
+        event: Event::Devops(DevopsEvent {
           event_type: DevopsEventType::ServerPanic,
-          running: None,
-          pending: None,
           message: Some(format!("Panic at: {panic}")),
-        })),
+        }),
       };
       let queue = queue.clone();
       tokio::spawn(async move {

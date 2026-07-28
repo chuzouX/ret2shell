@@ -22,7 +22,9 @@ export const accountStore = accountRoot[0];
 export const setAccountStore = accountRoot[1];
 
 export function storeToken(token: string) {
-  const tokenRaw = new TextDecoder().decode(base64urlnopad.decode(token.split(".")[1]));
+  const parts = token?.split(".");
+  if (!parts || parts.length < 3) return;
+  const tokenRaw = new TextDecoder().decode(base64urlnopad.decode(parts[1]));
   const tokenJson = JSON.parse(tokenRaw) as Token;
   setAccountStore({
     id: tokenJson.id,

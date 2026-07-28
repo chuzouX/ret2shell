@@ -249,10 +249,11 @@
       "accept": {
         "title": "受け入れる"
       }
-    }
+    },
+    "updated": "Rhythm Arena に互換性のない更新が適用されたため、ページを再読み込みしました。再ログインが必要な場合があります。"
   },
   "platform": {
-    "name": "端末に戻る",
+    "name": "Rhythm Arena",
     "subject": "戻り先のアドレスに基づいて世界を構築します",
     "cookiePolicy": "私たちはあなたを追跡するためにどの Cookie も使用していません。",
     "updated": "端末に戻るには非互換の更新が行われました。このページは更新を適用するために再読み込みされました。再度ログインする必要がありますのでご注意ください。",
@@ -471,42 +472,6 @@
     },
     "unknownPublisher": "匿名"
   },
-  "training": {
-    "title": "訓練",
-    "list": "練習場一覧",
-    "empty": "練習場はありません",
-    "noArchives": "アーカイブされた過去の大会はありません",
-    "placeholder": "今日分の訓練を始めましょう！",
-    "openForever": "常にオープン",
-    "errors": {
-      "fetchList": {
-        "title": "練習場一覧の取得に失敗しました"
-      },
-      "fetchArchives": {
-        "title": "過去の大会の取得に失敗しました"
-      },
-      "fetchTraining": {
-        "title": "訓練場の取得に失敗しました"
-      },
-      "gameNotArchived": {
-        "title": "大会はまだアーカイブされていません",
-        "message": "少し待ってください"
-      }
-    },
-    "form": {
-      "name": {
-        "label": "練習場タイトル",
-        "placeholder": "タイトルを入力してください",
-        "required": "タイトルは必須です"
-      },
-      "brief": {
-        "label": "練習場概要",
-        "placeholder": "概要を入力してください",
-        "required": "概要は必須です"
-      }
-    },
-    "gotoGamePage": "大会情報を見る"
-  },
   "calendar": {
     "day": {
       "sun": "日",
@@ -536,937 +501,6 @@
     },
     "startAt": "開始時間",
     "endAt": "終了時間"
-  },
-  "game": {
-    "title": "大会",
-    "list": "大会一覧",
-    "noGameHosted": "開催された大会はありません",
-    "otherGames": "他の大会",
-    "noOtherGames": "他の大会はありません",
-    "pending": "未着手",
-    "notStarted": "まだ始まっていません、少々お待ちください",
-    "started": "進行中",
-    "start": "開始",
-    "ended": "終了済み",
-    "end": "終了",
-    "archived": "アーカイブ済み",
-    "archive": "アーカイブ",
-    "welcome": "参加をお待ちしています",
-    "join": "コンペティションに参加する",
-    "introduction": {
-      "title": "大会の紹介",
-      "empty": "主催者がまだ何も書いていません",
-      "form": {
-        "content": {
-          "label": "内容",
-          "placeholder": "内容を入力してください",
-          "required": "内容は必須です"
-        }
-      }
-    },
-    "rules": {
-      "title": "大会ルール"
-    },
-    "scoreboard": {
-      "title": "ポイントボード",
-      "empty": "参加チームなし",
-      "selectInstitute": "組織を選択...",
-      "currentPeriod": "今週目",
-      "errors": {
-        "fetchScoreboard": {
-          "title": "ポイントボードを取得できませんでした"
-        }
-      }
-    },
-    "writeups": {
-      "title": "問題解説",
-      "empty": "問題解説なし"
-    },
-    "statistics": {
-      "title": "統計データ",
-      "errors": {
-        "fetch": "大会の統計情報を取得できませんでした",
-        "export": "大会の統計情報をエクスポートできませんでした"
-      },
-      "selectInstitute": "組織を選択...",
-      "submission": "評価結果を提出",
-      "challengeStats": "問題解決状況",
-      "players": "選手統計",
-      "institutePlayers": "組織参加選手統計",
-      "others": "その他",
-      "teams": "チーム統計",
-      "instituteTeams": "組織参加チーム統計"
-    },
-    "monitor": {
-      "title": "イベントダッシュボード",
-      "empty": "監査ログはありません",
-      "status": {
-        "pending": {
-          "title": "人間による再確認を待っています"
-        },
-        "misjudged": {
-          "title": "誤判断"
-        },
-        "confirmed": {
-          "title": "事実です"
-        }
-      },
-      "errors": {
-        "fetchAudit": {
-          "title": "監査ログの取得に失敗しました"
-        },
-        "fetchSubmission": {
-          "title": "提出記録の取得に失敗しました"
-        }
-      },
-      "autoRefreshEnabled": "自動リフレッシュが有効になっています",
-      "submissions": "提出記録",
-      "audits": "監査イベント"
-    },
-    "git": {
-      "title": "問題ライブラリ",
-      "status": {
-        "readonly": {
-          "message": "コンテストが選手に表示されている場合、このリポジトリは読み取り専用の状態であり、ローカルの変更をプッシュしたり、ブランチをマージすることはできません。コンテストデータの操作には、ウェブ機能を使用してください。"
-        },
-        "writable": {
-          "message": "大会は非表示になっています。このリポジトリは Git クライアントから書き込み可能です。ただし、元のデータを直接操作すると大会データが破損する可能性があるため、自分が何をしているかを確認してください。ローカルの変更をプッシュした後、プラットフォームはデータベースの同期と利用可能性のチェックを自動的に行います。同期が完了するまで他の操作をしないでください。"
-        }
-      },
-      "cloneTip": "次のリンクを使用して、コンペティションデータをローカルにクローンできます。リポジトリにアクセスする際に使用するアカウントは、プラットフォームアカウントと一致させる必要があります。これにより、バックアップや後の移行が容易になります。ただし、ユーザー情報やチーム情報などは含まれていません。",
-      "listTip": "ここでは基本的なファイル構造と提出履歴のみを確認できます。リポジトリのサイズが大きい場合、Gitデータベースの整理には大量の時間がかかる可能性があります。",
-      "errors": {
-        "fetchRepo": {
-          "title": "問題の取得に失敗しました"
-        }
-      }
-    },
-    "form": {
-      "title": "編集情報",
-      "name": {
-        "label": "大会名",
-        "placeholder": "大会名を入力してください",
-        "required": "大会名は必須です"
-      },
-      "brief": {
-        "label": "大会概要",
-        "placeholder": "概要を入力してください",
-        "required": "概要は必須です"
-      },
-      "startAt": {
-        "label": "開始時間",
-        "placeholder": "開始時間を選択してください",
-        "required": "開始時間は必須です",
-        "canNotLaterThanEnd": "開始時間は終了時間より遅くできません"
-      },
-      "endAt": {
-        "label": "終了時間",
-        "placeholder": "終了時間を選択してください",
-        "required": "終了時間は空にできません",
-        "canNotEarlierThanStart": "終了時間は開始時間より前にはなりません"
-      },
-      "registerAt": {
-        "label": "登録時間",
-        "placeholder": "登録時間を選択してください",
-        "required": "登録時間は空にできません",
-        "canNotLaterThanEnd": "登録時間は終了時間より後にはなりません"
-      },
-      "archiveAt": {
-        "label": "アーカイブ時間",
-        "placeholder": "アーカイブ時間を選択してください",
-        "required": "アーカイブ時間は空にできません",
-        "canNotEarlierThanStart": "アーカイブ時間は開始時間より前にはなりません"
-      },
-      "weight": {
-        "label": "重み"
-      },
-      "misc": {
-        "label": "その他設定"
-      },
-      "awardRate": {
-        "label": "追加報酬ポイント割合",
-        "firstBlood": "一血報酬スコア割合",
-        "secondBlood": "二血報酬スコア割合",
-        "thirdBlood": "三血報酬スコア割合",
-        "placeholder": "報酬スコア割合を入力してください",
-        "required": "報酬スコア割合は必須です",
-        "mustBeNumber": "報酬スコア割合は数字でなければなりません",
-        "mustBePositiveNumber": "報酬スコア割合は正の数でなければなりません"
-      },
-      "hidden": {
-        "label": "非表示",
-        "placeholder": "非表示にするか",
-        "message": "非表示にすると、管理者以外はその大会を見ることができません"
-      },
-      "frozen": {
-        "label": "凍結",
-        "placeholder": "凍結するか",
-        "message": "凍結後、選手は一時的に問題にアクセスできなくなります"
-      },
-      "offline": {
-        "label": "オフライン大会の特徴を有効にする"
-      },
-      "teamSize": {
-        "label": "チーム人数",
-        "placeholder": "チーム人数を入力してください。0 は制限なし",
-        "required": "チーム人数は必須です",
-        "mustBeNumber": "チーム人数は数字でなければなりません",
-        "mustBePositiveNumber": "チーム人数は正の数でなければなりません",
-        "minimum": "人数は0未満であってはなりません",
-        "maximum": "人数は99を超えてはなりません"
-      },
-      "envLimit": {
-        "label": "コンテナ制限",
-        "placeholder": "空欄の場合、チーム人数に従います（無制限時は 1）",
-        "minimum": "コンテナ制限は1未満であってはなりません",
-        "maximum": "コンテナ制限は99を超えてはなりません"
-      },
-      "enableTeamAudit": {
-        "label": "チーム審査を有効にする",
-        "placeholder": "チーム審査を有効にしますか",
-        "message": "有効にすると、チームは参加する前に審査が必要になります"
-      },
-      "canRegisterAfterStart": {
-        "label": "大会開始後に登録を許可する",
-        "placeholder": "大会開始後に登録を許可するか",
-        "message": "許可すると、選手は大会開始後に登録できます"
-      },
-      "introduction": {
-        "label": "大会紹介",
-        "required": "大会紹介は空にできません"
-      },
-      "enableHammer": {
-        "label": "ハンマーのフィードバックを有効にする",
-        "placeholder": "ハンマーフィードバックを有効にする",
-        "message": "有効にすると、選手はハンマーフィードバック機能を使って出題者と連絡できます"
-      },
-      "outerHammerUrl": {
-        "label": "外部フィードバックアドレス",
-        "placeholder": "外部フィードバックアドレスを入力してください",
-        "message": "ハンマーフィードバックを有効にしない場合、プラットフォームはここに記載されたリンクに従って選手を外部フィードバックシステムに誘導します。"
-      },
-      "outerHammerLabel": {
-        "label": "外部フィードバックリンク名",
-        "placeholder": "外部フィードバックリンクの名前を入力してください",
-        "message": "ハンマーフィードバックを有効にしない場合、プラットフォームはここに表示される名前に基づいて選手を外部フィードバックシステムにリダイレクトします。"
-      }
-    },
-    "admin": {
-      "title": "管理",
-      "gotoChallenges": "問題管理に移動する"
-    },
-    "administrator": {
-      "errors": {
-        "fetchList": {
-          "title": "大会管理者一覧の取得に失敗しました"
-        },
-        "noPermission": {
-          "title": "基本的な権限がありません"
-        },
-        "alreadyAdded": {
-          "title": "すでに追加されています"
-        }
-      },
-      "title": "大会管理者",
-      "form": {
-        "search": {
-          "title": "大会管理者を追加",
-          "placeholder": "ユーザー名またはメールアドレスを検索"
-        },
-        "confirm": {
-          "message": "{{name}} を大会管理者として追加しますか？"
-        }
-      },
-      "empty": "管理者がいません。運用チームに連絡して手動で追加してください"
-    },
-    "registerNotStarted": "登録はまだ開始されていません、少しお待ちください",
-    "registerEnded": "登録はすでに終了しました。試合のアーカイブを待ってください",
-    "policies": {
-      "title": "ポリシー管理",
-      "form": {
-        "challenge": {
-          "showAnswer": {
-            "label": "アーカイブ後に問題の解答を表示する"
-          },
-          "showHints": {
-            "label": "アーカイブ後に無料でヒントを表示する"
-          }
-        }
-      }
-    },
-    "timeline": {
-      "title": "タイムライン管理",
-      "form": {
-        "label": {
-          "label": "タイムラインラベル",
-          "required": "タイムラインラベルは空にできません",
-          "placeholder": "期間ラベルを入力してください"
-        },
-        "startAt": {
-          "required": "開始時間を入力してください"
-        },
-        "endAt": {
-          "required": "終了時間を入力してください"
-        },
-        "startEndTime": {
-          "label": "開始と終了時間",
-          "placeholder": "開始と終了時間を選択してください"
-        }
-      },
-      "empty": "定義された期間はありません",
-      "deleteWarning": "この期間を削除しますか？削除しても現在の問題の期間制御には影響しません。"
-    },
-    "hammer": {
-      "title": "ハンマーフィードバック",
-      "errors": {
-        "fetchSessions": {
-          "title": "フィードバックセッション一覧の取得に失敗しました"
-        }
-      },
-      "empty": "まだフィードバックはありません",
-      "status": {
-        "adminUnread": {
-          "title": "管理者未読"
-        },
-        "playerUnread": {
-          "title": "選手未読"
-        },
-        "notReply": {
-          "title": "既読無視"
-        }
-      },
-      "placeholder": "メッセージを表示および返信するためのセッションを選択してください",
-      "newMessages": "出題者が {{challenge}} であなたのメッセージに返信しました"
-    },
-    "delete": {
-      "title": "大会を削除",
-      "warning": "この大会を削除しますか？削除後は元に戻せません。関連データはすべて削除されます。",
-      "requirements": "注意してください。大会を削除する前に、大会内のすべての問題をクリアする必要があります。問題が存在する場合は大会を削除できません。",
-      "confirm": "大会を削除する場合、下記に大会名 {{name}} を入力してください"
-    },
-    "events": {
-      "title": "イベント通知",
-      "errors": {
-        "fetchDevices": {
-          "title": "接続デバイスの取得に失敗しました"
-        }
-      },
-      "howto": "次のWebSocketアドレスに接続することで、プラットフォームのイベントAPIサブスクリプションにアクセスできます。イベントAPIの統合方法についてはここから確認できます：",
-      "tokenWarning": "注意してください。イベントAPIはトークンのみで認証されます。このリンクの漏洩に十分注意してください。",
-      "regenerateTokenWarning": "トークンを再生成してもよろしいですか？すでに接続されているデバイスは接続を失います。",
-      "linkedDevices": "接続されたデバイス",
-      "emptyDevices": "接続されたデバイスはありません"
-    },
-    "organize": {
-      "title": "組織管理",
-      "actions": {
-        "restrict": {
-          "confirm": "以下の組織以外のユーザーを参加させないようしますか？（クリック後、即座に有効になります！）",
-          "title": "この大会を限定する"
-        }
-      },
-      "instituteEnabled": "組織ランキング"
-    },
-    "errors": {
-      "fetch": {
-        "title": "大会の取得に失敗しました"
-      },
-      "fetchList": {
-        "title": "大会リストの取得に失敗しました"
-      },
-      "regenerateToken": {
-        "title": "管理キーの生成に失敗しました"
-      },
-      "fetchDoc": {
-        "title": "大会ドキュメントの取得に失敗しました"
-      },
-      "fetchIntroduction": {
-        "title": "試合の紹介を取得できませんでした"
-      }
-    },
-    "seeOtherInteresting": "他の場所を見てみましょう",
-    "notArchived": "試合はまだアーカイブされていません",
-    "canNotParticipate": "参加できません",
-    "adminMode": "管理者モード",
-    "miscSettings": "その他設定",
-    "register": "登録",
-    "timeLast": "{{period}} あと",
-    "accessPolicy": {
-      "open": "オープン大会"
-    },
-    "gotoTraining": "アーカイブ済み、練習場へ移動してください",
-    "enterChallenge": "チャレンジを突破せよ！",
-    "manageChallenges": "大会問題の管理",
-    "loginThenBack": "ログインして参加してください",
-    "notification": {
-      "errors": {
-        "fetch": {
-          "title": "通知メッセージの取得に失敗しました"
-        }
-      },
-      "form": {
-        "title": {
-          "required": "通知タイトルは空にできません",
-          "placeholder": "通知タイトルを入力してください",
-          "label": "通知タイトル"
-        },
-        "content": {
-          "required": "通知内容は空にできません",
-          "label": "通知内容"
-        }
-      },
-      "empty": "通知はありません"
-    }
-  },
-  "challenge": {
-    "title": "問題",
-    "list": "問題一覧",
-    "empty": "問題がありません",
-    "tag": {
-      "title": "問題のタグ",
-      "unknown": "未知のカテゴリ"
-    },
-    "search": {
-      "placeholder": "名前またはタグで検索",
-      "hideSolved": "解決済みの問題を非表示",
-      "solved": "解決済み",
-      "hideArchived": "アーカイブ済みの問題を非表示",
-      "archived": "アーカイブ済み"
-    },
-    "status": {
-      "solved": {
-        "title": "解決済み",
-        "message": "おめでとうございます、フラグを取得しました！"
-      },
-      "archived": {
-        "title": "アーカイブ済み",
-        "message": "アーカイブ後は問題を解いても点数が付与されません"
-      },
-      "inPeriod": {
-        "title": "進行中",
-        "message": "タイムリミット付きの問題で、現在の週目でのみ点数が付与されます",
-        "countdown": "問題のアーカイブカウントダウン"
-      },
-      "unreleased": {
-        "title": "未公開",
-        "message": "問題はまだ公開されていません。選手はこの問題を見ることができません",
-        "countdown": "問題の公開カウントダウン"
-      },
-      "hidden": {
-        "title": "非表示",
-        "message": "問題は非表示にされています。管理者のテスト用です。",
-        "alert": "問題が準備ができたら、「公開」ボタンをクリックしてください。プラットフォームは問題の可視性を自動的に変更しません。自動公開機能は、タイムノードと非表示状態を使用して、問題の最終的な可視性を計算します。"
-      }
-    },
-    "actions": {
-      "up": {
-        "title": "公開",
-        "message": "この問題を公開しますか？公開すると、選手は開催後、該当するラウンドに参加した後に問題を閲覧および解答できます（コンテスト開始時にすべての問題が公開状態になっていることを確認してください。自動掲題機能はタイムラインに従って選手の可視性を計算しますが、この状態を変更しません）。公開中は問題を編集できません。"
-      },
-      "down": {
-        "title": "非表示",
-        "message": "この問題を非表示にしますか？非表示にすると、問題の内容を編集して再度公開できます。非表示の間、選手は問題を閲覧および解答できません。プラットフォームはこの状態を変更しません。"
-      }
-    },
-    "form": {
-      "name": {
-        "label": "問題名",
-        "placeholder": "名前を入力してください",
-        "required": "名前は必須です"
-      },
-      "tag": {
-        "label": "問題タグ",
-        "placeholder": "タグを入力してください。/ で区切ってください。最初のタグがカテゴリになります",
-        "required": "タグは必須です"
-      },
-      "scoreRule": {
-        "initial": {
-          "label": "初期スコア",
-          "placeholder": "スコアを入力してください"
-        },
-        "minimum": {
-          "label": "最低スコア",
-          "placeholder": "スコアを入力してください"
-        },
-        "range": {
-          "label": "スコア範囲"
-        },
-        "decay": {
-          "label": "減衰回数",
-          "placeholder": "減衰回数を入力してください"
-        }
-      },
-      "scoringPeriod": {
-        "label": "スコア計算サイクル",
-        "placeholder": "スコア計算サイクルを選択してください"
-      },
-      "content": {
-        "label": "問題内容",
-        "placeholder": "内容を入力してください",
-        "required": "内容は空にできません"
-      }
-    },
-    "errors": {
-      "fetchList": {
-        "title": "問題リストの取得に失敗しました"
-      },
-      "fetch": {
-        "title": "問題の取得に失敗しました"
-      },
-      "up": {
-        "title": "チャレンジを公開できませんでした"
-      },
-      "down": {
-        "title": "チャレンジを非表示にできませんでした"
-      }
-    },
-    "terminal": {
-      "title": "ターミナル"
-    },
-    "hint": {
-      "title": "ヒント",
-      "empty": "出題者があなたにヒントをまだ公開していません。もう少し考えてみてください。",
-      "unlockConfirm": "{{cost}} pts を使ってこのヒントを解除しますか？",
-      "form": {
-        "content": {
-          "required": "ヒントの内容は空にできません",
-          "label": "ヒントの内容",
-          "placeholder": "ヒントの内容を入力してください"
-        },
-        "cost": {
-          "label": "スコア",
-          "placeholder": "スコア"
-        }
-      },
-      "errors": {
-        "fetch": {
-          "title": "ヒントの取得に失敗しました"
-        },
-        "unlock": {
-          "title": "ヒントのアンロックに失敗しました"
-        }
-      }
-    },
-    "file": {
-      "title": "添付ファイル",
-      "empty": "添付ファイルはありません",
-      "type": {
-        "static": {
-          "title": "静的添付ファイル",
-          "tip": "この場所にあるファイルはすべて、コンテスト参加者にそのまま提供されます。"
-        },
-        "mapped": {
-          "title": "動的添付ファイル",
-          "tip": "このファイルはハッシュマップ形式で参加者に割り当てられます。複数の添付ファイルを動的に割り当てる必要がある場合は、圧縮ファイルにパッケージ化してください。"
-        },
-        "checker": {
-          "title": "評価ファイル",
-          "tip": "このファイルは評価に使用され、参加者がアクセスすることは一切ありません。"
-        }
-      },
-      "errors": {
-        "fetchFiles": {
-          "title": "ファイルの取得に失敗しました"
-        },
-        "uploadFiles": {
-          "title": "ファイルのアップロードに失敗しました"
-        },
-        "deleteFiles": {
-          "title": "ファイルの削除に失敗しました"
-        }
-      }
-    },
-    "answer": {
-      "title": "問題解説",
-      "empty": "現在、問題解説はありません",
-      "errors": {
-        "fetchAnswer": {
-          "title": "問題の解説を取得できませんでした"
-        },
-        "invisibleBeforeArchive": {
-          "title": "解説が表示されません",
-          "message": "アーカイブ前に解説は表示されません"
-        }
-      }
-    },
-    "hammer": {
-      "title": "ハンマー",
-      "solved": "問題は解決しました。おめでとうございます！",
-      "adminGoto": "管理者は、コンテスト管理パネルに移動して選手からのフィードバックメッセージを確認してください。",
-      "outerGoto": "この試合ではハンマーフィーチャーが有効になっていません。試合や問題に関するフィードバックはここにご記入ください",
-      "outerFollow": "この試合ではハンマーフィーチャーは使用されません。主催者の要件に従って、他のチャネルで問題をフィードバックしてください。",
-      "tips": {
-        "0": "ここに送信するメッセージは、問題の状態とともに作問者に転送されます。作問者はここに返信するか、他の方法であなたに連絡するかもしれません。",
-        "1": "作問者の返信があるまで、あなたは3つのメッセージしか送信できません。そのため、できるだけ一度に多くの質問をまとめることをお勧めします。",
-        "2": "ログやコードなど長いメッセージは、ネットワーククリップボードを使用して送信することをお勧めします。例えば："
-      },
-      "role": {
-        "admin": "管理者",
-        "player": "選手"
-      },
-      "freeMessages": "あと {{last}} 件のメッセージを送信できます",
-      "markdownHoto": "Markdown はどのように使用しますか？",
-      "markdownSupport": "フィードバックする問題を入力してください。Markdown の構文がサポートされています",
-      "errors": {
-        "send": {
-          "title": "メッセージの送信に失敗しました"
-        },
-        "fetch": {
-          "title": "メッセージの履歴取得に失敗しました"
-        },
-        "fetchSolve": {
-          "title": "解決状態の取得に失敗しました"
-        },
-        "maxMessageLimit": {
-          "title": "メッセージ上限に達しました。フィードバックを待ってください..."
-        }
-      }
-    },
-    "submission": {
-      "submit": "提出しました",
-      "status": {
-        "pending": {
-          "title": "キューにあります"
-        },
-        "solved": {
-          "title": "正しい"
-        },
-        "failed": {
-          "title": "エラー"
-        }
-      },
-      "errors": {
-        "submit": {
-          "title": "提出に失敗しました"
-        },
-        "fetchSolves": {
-          "title": "解き方を取得できませんでした"
-        },
-        "fetchSolveStatus": {
-          "title": "解いた状態を取得できませんでした"
-        }
-      },
-      "title": "提出記録",
-      "total": "合計"
-    },
-    "statistics": {
-      "title": "統計",
-      "empty": "統計データはありません",
-      "showAll": "すべて表示",
-      "solves": {
-        "title": "解き方の統計",
-        "subject": "誰が私の問題を解きましたか？"
-      },
-      "commits": {
-        "title": "操作履歴",
-        "subject": "誰が私の問題を弄ったのか？"
-      },
-      "errors": {
-        "fetchStatistics": {
-          "title": "統計データの取得に失敗しました"
-        },
-        "fetchSubmission": {
-          "title": "問題の解答状況の取得に失敗しました"
-        },
-        "fetchCommitHistory": "問題の操作履歴の取得に失敗しました"
-      }
-    },
-    "instance": {
-      "title": "インスタンス",
-      "empty": "インスタンスはありません",
-      "delete": "環境設定を削除すると、問題は添付ファイル形式の問題に戻ります。",
-      "internet": "コンテナ内からインターネットへのアクセスを許可する",
-      "restrict": "Root権限の制限",
-      "privileged": "特権で実行",
-      "registrySecret": "リポジトリシークレット（事前にリソースを構成する必要があります）",
-      "runningContainers": "実行中の環境",
-      "status": {
-        "idle": {
-          "title": "問題はオンライン環境を起動できます"
-        },
-        "running": {
-          "title": "問題の環境が起動しました"
-        },
-        "pending": {
-          "title": "問題の環境を起動中です、お待ちください..."
-        },
-        "failed": {
-          "title": "問題の環境の起動に失敗しました"
-        }
-      },
-      "image": {
-        "label": "問題の環境イメージ",
-        "upload": "イメージリポジトリにアップロード",
-        "empty": "イメージが設定されていません",
-        "form": {
-          "containerName": {
-            "label": "コンテナ名",
-            "placeholder": "コンテナ名を入力してください",
-            "required": "コンテナ名は必須です",
-            "mustBeValidName": "3-40文字で、小文字英字で始まり、小文字英字、数字、ハイフン(-)のみを使用し、末尾にハイフンは使えません"
-          },
-          "tag": {
-            "label": "イメージタグ",
-            "placeholder": "イメージタグを入力してください",
-            "required": "イメージタグは空にできません"
-          },
-          "version": {
-            "label": "イメージバージョン",
-            "placeholder": "イメージバージョンを入力してください"
-          },
-          "restrict": {
-            "label": "Root権限の制限",
-            "placeholder": "Root権限を制限しますか",
-            "message": "制限すると、コンテナ内の非rootユーザーは特権ポートや他のコンテナから昇格する機能を使用できなくなります"
-          },
-          "service": {
-            "description": {
-              "label": "サービスの説明",
-              "placeholder": "サービスの説明を入力してください。ポートを開けない場合は空にできます",
-              "requiredWhenHavePort": "サービスのポートを入力した場合、サービスの説明は空にできません"
-            },
-            "type": {
-              "label": "サービスタイプ",
-              "placeholder": "サービスタイプを選択してください",
-              "items": {
-                "tcp": "オリジナル (TCP)",
-                "http": "HTTP",
-                "udp": "UDP"
-              },
-              "udpNotWorkingWithWsrx": "クラスターのポートフォワーディング機能はUDPフォワーディングをサポートしていません。UDPサービスはプラットフォームのプロキシとWSRXを通じてアクセスできません。適切にトラフィックフォワーディングスクリプトを設定してください。",
-              "requiredWhenHavePort": "サービスのポートを入力した場合、サービスタイプは空にできません"
-            },
-            "protocol": {
-              "label": "トランスポートプロトコル",
-              "placeholder": "トランスポートプロトコルを選択してください",
-              "items": {
-                "tcp": "TCP",
-                "stcp": "STCP",
-                "udp": "UDP"
-              },
-              "udpNotWorkingWithWsrx": "クラスターのポートフォワーディング機能はUDPフォワーディングをサポートしていません。UDPサービスはプラットフォームのプロキシとWSRXを通じてアクセスできません。適切にトラフィックフォワーディングスクリプトを設定してください。",
-              "requiredWhenHavePort": "サービスのポートを入力した場合、トランスポートプロトコルは空にできません"
-            },
-            "appProtocol": {
-              "label": "アプリケーションプロトコル",
-              "placeholder": "アプリケーションプロトコルを選択してください",
-              "items": {
-                "raw": "Raw",
-                "http": "HTTP"
-              },
-              "requiredWhenHavePort": "サービスのポートを入力した場合、アプリケーションプロトコルは空にできません"
-            },
-            "port": {
-              "label": "サービスのポート",
-              "placeholder": "サービスのポートを入力してください",
-              "required": "サービスを有効にする際、サービスのポートは空にできません",
-              "mustBeNumber": "サーバーポートは数字でなければなりません",
-              "mustBeInRange": "サーバーポートは 1-65535 の範囲内である必要があります",
-              "conflict": "サーバーポートが他のサーバーポートと衝突しています"
-            },
-            "cpu": {
-              "label": "CPU 制限",
-              "required": "CPU 制限は空にできません"
-            },
-            "mem": {
-              "label": "メモリ制限",
-              "required": "メモリ制限は空にできません"
-            },
-            "storage": {
-              "label": "ストレージ制限",
-              "required": "ストレージ制限は空にできません"
-            }
-          }
-        }
-      },
-      "actions": {
-        "addImage": {
-          "title": "イメージを追加",
-          "message": "イメージを追加した後、イメージは自動的にサーバーにプルされます。"
-        },
-        "start": {
-          "title": "スタート！"
-        },
-        "delay": {
-          "title": "1時間延長"
-        },
-        "stop": {
-          "title": "環境を停止"
-        },
-        "copy": {
-          "title": "問題環境のアドレスをコピー"
-        }
-      },
-      "errors": {
-        "fetchInstances": {
-          "title": "インスタンスの取得に失敗しました"
-        },
-        "fetchConfigImages": {
-          "title": "イメージリストの取得に失敗しました"
-        },
-        "fetchRegistry": {
-          "title": "イメージリポジトリの取得に失敗しました"
-        },
-        "toggleNetworkConfig": {
-          "title": "ネットワーク設定の変更に失敗しました"
-        },
-        "toggleRestrict": {
-          "title": "制限Root権限の変更に失敗しました"
-        },
-        "noExportedServices": {
-          "title": "外部サービスがまだ指定されていません",
-          "message": "環境に少なくとも1つのサービスポートを追加してください。"
-        },
-        "start": {
-          "title": "インスタンスの起動に失敗しました"
-        },
-        "stop": {
-          "title": "インスタンスの停止に失敗しました"
-        },
-        "delay": {
-          "title": "インスタンスの延長に失敗しました"
-        },
-        "calmdown": {
-          "title": "コンテナの再構築中です"
-        },
-        "managedByMate": {
-          "title": "チームメイトの環境、アクセスのみ可能です"
-        },
-        "noConfig": {
-          "title": "この問題にはオンライン環境は提供されていません"
-        },
-        "singleton": {
-          "title": "同時に起動できる問題サービスの数は上限に達しました",
-          "current": "現在実行中のサービス",
-          "action": "他の問題サービスを停止して、現在の問題を起動しますか？",
-          "stop": "特定の問題のサービスを停止して、現在の問題を起動してください"
-        },
-        "noAction": {
-          "title": "何も実行されません。"
-        }
-      }
-    },
-    "checker": {
-      "title": "評価",
-      "script": "評価スクリプト",
-      "preset": {
-        "placeholder": "スクリプトプリセットを選択してください",
-        "simple": {
-          "label": "シンプルな評価"
-        },
-        "leet": {
-          "label": "ダイナミック環境評価（Leet）"
-        },
-        "uuid": {
-          "label": "ダイナミック環境評価（UUID）"
-        },
-        "mapped": {
-          "label": "ダイナミック添付ファイル評価"
-        }
-      },
-      "errors": {
-        "fetchCheckerScript": {
-          "title": "評価スクリプトの取得に失敗しました"
-        },
-        "fetchScript": {
-          "title": "スクリプト構成を取得できませんでした"
-        }
-      }
-    },
-    "settings": {
-      "title": "設定"
-    },
-    "inGame": "ゲーム中の問題",
-    "total": "すべての問題"
-  },
-  "wsrx": {
-    "title": "WebSocket Reflector X",
-    "status": {
-      "invalid": {
-        "title": "WSRX 未接続"
-      },
-      "pending": {
-        "title": "ローカル認証を待機中"
-      },
-      "usable": {
-        "title": "WSRX 接続済み"
-      },
-      "connecting": {
-        "title": "接続中..."
-      }
-    },
-    "retry": "接続を再試行",
-    "download": {
-      "title": "WSRX クライアントをダウンロード",
-      "message": "最新バージョンの WSRX を GitHub からダウンロードしてください"
-    },
-    "actions": {
-      "copy": {
-        "title": "WebSocket リンクをコピー"
-      },
-      "copyLocal": {
-        "title": "ローカルアドレスをコピー"
-      },
-      "retry": {
-        "title": "接続を再試行"
-      },
-      "resetDefault": {
-        "title": "デフォルトにリセット"
-      },
-      "refresh": {
-        "title": "ルーティングを更新"
-      },
-      "openAll": {
-        "title": "すべてのルーティングを開く"
-      },
-      "deleteAll": {
-        "title": "すべてのルーティングを閉じる"
-      },
-      "deleteOutdated": {
-        "title": "期限切れのルーティングを削除"
-      }
-    },
-    "settings": {
-      "title": "WSRX 設定",
-      "address": {
-        "label": "WSRX コントロールアドレス",
-        "placeholder": "WSRX コントロールアドレスを入力してください",
-        "required": "WSRX コントロールアドレスは必須です",
-        "invalid": "WSRX コントロールアドレスが無効です"
-      }
-    },
-    "errors": {
-      "versionMismatch": {
-        "title": "WSRX バージョンが古いです",
-        "message": "プラットフォーム統合を使用するには最新バージョンに更新してください"
-      },
-      "daemonOffline": {
-        "title": "WSRX デーモンがオフラインです",
-        "message": "デスクトップクライアントが起動している場合は、プラットフォーム設定のWSRXコントロールアドレスが正しいか確認してください"
-      },
-      "disconnected": {
-        "title": "WSRX デーモンが切断されました",
-        "message": "ローカルクライアントの状態を確認してください"
-      },
-      "daemonError": {
-        "title": "WSRX デーモンエラー",
-        "message": "ローカルクライアントの状態を確認してください"
-      },
-      "fetchTunnel": {
-        "title": "WSRX マッピングリストの取得に失敗しました",
-        "message": "ローカルクライアントのログを確認してください"
-      },
-      "deleteTunnel": {
-        "title": "WSRX マッピングの削除に失敗しました",
-        "message": "ローカルクライアントのログを確認してください"
-      },
-      "createTunnel": {
-        "title": "WSRXマッピングの作成に失敗しました",
-        "message": "ローカルクライアントのログを確認してください"
-      }
-    },
-    "downloadClient": "クライアントをダウンロード",
-    "tunnels": "接続ルート"
   },
   "captcha": {
     "title": "CAPTCHA保護",
@@ -1529,23 +563,7 @@
       "title": "個人紹介",
       "empty": "この謎めいたハッカーは何かを残していなかった..."
     },
-    "joinedGames": "大会に参加",
-    "gameJournal": "{{team}}のメンバーとして{{game}}に参加しました。",
     "moreJournal": "命ある限り、探求を止めない……",
-    "solvedProblems": "解答状況",
-    "stats": {
-      "title": "キャリアデータ",
-      "allGames": "すべての大会",
-      "empty": "解答記録はありません",
-      "solved": "解答済み",
-      "failed": "未解答"
-    },
-    "statusFilter": {
-      "all": "すべての問題",
-      "notAttempted": "未着手",
-      "attempted": "挑戦済み",
-      "solved": "解答済み"
-    },
     "gotoAdminPanel": "ユーザー管理へ移動",
     "registeredAt": "{{time}}に登録",
     "title": "ユーザー",
@@ -1573,7 +591,7 @@
       "calendar": "カレンダー公開",
       "wiki": "知識公開",
       "bulletin": "公告公開",
-      "game": "大会管理",
+      "tournament": "大会管理",
       "host": "大会開催",
       "statistics": "データ統計",
       "devOps": "プラットフォーム運用",
@@ -1730,11 +748,40 @@
         }
       }
     },
+    "phira": {
+      "title": "Phiraをバインド",
+      "description": "Phiraのメールアドレスとパスワードでアカウントを確認します。保存されるのはPhiraユーザーIDのみで、パスワードとトークンは保存されません。",
+      "form": {
+        "email": {
+          "label": "Phiraメールアドレス",
+          "placeholder": "Phiraメールアドレスを入力してください",
+          "required": "Phiraメールアドレスは必須です"
+        },
+        "password": {
+          "label": "Phiraパスワード",
+          "placeholder": "Phiraパスワードを入力してください",
+          "required": "Phiraパスワードは必須です"
+        }
+      },
+      "actions": {
+        "bind": "Phiraをバインド",
+        "unbind": "Phiraのバインドを解除"
+      },
+      "status": {
+        "bound": "Phiraアカウントをバインド済み：{{name}}",
+        "success": "Phiraアカウントをバインドしました"
+      },
+      "errors": {
+        "bind": {
+          "title": "Phiraアカウントのバインドに失敗しました"
+        }
+      }
+    },
     "register": {
       "tips": "アカウントをお持ちではありませんか？今すぐ登録！",
       "status": {
         "success": {
-          "message": "登録に成功しました。CTFの世界へようこそ！"
+          "message": "登録に成功しました。Rhythm Arena へようこそ！"
         }
       },
       "errors": {
@@ -1817,277 +864,6 @@
       "title": "メールアドレスを検証する"
     }
   },
-  "shell": {
-    "cat": {
-      "man": "ファイルの内容を表示します。",
-      "errors": {
-        "noFileSpecified": {
-          "title": "ファイルが指定されていません。"
-        },
-        "tooManyFiles": {
-          "title": "パラメータが多すぎます！"
-        },
-        "fileNotFound": {
-          "title": "そのファイルやディレクトリは存在しません。"
-        },
-        "read": {
-          "title": "ファイルの読み込みに失敗しました。"
-        }
-      }
-    },
-    "errors": {
-      "noGameSpecified": {
-        "title": "有効なゲームパスにありません。"
-      },
-      "permissionDenied": {
-        "title": "アクセス権が不足しています。"
-      },
-      "noChallengeSpecified": {
-        "title": "有効な問題パスにありません。"
-      },
-      "traversalDetected": {
-        "title": "リモートホストがディレクトリトラバーサルを拒否しました。"
-      },
-      "commandInvalid": {
-        "title": "コマンドに構文エラーがあります"
-      }
-    },
-    "help": {
-      "man": "ヘルプ情報を出力します。",
-      "commands": "以下のコマンドを使用できます："
-    },
-    "welcome": "{{shell}}をご利用いただきありがとうございます！",
-    "tip": "この端末に形式に合った {{flag}} を直接入力すると提出できます。より多くの使用方法を取得するには、{{help}} を入力してください。",
-    "clear": {
-      "man": "端末の出力内容をクリアして再び開始します。"
-    },
-    "echo": {
-      "man": "あなたの入力をそのまま出力します。"
-    },
-    "ls": {
-      "man": "<ファイル>（デフォルトは現在のディレクトリ）の情報を一覧表示します。",
-      "errors": {
-        "invalidOption": {
-          "title": "無効なオプション -- {{option}}"
-        },
-        "tooManyArgs": {
-          "title": "パラメータが多すぎます！"
-        },
-        "traversalDetected": {
-          "title": "リモートホストがディレクトリトラバーサルを拒否しました。"
-        },
-        "fileNotFound": {
-          "title": "そのファイルやディレクトリは存在しません。"
-        },
-        "list": {
-          "title": "ディレクトリへのアクセスにエラーが発生しました。"
-        }
-      }
-    },
-    "service": {
-      "man": "問題環境サービスを管理します。",
-      "errors": {
-        "needAction": {
-          "title": "操作を指定してください。"
-        }
-      },
-      "usage": "使用方法：",
-      "actions": {
-        "start": {
-          "title": "問題環境サービスを起動します。"
-        },
-        "stop": {
-          "title": "問題環境サービスを停止します。このコマンドは他の問題の環境サービスをここで停止できます。"
-        },
-        "restart": {
-          "title": "問題環境サービスを再起動します。問題環境を間違って破損させたときに使用してください。"
-        },
-        "status": {
-          "title": "問題環境サービスの状態を表示します。"
-        },
-        "delay": {
-          "title": "問題環境の存在時間を延長します。問題環境を起動した後、デフォルトで1時間のサービス時間が設定されています。時間が足りないと感じたら、このコマンドを使用してください。"
-        }
-      },
-      "starting": "{{service}}を起動中...",
-      "stopping": "{{service}}を停止中..."
-    },
-    "submit": {
-      "man": "この問題のflagをプラットフォームに提出します。",
-      "submitting": "提出中...",
-      "waitingForChecking": "提出しました。評価を待っています...",
-      "errors": {
-        "timeout": {
-          "title": "現在、評価キューが長すぎます。5分後に更新して評価結果を確認してください。繰り返し送信しないでください。"
-        }
-      }
-    },
-    "wget": {
-      "man": "指定されたファイルをダウンロードします。",
-      "usage": "使用方法: wget \"<ファイル名>\"",
-      "downloading": "ダウンロード中",
-      "errors": {
-        "fileNotFound": {
-          "title": "そのファイルやディレクトリは存在しません。"
-        }
-      }
-    },
-    "whoami": {
-      "man": "現在の有効なユーザーIDに関連するユーザー名を表示します。"
-    },
-    "commandNotFound": "未知のコマンド: {{command}}"
-  },
-  "about": {
-    "contact": "プラットフォームソフトウェアサポート",
-    "donate": "寄付",
-    "source": "サポート"
-  },
-  "docs": {
-    "title": "開発者ドキュメント",
-    "tip": "ターミナルに戻る - 開発者ドキュメント",
-    "forVersion": "対応バージョン",
-    "intro": "概要"
-  },
-  "magic": {
-    "about": {
-      "license": {
-        "commercial": "商用サービス可",
-        "copyleft": "強いコピーレフト",
-        "description": "Ret2Shell は GPL-3.0 を土台にした強いコピーレフトライセンスを採用しており、GPL の基本的な権利と義務を維持したまま、有料アクセス層などのユーザー向け収益化に限定的な追加制限を設けています。",
-        "gplBase": "GPL-3.0 ベース",
-        "noUserFees": "有料アクセス層なし",
-        "view": "ライセンス全文を見る"
-      },
-      "thanks": "私の作品を使用していただきありがとうございます",
-      "title": "について"
-    },
-    "sakana": {
-      "title": "サカナ~",
-      "illustration": "イラスト",
-      "source": "コード"
-    }
-  },
-  "team": {
-    "status": {
-      "pending": {
-        "title": "承認待ち",
-        "message": "チーム名にセンシティブなキーワードが含まれています。管理者に承認を依頼してください",
-        "placeholder": "チームは承認待ちです"
-      },
-      "banned": {
-        "message": "不正行為のため、チームはブロックされました",
-        "title": "ブロック済み"
-      },
-      "empty": {
-        "message": "まだ参加していないため、まず参加してください"
-      },
-      "hidden": {
-        "title": "非表示済み"
-      },
-      "title": "チームの状態",
-      "passed": {
-        "title": "正常"
-      }
-    },
-    "errors": {
-      "fetchList": {
-        "title": "チーム一覧の取得に失敗しました"
-      },
-      "fetch": {
-        "title": "チーム情報の取得に失敗しました"
-      },
-      "join": {
-        "title": "チームへの参加に失敗しました"
-      },
-      "fetchMember": {
-        "title": "チームメンバーの取得に失敗しました"
-      },
-      "fetchSolves": {
-        "title": "問題解決状況の取得に失敗しました"
-      },
-      "fetchExtra": {
-        "title": "追加スコア変動の取得に失敗しました"
-      }
-    },
-    "title": "参加チーム",
-    "coming": "登場！",
-    "empty": "チームはありません",
-    "join": {
-      "title": "チームに参加",
-      "tips": "既存のチームに参加します。チームのキーワードを入力することで、チームに参加できます。",
-      "form": {
-        "token": {
-          "required": "チームキーは空にできません",
-          "label": "チームキー",
-          "placeholder": "チームキーを入力してください"
-        }
-      }
-    },
-    "create": {
-      "title": "チームを作成",
-      "tips": "新しいチームを作成します。チームを作成すると、あなたはリーダーとなり、チームを管理する権限を持ちます。"
-    },
-    "choose": {
-      "title": "競技方法を選択してください"
-    },
-    "solo": "シングル戦",
-    "collab": "{{size}} 人チーム戦",
-    "unlimited": "人数無制限チーム戦",
-    "list": {
-      "title": "チーム一覧",
-      "selectInstitute": "組織を選択...",
-      "filter": "チーム名でフィルター"
-    },
-    "sortBy": "並び順",
-    "form": {
-      "name": {
-        "label": "チーム名",
-        "required": "チーム名を入力してください",
-        "maximumLength": "最大 32 文字まで",
-        "customDisabled": "チーム名は変更できません",
-        "placeholder": "チーム名を入力してください",
-        "chuunibyouGenerator": "中二病ジェネレーター"
-      },
-      "institute": {
-        "label": "所属組織",
-        "placeholder": "所属組織を選択してください"
-      },
-      "state": {
-        "label": "チーム状態"
-      },
-      "tag": {
-        "maximumLength": "タグ文字は32文字を超えてはなりません",
-        "label": "タグ文字",
-        "placeholder": "タグ文字を入力してください"
-      },
-      "acceptRules": {
-        "required": "参加規則に同意してください",
-        "label": "参加規則に同意",
-        "title": "参加規則の注意事項",
-        "ok": "参加規則に同意しました"
-      },
-      "extraScore": {
-        "placeholder": "追加スコア変動を入力してください",
-        "required": "追加スコア変動は空にできません"
-      },
-      "extraReason": {
-        "placeholder": "追加スコア変動の理由を入力してください",
-        "required": "追加スコア変動の理由は空にできません"
-      }
-    },
-    "selfManagement": "チーム管理",
-    "token": "チームのシークレット",
-    "scoreChart": "スコア曲線",
-    "solves": "問題の解決状況",
-    "noSolves": "解かれた問題はありません",
-    "solvesJournal": "{{user}} さんが {{challenge}} を解決しました。",
-    "extras": "追加スコアの変動",
-    "noExtras": "追加スコアの変動はありません"
-  },
-  "notification": {
-    "empty": "未読メッセージはありません",
-    "title": "ヒントメッセージ"
-  },
   "bulletin": {
     "title": "公告",
     "errors": {
@@ -2127,71 +903,6 @@
   },
   "license": {
     "title": "Ret2Shell Public License"
-  },
-  "traffic": {
-    "title": "環境ルーティング",
-    "nodeSelector": "ノードセレクター",
-    "preset": {
-      "title": "スクリプトプリセット",
-      "singleNodeDirectScript": "単一ノード直結",
-      "multiNodeDirectScript": "マルチノード直結"
-    }
-  },
-  "lifecycle": {
-    "title": "ライフサイクル",
-    "functions": "関数: on_start(ctx) / on_delay(ctx) / on_stop(ctx)",
-    "preset": {
-      "title": "スクリプトプリセット",
-      "webhookExample": "Webhook サンプル",
-      "reservedBlank": "空の予約枠"
-    }
-  },
-  "cluster": {
-    "title": "クラスタ管理",
-    "status": {
-      "available": {
-        "title": "クラスタは正常に動作中です"
-      },
-      "unavailable": {
-        "title": "クラスタがオフライン"
-      }
-    },
-    "nodeInfo": {
-      "title": "ノード情報",
-      "architecture": "アーキテクチャ",
-      "bootID": "起動 ID",
-      "containerRuntimeVersion": "コンテナランタイム",
-      "kernelVersion": "カーネルバージョン",
-      "machineID": "マシン ID",
-      "operatingSystem": "オペレーティングシステム",
-      "osImage": "リリース版",
-      "systemUUID": "システム UUID",
-      "kubeletVersion": "Kubelet",
-      "kubeProxyVersion": "Kube Proxy"
-    },
-    "selectNode": "ノードを選択",
-    "actions": {
-      "refreshNode": {
-        "title": "ノードを更新"
-      },
-      "updateNode": {
-        "title": "ノードをアップグレード"
-      },
-      "disconnectNode": {
-        "title": "ノードを切断"
-      }
-    },
-    "nodeResources": {
-      "title": "ノードリソース"
-    },
-    "errors": {
-      "fetchNodes": {
-        "title": "クラスターノード情報の取得に失敗しました"
-      },
-      "fetchConfig": {
-        "title": "クラスター構成の取得に失敗しました"
-      }
-    }
   },
   "oauth": {
     "title": "サードパーティ認証",
@@ -2242,9 +953,6 @@
       }
     }
   },
-  "captures": {
-    "title": "コンテナトラフィック"
-  },
   "institute": {
     "errors": {
       "fetchList": {
@@ -2270,5 +978,165 @@
     "title": "組織管理",
     "manual": "手動管理",
     "withOAuth": "認証サービスを使用"
+  },
+  "tournament": {
+    "title": "Rhythm tournaments",
+    "listSubtitle": "Create, enter, and operate rhythm game competitions.",
+    "past": "過去の大会",
+    "pastSubtitle": "終了またはアーカイブされた大会を振り返ることができます。",
+    "emptyPast": "過去の大会はまだありません。",
+    "introduction": "大会紹介",
+    "noDescription": "大会紹介はまだ公開されていません。",
+    "empty": "No tournaments yet.",
+    "noBrief": "No summary",
+    "actions": {
+      "create": "Create tournament"
+    },
+    "errors": {
+      "create": "Failed to create tournament",
+      "action": "Tournament operation failed"
+    },
+    "fields": {
+      "name": "Tournament name",
+      "brief": "Summary",
+      "mode": "Competition mode",
+      "evidence": "Screenshot policy",
+      "teamSize": "Team size",
+      "lifecycle": "Lifecycle",
+      "visibility": "Leaderboard visibility"
+    },
+    "lifecycle": {
+      "draft": "Draft",
+      "registration": "Registration",
+      "running": "Running",
+      "review": "Review",
+      "finished": "Finished",
+      "archived": "Archived"
+    },
+    "mode": {
+      "individual": "Individual",
+      "team": "Team",
+      "both": "Individual + team"
+    },
+    "evidence": {
+      "required": "Required",
+      "optional": "Optional",
+      "disabled": "Disabled"
+    },
+    "visibility": {
+      "live": "Live",
+      "frozen": "Frozen",
+      "after_end": "After finish"
+    },
+    "nav": {
+      "overview": "Overview",
+      "charts": "譜面ライブラリ",
+      "results": "Results",
+      "individual": "Individual board",
+      "team": "Team board",
+      "admin": "Manage"
+    },
+    "registration": {
+      "title": "Registration",
+      "loginRequired": "Sign in to register.",
+      "displayName": "Display name",
+      "join": "Register",
+      "withdraw": "Withdraw",
+      "status": {
+        "pending": "Pending",
+        "approved": "Approved",
+        "rejected": "Rejected",
+        "withdrawn": "Withdrawn"
+      }
+    },
+    "pool": {
+      "title": "Rounds and chart pool",
+      "empty": "No charts published.",
+      "rounds": "Rounds",
+      "tags": "タグ",
+      "tagName": "タグ名",
+      "chooseTag": "タグを選択",
+      "noTags": "このラウンドにはタグがありません",
+      "charts": "Charts",
+      "roundName": "Round name",
+      "chooseRound": "Choose round",
+      "chartTitle": "Chart title",
+      "difficulty": "Difficulty"
+    },
+    "charts": {
+      "library": "譜面ライブラリ",
+      "search": "譜面またはタグを検索",
+      "select": "譜面を選択",
+      "selectHint": "ラウンドとタグのツリーから譜面を選択してください。",
+      "charter": "譜面制作者",
+      "constant": "譜面定数",
+      "weight": "スコア重み"
+    },
+    "teams": {
+      "title": "Teams",
+      "name": "Team name",
+      "create": "Create team",
+      "join": "Join",
+      "empty": "No teams yet."
+    },
+    "results": {
+      "title": "Result submission",
+      "subtitle": "Submit a play for judge review and keep its evidence.",
+      "chart": "Chart",
+      "score": "Score",
+      "accuracy": "Accuracy",
+      "combo": "Max combo",
+      "evidence": "Add screenshot",
+      "evidenceReady": "Screenshot ready",
+      "submit": "Submit result",
+      "history": "Submission history",
+      "status": "Status",
+      "playedAt": "Played at",
+      "empty": "No submitted results.",
+      "uploadError": "Screenshot upload failed",
+      "submitError": "Result submission failed",
+      "states": {
+        "pending": "Pending",
+        "approved": "Approved",
+        "rejected": "Rejected",
+        "voided": "Voided"
+      }
+    },
+    "leaderboard": {
+      "individual": "Individual leaderboard",
+      "team": "Team leaderboard",
+      "subtitle": "Competition ranking with stable tie handling.",
+      "stale": "Recalculation failed; showing the last successful scores.",
+      "empty": "The leaderboard is not available yet."
+    },
+    "roles": {
+      "owner": "Owner",
+      "organizer": "Organizer",
+      "judge": "Judge"
+    },
+    "admin": {
+      "title": "Tournament management",
+      "subtitle": "Configure operations, review results, and control publishing.",
+      "settings": "Settings",
+      "staff": "Staff",
+      "pool": "Chart pool",
+      "scripts": "Scoring",
+      "review": "Review",
+      "import": "Import",
+      "advance": "Advance lifecycle",
+      "recompute": "Recompute",
+      "userId": "User ID",
+      "role": "Role",
+      "scriptName": "Version name",
+      "createVersion": "Create immutable version",
+      "activate": "Activate",
+      "active": "Active",
+      "noPending": "No pending results.",
+      "approve": "Approve",
+      "reject": "Reject",
+      "selectFile": "Select CSV/XLSX",
+      "valid": "Valid",
+      "commitImport": "Commit atomic import"
+    }
   }
 }

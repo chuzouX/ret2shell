@@ -11,15 +11,18 @@ use nanoid::{alphabet, nanoid};
 use r2s_cache::Cache;
 use r2s_config::{captcha::ValidatorType, email};
 use r2s_database::{
-  config, game, institute as institute_db, team,
+  config, institute as institute_db, oauth as oauth_db, registration,
+  tournament::{self, Lifecycle},
+  tournament_staff,
   user::{self, Permission, Permissions},
 };
 use r2s_email::{EmailCtx, EmailRequest, EmailType};
 use r2s_migrator::Database;
 use r2s_queue::Queue;
 use rand::RngExt;
-use sea_orm::TransactionTrait;
+use sea_orm::{ColumnTrait, ConnectionTrait, EntityTrait, QueryFilter, TransactionTrait};
 use serde::{Deserialize, Serialize};
+use serde_json::json;
 use tower_http::request_id::RequestId;
 use tracing::{debug, info, warn};
 
@@ -41,6 +44,7 @@ mod oauth;
 
 pub fn router(state: &GlobalState) -> Router<GlobalState> {
   Router::new()
+    .route("/phira", post(bind_phira_account))
     .route("/code", get(get_account_code).post(generate_account_code))
     .route_layer(middleware::from_fn(permission_required_all!(
       Permission::Verified
@@ -73,6 +77,66 @@ pub fn router(state: &GlobalState) -> Router<GlobalState> {
     )
     .nest("/captcha", captcha::router(state))
     .nest("/institute", institute::router(state))
+}
+
+#[derive(Debug, Deserialize)]
+struct PhiraBindRequest {
+  email: String,
+  password: String,
+}
+
+async fn bind_phira_account(
+  State(db): State<Database>, Extension(token): Extension<Token>,
+  Json(body): Json<PhiraBindRequest>,
+) -> Result<impl IntoResponse, ResponseError> {
+  validate_email(&body.email)?;
+  if body.password.is_empty() {
+    return Err(ResponseError::BadRequest("password is required".to_owned()));
+  }
+
+  let identity = r2s_oauth::phira::authenticate(&body.email, &body.password).await?;
+  let auth_key = identity.id.to_string();
+  let provider = "phira";
+
+  if oauth_db::get_by_auth_key(&db.conn, provider, &auth_key)
+    .await?
+    .is_some()
+  {
+    return Err(ResponseError::Conflict(
+      "phira account is already bound".to_owned(),
+    ));
+  }
+  if oauth_db::get_list(&db.conn, token.id)
+    .await?
+    .into_iter()
+    .any(|oauth| oauth.provider == provider)
+  {
+    return Err(ResponseError::Conflict(
+      "phira account is already bound".to_owned(),
+    ));
+  }
+
+  let mut data = json!({
+    "id": identity.id.to_string(),
+    "name": identity.name,
+  });
+  if let Some(avatar) = identity.avatar {
+    data["avatar"] = json!(avatar);
+  }
+
+  let oauth = oauth_db::create(
+    &db.conn,
+    oauth_db::Model {
+      user_id: token.id,
+      provider: provider.to_owned(),
+      auth_key,
+      data: Some(data),
+      ..Default::default()
+    },
+  )
+  .await?;
+
+  Ok((StatusCode::CREATED, Json(oauth)))
 }
 
 macro_rules! get_user_by_account {
@@ -394,12 +458,12 @@ async fn send_email(
     .verify_email_subject
     .clone()
     .filter(|s| !s.trim().is_empty())
-    .unwrap_or("Verify your account - Ret2Shell".to_owned());
+    .unwrap_or("Verify your account - Rhythm Arena".to_owned());
   let reset_password_subject = email_config
     .reset_password_email_subject
     .clone()
     .filter(|s| !s.trim().is_empty())
-    .unwrap_or("Reset your password - Ret2Shell".to_owned());
+    .unwrap_or("Reset your password - Rhythm Arena".to_owned());
   let verify_email_body = email_config
     .verify_email_body
     .clone()
@@ -486,14 +550,14 @@ async fn register(
 
   let password = hash_password(&body.password)?;
 
-  let mut permissions = match user::count(&txn, true, None, None, false).await? {
+  let mut permissions = match user::count(&txn, true, None).await? {
     0 => Permissions(vec![
       Permission::Basic,
       Permission::Verified,
       Permission::Calendar,
       Permission::Wiki,
       Permission::Bulletin,
-      Permission::Game,
+      Permission::Tournament,
       Permission::Host,
       Permission::User,
       Permission::Statistics,
@@ -881,7 +945,7 @@ async fn delete_self(
   let txn = db.conn.begin().await?;
 
   // Check if user is the only user
-  let user_count = user::count(&txn, false, None, None, true).await?;
+  let user_count = user::count(&txn, false, None).await?;
   if user_count == 1 {
     warn!("the only user cannot delete itself");
     return Err(ResponseError::Forbidden(
@@ -889,19 +953,7 @@ async fn delete_self(
     ));
   }
 
-  // Check if user has participated in any in-progress game
-  let games = game::get_list(&txn, Some(Utc::now()), None, None, Some(Utc::now())).await?;
-  for game in games {
-    if team::get_by_user_id(&txn, game.id, user.id)
-      .await?
-      .is_some()
-    {
-      warn!(?game, "user want to delete itself before game archived");
-      return Err(ResponseError::Forbidden(
-        "you can not delete account before game archived".to_owned(),
-      ));
-    }
-  }
+  ensure_user_not_in_active_tournament(&txn, user.id).await?;
   let user = user::Model {
     account: format!("[DELETED]_{}", user.id),
     nickname: format!("[DELETED]_{}", user.id),
@@ -931,6 +983,43 @@ async fn delete_self(
 
   txn.commit().await?;
   Ok(StatusCode::OK)
+}
+
+async fn ensure_user_not_in_active_tournament<C>(
+  db: &C, user_id: i64,
+) -> Result<(), ResponseError>
+where
+  C: ConnectionTrait, {
+  let mut tournament_ids = registration::Entity::find()
+    .filter(registration::Column::UserId.eq(user_id))
+    .all(db)
+    .await?
+    .into_iter()
+    .map(|row| row.tournament_id)
+    .collect::<Vec<_>>();
+  tournament_ids.extend(
+    tournament_staff::Entity::find()
+      .filter(tournament_staff::Column::UserId.eq(user_id))
+      .all(db)
+      .await?
+      .into_iter()
+      .map(|row| row.tournament_id),
+  );
+  let active = tournament::Entity::find()
+    .filter(tournament::Column::Id.is_in(tournament_ids))
+    .filter(tournament::Column::Lifecycle.is_in([
+      Lifecycle::Registration,
+      Lifecycle::Running,
+      Lifecycle::Review,
+    ]))
+    .one(db)
+    .await?;
+  if active.is_some() {
+    return Err(ResponseError::Forbidden(
+      "you cannot change account ownership while an active tournament depends on it".to_owned(),
+    ));
+  }
+  Ok(())
 }
 
 #[cfg(test)]

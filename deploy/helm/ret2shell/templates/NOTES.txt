@@ -1,7 +1,6 @@
-Ret2Shell chart rendered successfully.
+Rhythm Arena chart rendered successfully.
 
 - Install namespace must be `ret2shell-platform`
-- Challenge namespace is fixed to `ret2shell-challenge`
 - Platform exposure mode: `{{ .Values.platform.exposure.type }}`
 
 Common install command:

@@ -94,7 +94,7 @@ async fn upload_media(
 ) -> Result<impl IntoResponse, ResponseError> {
   let uploads: Option<i32> = cache.at("media").get(token.id).await?;
   if !token.permissions.0.contains(&Permission::Bulletin)
-    && !token.permissions.0.contains(&Permission::Game)
+    && !token.permissions.0.contains(&Permission::Tournament)
     && !token.permissions.0.contains(&Permission::Wiki)
     && uploads.is_some_and(|u| config.media.is_some_and(|m| u >= m.limit))
   {
@@ -106,7 +106,7 @@ async fn upload_media(
     && !token.permissions.0.contains(&Permission::Bulletin)
     && !token.permissions.0.contains(&Permission::Calendar)
     && !token.permissions.0.contains(&Permission::DevOps)
-    && !token.permissions.0.contains(&Permission::Game)
+    && !token.permissions.0.contains(&Permission::Tournament)
     && !token.permissions.0.contains(&Permission::Host)
     && !token.permissions.0.contains(&Permission::Wiki)
   {

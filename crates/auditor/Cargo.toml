@@ -1,5 +1,5 @@
 [package]
-description = "Auditor for Ret2Shell - A feature-riches CTF challenge platform."
+description = "Content auditor for Rhythm Arena."
 name        = "r2s-auditor"
 
 authors      = { workspace = true }

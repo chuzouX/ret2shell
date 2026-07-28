@@ -8,10 +8,6 @@
 ret2shell-platform
 {{- end -}}
 
-{{- define "ret2shell.challengeNamespace" -}}
-ret2shell-challenge
-{{- end -}}
-
 {{- define "ret2shell.name" -}}
 ret2shell
 {{- end -}}
@@ -105,10 +101,6 @@ ret2shell-nats
 ret2shell-nats-headless
 {{- end -}}
 
-{{- define "ret2shell.registryName" -}}
-ret2shell-registry
-{{- end -}}
-
 {{- define "ret2shell.victoriaLogsName" -}}
 ret2shell-victoria-logs
 {{- end -}}
@@ -133,10 +125,6 @@ annotations:
 
 {{- define "ret2shell.platformServiceUrl" -}}
 {{- printf "http://%s:%d" (include "ret2shell.platformName" .) (int .Values.platform.service.port) -}}
-{{- end -}}
-
-{{- define "ret2shell.registryEnabled" -}}
-{{- if ne .Values.registry.mode "disabled" -}}true{{- else -}}false{{- end -}}
 {{- end -}}
 
 {{- define "ret2shell.victoriaLogsEnabled" -}}

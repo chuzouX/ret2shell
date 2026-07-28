@@ -1,5 +1,5 @@
 [package]
-description = "Message queue for Ret2Shell - A feature-riches CTF challenge platform."
+description = "Message queue service for Rhythm Arena."
 name        = "r2s-queue"
 
 authors      = { workspace = true }

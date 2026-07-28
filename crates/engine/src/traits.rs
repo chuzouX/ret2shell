@@ -5,8 +5,8 @@ use thiserror::Error;
 pub enum EngineError {
   #[error("io error: {0}")]
   IoError(#[from] std::io::Error),
-  #[error("missing checker script: {0}")]
-  MissingCheckerScript(String),
+  #[error("missing script: {0}")]
+  MissingScript(String),
   #[error("rune context error: {0}")]
   RuneError(#[from] rune::ContextError),
   #[error("rune runtime error: {0}")]
@@ -32,7 +32,7 @@ pub enum EngineError {
 }
 
 /// DiagnosticMarker for rune scripts
-/// Originally from https://github.com/ElaBosak233/cdsctf/blob/main/crates/checker/src/traits.rs
+/// Adapted from the upstream cdsctf Rune implementation.
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub struct DiagnosticMarker {
@@ -45,7 +45,7 @@ pub struct DiagnosticMarker {
 }
 
 /// DiagnosticKind for rune scripts
-/// Originally from https://github.com/ElaBosak233/cdsctf/blob/main/crates/checker/src/traits.rs
+/// Adapted from the upstream cdsctf Rune implementation.
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum DiagnosticKind {

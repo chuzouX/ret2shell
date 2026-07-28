@@ -55,7 +55,7 @@ export default function InstituteForm(props: {
       <Field name="name" validate={[required(t("institute.form.name.required"))]}>
         {(field, fieldProps) => (
           <Input
-            icon={<span class="shrink-0 icon-[fluent--flag-20-regular] w-5 h-5" />}
+            icon={<span class="shrink-0 icon-[fluent--building-20-regular] w-5 h-5" />}
             title={t("institute.form.name.label")}
             placeholder={t("institute.form.name.placeholder")}
             {...fieldProps}

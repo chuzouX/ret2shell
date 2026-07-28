@@ -10,13 +10,6 @@ export type AuthConfig = {
   buffer_time: number;
   expires_time: number;
 };
-export type AutomateConfig = {
-  enabled: boolean;
-  token: string;
-};
-export type BucketConfig = {
-  path: string;
-};
 export type CacheConfig = {
   url: string;
 };
@@ -24,26 +17,6 @@ export type CaptchaConfig = {
   enabled: boolean;
   difficulty: number | null;
   validator: "none" | "image" | "pow" | "recaptcha_v3" | "h_captcha";
-};
-export type RegistryConfig = {
-  external: string;
-  username: string;
-  password: string;
-  server: string;
-  insecure: boolean;
-  enabled: boolean | null;
-};
-export type ClusterConfig = {
-  try_default: boolean;
-  auto_infer: boolean;
-  kube_config_path: string | null;
-  node_selector: string | null;
-  proxy_image: string | null;
-  traffic: string | null;
-  lifecycle: string | null;
-  enable_capture: boolean | null;
-  capture_directory: string | null;
-  registry: RegistryConfig | null;
 };
 export type DatabaseConfig = {
   db: string;
@@ -100,16 +73,12 @@ export type ServerConfig = {
   record: string | null;
   hide_maker: boolean | null;
   highlight_banner: string | null;
-  zen_game: number | null;
 };
 export type Config = {
   auditor: AuditorConfig;
   auth: AuthConfig;
-  automate: AutomateConfig;
-  bucket: BucketConfig;
   cache: CacheConfig;
   captcha: CaptchaConfig;
-  cluster: ClusterConfig;
   database: DatabaseConfig;
   email: EmailConfig;
   logging: LoggingConfig;

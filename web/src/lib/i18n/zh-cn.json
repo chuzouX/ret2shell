@@ -249,10 +249,11 @@
       "accept": {
         "title": "接受"
       }
-    }
+    },
+    "updated": "Rhythm Arena 已完成不兼容更新，页面已自动刷新。你可能需要重新登录。"
   },
   "platform": {
-    "name": "回归终端",
+    "name": "Rhythm Arena",
     "subject": "基于返回地址构建世界",
     "cookiePolicy": "我们不使用任何 Cookie 来追踪你。",
     "updated": "回归终端进行了一项非兼容更新，已重新加载此页面应用更新。请注意你需要重新登录。",
@@ -427,7 +428,7 @@
     }
   },
   "wiki": {
-    "title": "知识",
+    "title": "谱面库",
     "placeholder": "想了解些什么？",
     "form": {
       "title": {
@@ -471,42 +472,6 @@
     },
     "unknownPublisher": "佚名"
   },
-  "training": {
-    "title": "训练",
-    "list": "练习场列表",
-    "empty": "没有练习场",
-    "noArchives": "没有归档的往期赛事",
-    "placeholder": "开始今日份的训练！",
-    "openForever": "永久开放",
-    "gotoGamePage": "查看比赛信息",
-    "errors": {
-      "fetchList": {
-        "title": "获取练习场列表失败"
-      },
-      "fetchArchives": {
-        "title": "获取往期赛事失败"
-      },
-      "fetchTraining": {
-        "title": "获取练习场失败"
-      },
-      "gameNotArchived": {
-        "title": "比赛尚未归档",
-        "message": "请少安毋躁"
-      }
-    },
-    "form": {
-      "name": {
-        "label": "练习场标题",
-        "placeholder": "请输入标题",
-        "required": "标题不能为空"
-      },
-      "brief": {
-        "label": "练习场简介",
-        "placeholder": "请输入简介",
-        "required": "简介不能为空"
-      }
-    }
-  },
   "calendar": {
     "day": {
       "sun": "日",
@@ -536,937 +501,6 @@
     },
     "startAt": "开始时间",
     "endAt": "结束时间"
-  },
-  "game": {
-    "title": "赛事",
-    "list": "赛事列表",
-    "noGameHosted": "没有举办过赛事",
-    "otherGames": "其他赛事",
-    "noOtherGames": "没有其他赛事",
-    "pending": "未开始",
-    "notStarted": "尚未开始，少安毋躁",
-    "started": "进行中",
-    "start": "开始",
-    "ended": "已结束",
-    "end": "结束",
-    "archived": "已归档",
-    "archive": "归档",
-    "welcome": "欢迎参赛",
-    "join": "参加比赛",
-    "introduction": {
-      "title": "赛事介绍",
-      "empty": "主办方很懒，什么也没有写",
-      "form": {
-        "content": {
-          "label": "内容",
-          "placeholder": "请输入内容",
-          "required": "内容不能为空"
-        }
-      }
-    },
-    "rules": {
-      "title": "比赛规则"
-    },
-    "scoreboard": {
-      "title": "积分板",
-      "empty": "暂无参赛队伍",
-      "selectInstitute": "选择组织...",
-      "currentPeriod": "本周目",
-      "errors": {
-        "fetchScoreboard": {
-          "title": "获取积分板失败"
-        }
-      }
-    },
-    "writeups": {
-      "title": "题解",
-      "empty": "暂无题解"
-    },
-    "statistics": {
-      "title": "统计数据",
-      "errors": {
-        "fetch": "获取赛事统计信息失败",
-        "export": "导出赛事统计信息失败"
-      },
-      "selectInstitute": "选择组织...",
-      "submission": "提交评测情况",
-      "challengeStats": "解题情况",
-      "players": "选手统计",
-      "institutePlayers": "组织参赛选手统计",
-      "others": "其他",
-      "teams": "队伍统计",
-      "instituteTeams": "组织参赛队伍统计"
-    },
-    "monitor": {
-      "title": "事件看板",
-      "empty": "没有审计日志",
-      "status": {
-        "pending": {
-          "title": "等待人工复核"
-        },
-        "misjudged": {
-          "title": "误判"
-        },
-        "confirmed": {
-          "title": "属实"
-        }
-      },
-      "errors": {
-        "fetchAudit": {
-          "title": "获取审计日志失败"
-        },
-        "fetchSubmission": {
-          "title": "获取提交记录失败"
-        }
-      },
-      "autoRefreshEnabled": "自动刷新已开启",
-      "submissions": "提交记录",
-      "audits": "审计事件"
-    },
-    "git": {
-      "title": "题目仓库",
-      "status": {
-        "readonly": {
-          "message": "比赛对选手可见时，此处仓库为只读状态，无法推送本地更改或者合并分支，请使用网页功能操作比赛数据。"
-        },
-        "writable": {
-          "message": "比赛已经隐藏，此处仓库可以通过 Git 客户端进行写入操作。请注意，直接操作原始数据可能会导致比赛数据损坏，请确定你知道自己在做什么。在推送本地更改后，平台会自动进行数据库同步与可用性检查，请等待同步完成后再进行其他操作。"
-        }
-      },
-      "cloneTip": "使用如下链接可以将比赛数据克隆到本地，访问仓库所使用的账户与平台账户保持一致，方便备份与后续迁移。请注意，用户与队伍等信息不包含在此。",
-      "listTip": "此处仅供查看基础的文件结构与提交历史，由于仓库体积可能很大，整理 Git 数据库会消耗大量时间。",
-      "errors": {
-        "fetchRepo": {
-          "title": "获取题目仓库失败"
-        }
-      }
-    },
-    "form": {
-      "title": "编辑信息",
-      "name": {
-        "label": "赛事名称",
-        "placeholder": "请输入赛事名称",
-        "required": "赛事名称不能为空"
-      },
-      "brief": {
-        "label": "赛事简介",
-        "placeholder": "请输入简介",
-        "required": "简介不能为空"
-      },
-      "startAt": {
-        "label": "开始时间",
-        "placeholder": "请选择开始时间",
-        "required": "开始时间不能为空",
-        "canNotLaterThanEnd": "开始时间不能晚于结束时间"
-      },
-      "endAt": {
-        "label": "结束时间",
-        "placeholder": "请选择结束时间",
-        "required": "结束时间不能为空",
-        "canNotEarlierThanStart": "结束时间不能早于开始时间"
-      },
-      "registerAt": {
-        "label": "报名时间",
-        "placeholder": "请选择报名时间",
-        "required": "报名时间不能为空",
-        "canNotLaterThanEnd": "报名时间不能晚于结束时间"
-      },
-      "archiveAt": {
-        "label": "归档时间",
-        "placeholder": "请选择归档时间",
-        "required": "归档时间不能为空",
-        "canNotEarlierThanStart": "归档时间不能早于开始时间"
-      },
-      "weight": {
-        "label": "权重"
-      },
-      "misc": {
-        "label": "杂项设置"
-      },
-      "awardRate": {
-        "label": "额外奖励分数比例",
-        "firstBlood": "一血奖励分数比例",
-        "secondBlood": "二血奖励分数比例",
-        "thirdBlood": "三血奖励分数比例",
-        "placeholder": "请输入奖励分数比例",
-        "required": "奖励分数比例不能为空",
-        "mustBeNumber": "奖励分数比例必须是数字",
-        "mustBePositiveNumber": "奖励分数比例必须是正数"
-      },
-      "hidden": {
-        "label": "隐藏",
-        "placeholder": "是否隐藏",
-        "message": "隐藏后，只有管理员才能看到该赛事"
-      },
-      "frozen": {
-        "label": "冻结",
-        "placeholder": "是否冻结",
-        "message": "冻结后，选手将暂时无法访问题目"
-      },
-      "offline": {
-        "label": "启用线下赛事特性"
-      },
-      "teamSize": {
-        "label": "队伍人数",
-        "placeholder": "请输入队伍人数，0 表示不限制",
-        "required": "队伍人数不能为空",
-        "mustBeNumber": "队伍人数必须是数字",
-        "mustBePositiveNumber": "队伍人数必须是正数",
-        "minimum": "人数不能少于 0",
-        "maximum": "人数不能多于 99"
-      },
-      "envLimit": {
-        "label": "容器限制",
-        "placeholder": "留空则默认跟随队伍人数（无限制时为 1）",
-        "minimum": "容器限制不能少于 1",
-        "maximum": "容器限制不能多于 99"
-      },
-      "enableTeamAudit": {
-        "label": "启用队伍审核",
-        "placeholder": "是否启用队伍审核",
-        "message": "启用后，队伍需要审核才能参赛"
-      },
-      "canRegisterAfterStart": {
-        "label": "允许赛事开始后报名",
-        "placeholder": "是否允许赛事开始后报名",
-        "message": "允许后，选手可以在赛事开始后报名参赛"
-      },
-      "introduction": {
-        "label": "比赛介绍",
-        "required": "比赛介绍不能为空"
-      },
-      "enableHammer": {
-        "label": "启用锤子反馈",
-        "placeholder": "是否启用锤子反馈",
-        "message": "启用后，选手可以通过锤子反馈功能与出题人交流"
-      },
-      "outerHammerUrl": {
-        "label": "外部反馈地址",
-        "placeholder": "请输入外部反馈地址",
-        "message": "如果不启用锤子反馈，平台将根据此处链接引导选手前往外部反馈系统。"
-      },
-      "outerHammerLabel": {
-        "label": "外部反馈链接名称",
-        "placeholder": "请输入外部反馈链接名称",
-        "message": "如果不启用锤子反馈，平台将根据此处名称引导选手前往外部反馈系统。"
-      }
-    },
-    "admin": {
-      "title": "管理",
-      "gotoChallenges": "前往题目管理"
-    },
-    "administrator": {
-      "errors": {
-        "fetchList": {
-          "title": "获取赛事管理员列表失败"
-        },
-        "noPermission": {
-          "title": "无基础权限"
-        },
-        "alreadyAdded": {
-          "title": "已添加"
-        }
-      },
-      "title": "赛事管理员",
-      "form": {
-        "search": {
-          "title": "添加赛事管理员",
-          "placeholder": "搜索用户名或邮箱"
-        },
-        "confirm": {
-          "message": "确认添加 {{name}} 为赛事管理员？"
-        }
-      },
-      "empty": "没有管理员，请联系运维手动添加"
-    },
-    "registerNotStarted": "注册暂未开放，少安毋躁",
-    "registerEnded": "报名注册已经结束，请等待比赛归档",
-    "policies": {
-      "title": "策略管理",
-      "form": {
-        "challenge": {
-          "showAnswer": {
-            "label": "允许归档后查看题解"
-          },
-          "showHints": {
-            "label": "允许归档后免费查看提示"
-          }
-        }
-      }
-    },
-    "timeline": {
-      "title": "时段管理",
-      "form": {
-        "label": {
-          "label": "时段标签",
-          "required": "时段标签不能为空",
-          "placeholder": "请填写时段标签"
-        },
-        "startAt": {
-          "required": "时段开始时间不能为空"
-        },
-        "endAt": {
-          "required": "时段结束时间不能为空"
-        },
-        "startEndTime": {
-          "label": "开始与结束时间",
-          "placeholder": "请选择开始与结束时间"
-        }
-      },
-      "empty": "没有已定义时段",
-      "deleteWarning": "确定要删除这个时段吗？即使删除了也不影响现有题目的时段控制。"
-    },
-    "hammer": {
-      "title": "锤子反馈",
-      "errors": {
-        "fetchSessions": {
-          "title": "获取反馈会话列表失败"
-        }
-      },
-      "empty": "还没有反馈",
-      "status": {
-        "adminUnread": {
-          "title": "管理员未读"
-        },
-        "playerUnread": {
-          "title": "选手未读"
-        },
-        "notReply": {
-          "title": "已读不回"
-        }
-      },
-      "placeholder": "请选择会话来查看和回复消息",
-      "newMessages": "出题人在 {{challenge}} 回复了你的消息"
-    },
-    "delete": {
-      "title": "删除比赛",
-      "warning": "确定要删除这个比赛吗？删除后不可恢复，相关数据将被清除。",
-      "requirements": "请特别注意，删除比赛前需要清空比赛中所有的题目，有题目存在时无法删除比赛。",
-      "confirm": "如果决定删除比赛，请在下方输入比赛名称 {{name}}"
-    },
-    "events": {
-      "title": "事件推送",
-      "errors": {
-        "fetchDevices": {
-          "title": "获取已连接设备失败"
-        }
-      },
-      "howto": "连接下述 WebSocket 地址即可接入平台事件 API 订阅。你可以在这里找到事件 API 的对接方法：",
-      "tokenWarning": "请注意，事件 API 只通过 Token 进行鉴权，谨防此链接泄露。",
-      "regenerateTokenWarning": "确定要重新生成 Token 吗？已连接的设备将失去连接。",
-      "linkedDevices": "已连接的设备",
-      "emptyDevices": "没有已连接的设备"
-    },
-    "organize": {
-      "title": "组织管理",
-      "actions": {
-        "restrict": {
-          "confirm": "是否阻止以下组织之外的用户参赛？（点击后立即生效！）",
-          "title": "限定此赛事"
-        }
-      },
-      "instituteEnabled": "组织分榜"
-    },
-    "errors": {
-      "fetch": {
-        "title": "获取赛事失败"
-      },
-      "fetchList": {
-        "title": "获取比赛列表失败"
-      },
-      "regenerateToken": {
-        "title": "生成管理密钥失败"
-      },
-      "fetchDoc": {
-        "title": "获取赛事文档失败"
-      },
-      "fetchIntroduction": {
-        "title": "获取比赛介绍失败"
-      }
-    },
-    "seeOtherInteresting": "看看别的地方吧",
-    "notArchived": "比赛尚未归档",
-    "canNotParticipate": "无法参与",
-    "adminMode": "管理员模式",
-    "miscSettings": "杂项设置",
-    "register": "注册",
-    "timeLast": "距离 {{period}} 还有",
-    "accessPolicy": {
-      "open": "开放赛事"
-    },
-    "gotoTraining": "已归档，请前往练习场",
-    "enterChallenge": "攻克挑战！",
-    "manageChallenges": "管理赛事题目",
-    "loginThenBack": "登录后参与",
-    "notification": {
-      "errors": {
-        "fetch": {
-          "title": "获取通知消息失败"
-        }
-      },
-      "form": {
-        "title": {
-          "required": "通知标题不能为空",
-          "placeholder": "请填写通知标题",
-          "label": "通知标题"
-        },
-        "content": {
-          "required": "通知内容不能为空",
-          "label": "通知内容"
-        }
-      },
-      "empty": "没有通知"
-    }
-  },
-  "challenge": {
-    "title": "题目",
-    "list": "题目列表",
-    "empty": "暂无题目",
-    "tag": {
-      "title": "题目标签",
-      "unknown": "未知分类"
-    },
-    "search": {
-      "placeholder": "搜索名称或者标签",
-      "hideSolved": "隐藏已解出题目",
-      "solved": "已解出",
-      "hideArchived": "隐藏已归档题目",
-      "archived": "已归档"
-    },
-    "status": {
-      "solved": {
-        "title": "已解决",
-        "message": "恭喜你，夺旗成功！"
-      },
-      "archived": {
-        "title": "已归档",
-        "message": "归档后解题将不再计分"
-      },
-      "inPeriod": {
-        "title": "进行中",
-        "message": "限时题目，仅在当前周目解题计分",
-        "countdown": "题目归档倒计时"
-      },
-      "unreleased": {
-        "title": "未发布",
-        "message": "题目尚未发布，选手看不到这道题",
-        "countdown": "题目发布倒计时"
-      },
-      "hidden": {
-        "title": "已隐藏",
-        "message": "题目已隐藏，仅供管理员测试。",
-        "alert": "请在题目准备好后点击“公开”按钮公开题目。平台不会主动更改题目可见性，自动放题功能会使用时间节点与隐藏状态来计算题目的最终可见性。"
-      }
-    },
-    "actions": {
-      "up": {
-        "title": "公开",
-        "message": "确定要公开此题？公开后选手即可在开赛并进入相应周目之后阅览并解题（请确保比赛开始时所有题目都属于公开状态，自动放题功能会根据时间节点来计算选手可见性，不会更改此状态），公开期间无法修改题目。"
-      },
-      "down": {
-        "title": "隐藏",
-        "message": "确定要隐藏此题？隐藏后可以修改题目内容并再次公开，隐藏状态下选手无法阅览并解题，平台不会更改此状态。"
-      }
-    },
-    "form": {
-      "name": {
-        "label": "题目名称",
-        "placeholder": "请输入名称",
-        "required": "名称不能为空"
-      },
-      "tag": {
-        "label": "题目标签",
-        "placeholder": "请输入标签，以 / 分隔，第一个标签将成为分类",
-        "required": "标签不能为空"
-      },
-      "scoreRule": {
-        "initial": {
-          "label": "初始分数",
-          "placeholder": "请输入分数"
-        },
-        "minimum": {
-          "label": "最低分数",
-          "placeholder": "请输入分数"
-        },
-        "range": {
-          "label": "分数区间"
-        },
-        "decay": {
-          "label": "衰减次数",
-          "placeholder": "请输入衰减次数"
-        }
-      },
-      "scoringPeriod": {
-        "label": "计分周目",
-        "placeholder": "请选择计分周目"
-      },
-      "content": {
-        "label": "题目内容",
-        "placeholder": "请输入内容",
-        "required": "内容不能为空"
-      }
-    },
-    "errors": {
-      "fetchList": {
-        "title": "获取题目列表失败"
-      },
-      "fetch": {
-        "title": "获取题目失败"
-      },
-      "up": {
-        "title": "公开题目失败"
-      },
-      "down": {
-        "title": "隐藏题目失败"
-      }
-    },
-    "terminal": {
-      "title": "终端"
-    },
-    "hint": {
-      "title": "提示",
-      "empty": "出题人还没有发布提示哦，再想想吧",
-      "unlockConfirm": "确定要花费 {{cost}} pts 解锁这条提示吗？",
-      "form": {
-        "content": {
-          "required": "提示内容不能为空",
-          "label": "提示内容",
-          "placeholder": "请输入提示内容"
-        },
-        "cost": {
-          "label": "分数",
-          "placeholder": "分数"
-        }
-      },
-      "errors": {
-        "fetch": {
-          "title": "获取提示失败"
-        },
-        "unlock": {
-          "title": "解锁提示失败"
-        }
-      }
-    },
-    "file": {
-      "title": "附件",
-      "empty": "暂无附件",
-      "type": {
-        "static": {
-          "title": "静态附件",
-          "tip": "这里的文件会全部原样提供给比赛选手。"
-        },
-        "mapped": {
-          "title": "动态附件",
-          "tip": "这里的文件将会以哈希映射的形式为选手分配其中一个，如若需要动态分发多个附件，请打包进压缩包里。"
-        },
-        "checker": {
-          "title": "评测文件",
-          "tip": "这里的文件用于评测，永远不会被选手访问到。"
-        }
-      },
-      "errors": {
-        "fetchFiles": {
-          "title": "获取文件失败"
-        },
-        "uploadFiles": {
-          "title": "上传文件失败"
-        },
-        "deleteFiles": {
-          "title": "删除文件失败"
-        }
-      }
-    },
-    "answer": {
-      "title": "题解",
-      "empty": "暂无题解",
-      "errors": {
-        "fetchAnswer": {
-          "title": "获取题解失败"
-        },
-        "invisibleBeforeArchive": {
-          "title": "题解不可见",
-          "message": "题解在归档前不可见"
-        }
-      }
-    },
-    "hammer": {
-      "title": "锤子",
-      "solved": "题目已经解决，恭喜！",
-      "adminGoto": "管理员请前往比赛管理面板查看选手反馈消息。",
-      "outerGoto": "本场比赛未开启锤子功能，请前往这里反馈比赛与题目问题",
-      "outerFollow": "本场比赛不启用锤子功能，请遵照主办方要求在其他渠道反馈问题。",
-      "tips": {
-        "0": "你在这里发送的消息将会与题目状态一起转发给出题人，出题人可能会在这里回复或者通过其他渠道联系你。",
-        "1": "请注意，在出题人回复之前，你只能发送三条消息，所以请尽量合并发送你的问题。",
-        "2": "日志、代码等过长的消息建议使用网络剪贴板发送，例如："
-      },
-      "role": {
-        "admin": "管理员",
-        "player": "选手"
-      },
-      "freeMessages": "还可以发送 {{last}} 条消息",
-      "markdownHoto": "如何使用 Markdown？",
-      "markdownSupport": "请输入你要反馈的问题，支持 Markdown 语法",
-      "errors": {
-        "send": {
-          "title": "发送消息失败"
-        },
-        "fetch": {
-          "title": "获取消息历史记录失败"
-        },
-        "fetchSolve": {
-          "title": "获取解题状态失败"
-        },
-        "maxMessageLimit": {
-          "title": "已经到达消息上限，请等待反馈..."
-        }
-      }
-    },
-    "submission": {
-      "submit": "提交了",
-      "status": {
-        "pending": {
-          "title": "队列中"
-        },
-        "solved": {
-          "title": "正确"
-        },
-        "failed": {
-          "title": "错误"
-        }
-      },
-      "errors": {
-        "submit": {
-          "title": "提交失败"
-        },
-        "fetchSolves": {
-          "title": "获取解题情况失败"
-        },
-        "fetchSolveStatus": {
-          "title": "获取解出状态失败"
-        }
-      },
-      "title": "提交记录",
-      "total": "总共"
-    },
-    "statistics": {
-      "title": "统计",
-      "empty": "暂无统计数据",
-      "showAll": "显示全部",
-      "solves": {
-        "title": "解题统计",
-        "subject": "谁做了我的题？"
-      },
-      "commits": {
-        "title": "操作历史",
-        "subject": "谁动了我的题？"
-      },
-      "errors": {
-        "fetchStatistics": {
-          "title": "获取统计数据失败"
-        },
-        "fetchSubmission": {
-          "title": "获取题目解题情况失败"
-        },
-        "fetchCommitHistory": "获取题目操作历史失败"
-      }
-    },
-    "instance": {
-      "title": "实例",
-      "empty": "暂无实例",
-      "delete": "删除环境配置后，题目将变回附件类题目。",
-      "internet": "允许容器内访问互联网",
-      "restrict": "限制 Root 权限",
-      "privileged": "以特权运行",
-      "registrySecret": "仓库密钥（需预先配置资源）",
-      "runningContainers": "运行中的环境",
-      "status": {
-        "idle": {
-          "title": "题目可开启在线环境"
-        },
-        "running": {
-          "title": "题目环境已启动"
-        },
-        "pending": {
-          "title": "题目环境启动中，请稍候..."
-        },
-        "failed": {
-          "title": "题目环境启动失败"
-        }
-      },
-      "image": {
-        "label": "题目环境镜像",
-        "upload": "上传到镜像仓库",
-        "empty": "没有镜像配置",
-        "form": {
-          "containerName": {
-            "label": "容器名称",
-            "placeholder": "请输入容器名称",
-            "required": "容器名称不能为空",
-            "mustBeValidName": "容器名称需为 3-40 位，以小写字母开头，仅含小写字母、数字或连字符(-)，且不能以连字符结尾"
-          },
-          "tag": {
-            "label": "镜像标签",
-            "placeholder": "请输入镜像标签",
-            "required": "镜像标签不能为空"
-          },
-          "version": {
-            "label": "镜像版本",
-            "placeholder": "请输入镜像版本"
-          },
-          "restrict": {
-            "label": "限制 Root 权限",
-            "placeholder": "是否限制 Root 权限",
-            "message": "限制后，容器内非 root 用户将无法使用特权端口与其他容器提升的特性"
-          },
-          "service": {
-            "description": {
-              "label": "服务描述",
-              "placeholder": "请输入服务描述，不开放端口时可以留空",
-              "requiredWhenHavePort": "当填写了服务端口时，服务描述不能为空"
-            },
-            "type": {
-              "label": "服务类型",
-              "placeholder": "请选择服务类型",
-              "items": {
-                "tcp": "原始 (TCP)",
-                "http": "HTTP",
-                "udp": "UDP"
-              },
-              "udpNotWorkingWithWsrx": "由于集群的端口转发功能不支持 UDP 转发，UDP 服务无法使用平台代理与 WSRX 访问，请妥善配置流量转发脚本。",
-              "requiredWhenHavePort": "当填写了服务端口时，服务类型不能为空"
-            },
-            "protocol": {
-              "label": "传输协议",
-              "placeholder": "请选择传输协议",
-              "items": {
-                "tcp": "TCP",
-                "stcp": "STCP",
-                "udp": "UDP"
-              },
-              "udpNotWorkingWithWsrx": "由于集群的端口转发功能不支持 UDP 转发，UDP 服务无法使用平台代理与 WSRX 访问，请妥善配置流量转发脚本。",
-              "requiredWhenHavePort": "当填写了服务端口时，传输协议不能为空"
-            },
-            "appProtocol": {
-              "label": "应用协议",
-              "placeholder": "请选择应用协议",
-              "items": {
-                "raw": "原始",
-                "http": "HTTP"
-              },
-              "requiredWhenHavePort": "当填写了服务端口时，应用协议不能为空"
-            },
-            "port": {
-              "label": "服务端口",
-              "placeholder": "请输入服务端口",
-              "required": "启用服务时，服务端口不能为空",
-              "mustBeNumber": "服务端口必须是数字",
-              "mustBeInRange": "服务端口必须在 1-65535 范围内",
-              "conflict": "服务端口与其他服务端口冲突"
-            },
-            "cpu": {
-              "label": "CPU 限制",
-              "required": "CPU 限制不能为空"
-            },
-            "mem": {
-              "label": "内存限制",
-              "required": "内存限制不能为空"
-            },
-            "storage": {
-              "label": "存储限制",
-              "required": "存储限制不能为空"
-            }
-          }
-        }
-      },
-      "actions": {
-        "addImage": {
-          "title": "添加镜像",
-          "message": "添加镜像后，镜像将会被自动拉取到服务器上。"
-        },
-        "start": {
-          "title": "启动！"
-        },
-        "delay": {
-          "title": "延长一小时"
-        },
-        "stop": {
-          "title": "停止环境"
-        },
-        "copy": {
-          "title": "复制题目环境地址"
-        }
-      },
-      "errors": {
-        "fetchInstances": {
-          "title": "获取实例失败"
-        },
-        "fetchConfigImages": {
-          "title": "获取镜像列表失败"
-        },
-        "fetchRegistry": {
-          "title": "获取镜像仓库失败"
-        },
-        "toggleNetworkConfig": {
-          "title": "更改网络配置失败"
-        },
-        "toggleRestrict": {
-          "title": "更改限制 Root 权限失败"
-        },
-        "noExportedServices": {
-          "title": "还未指定外部服务",
-          "message": "请为环境添加至少一个服务端口。"
-        },
-        "start": {
-          "title": "启动实例失败"
-        },
-        "stop": {
-          "title": "停止实例失败"
-        },
-        "delay": {
-          "title": "延长实例失败"
-        },
-        "calmdown": {
-          "title": "正在重整货箱"
-        },
-        "managedByMate": {
-          "title": "队友的环境，仅可访问"
-        },
-        "noConfig": {
-          "title": "此题不提供在线环境"
-        },
-        "singleton": {
-          "title": "你可以同时启动的题目服务数量已达上限",
-          "current": "当前正在运行的服务",
-          "action": "是否停止其他题目服务并启动当前题目？",
-          "stop": "请选择停止某个题目服务并启动当前题目"
-        },
-        "noAction": {
-          "title": "不会执行任何操作。"
-        }
-      }
-    },
-    "checker": {
-      "title": "评测",
-      "script": "评测脚本",
-      "preset": {
-        "placeholder": "请选择脚本预设",
-        "simple": {
-          "label": "简单评测"
-        },
-        "leet": {
-          "label": "动态环境评测（Leet）"
-        },
-        "uuid": {
-          "label": "动态环境评测（UUID）"
-        },
-        "mapped": {
-          "label": "动态附件评测"
-        }
-      },
-      "errors": {
-        "fetchCheckerScript": {
-          "title": "获取评测脚本失败"
-        },
-        "fetchScript": {
-          "title": "获取脚本配置失败"
-        }
-      }
-    },
-    "settings": {
-      "title": "设置"
-    },
-    "inGame": "赛中题目",
-    "total": "所有题目"
-  },
-  "wsrx": {
-    "title": "WebSocket Reflector X",
-    "status": {
-      "invalid": {
-        "title": "WSRX 未连接"
-      },
-      "pending": {
-        "title": "正在等待本地授权"
-      },
-      "usable": {
-        "title": "WSRX 已连接"
-      },
-      "connecting": {
-        "title": "正在连接..."
-      }
-    },
-    "retry": "重试连接",
-    "download": {
-      "title": "下载 WSRX 客户端",
-      "message": "请前往 GitHub 下载最新版本的 WSRX"
-    },
-    "actions": {
-      "copy": {
-        "title": "复制 WebSocket 链接"
-      },
-      "copyLocal": {
-        "title": "复制本地地址"
-      },
-      "retry": {
-        "title": "重试连接"
-      },
-      "resetDefault": {
-        "title": "重置为默认"
-      },
-      "refresh": {
-        "title": "刷新路由"
-      },
-      "openAll": {
-        "title": "打开所有路由"
-      },
-      "deleteAll": {
-        "title": "关闭所有路由"
-      },
-      "deleteOutdated": {
-        "title": "关闭过期路由"
-      }
-    },
-    "settings": {
-      "title": "WSRX 设置",
-      "address": {
-        "label": "WSRX 控制地址",
-        "placeholder": "请输入 WSRX 控制地址",
-        "required": "WSRX 控制地址不能为空",
-        "invalid": "WSRX 控制地址不合法"
-      }
-    },
-    "errors": {
-      "versionMismatch": {
-        "title": "WSRX 版本过低",
-        "message": "请更新到最新版本后使用平台集成"
-      },
-      "daemonOffline": {
-        "title": "WSRX 守护进程离线",
-        "message": "如若桌面客户端已经启动，请检查平台设置中的 WSRX 控制地址是否正确"
-      },
-      "disconnected": {
-        "title": "WSRX 守护进程已断开",
-        "message": "请检查本地客户端运行状况"
-      },
-      "daemonError": {
-        "title": "WSRX 守护进程错误",
-        "message": "请检查本地客户端运行状况"
-      },
-      "fetchTunnel": {
-        "title": "获取 WSRX 映射列表失败",
-        "message": "请检查本地客户端日志"
-      },
-      "deleteTunnel": {
-        "title": "删除 WSRX 映射失败",
-        "message": "请检查本地客户端日志"
-      },
-      "createTunnel": {
-        "title": "创建 WSRX 映射失败",
-        "message": "请检查本地客户端日志"
-      }
-    },
-    "downloadClient": "下载客户端",
-    "tunnels": "连接路由"
   },
   "captcha": {
     "title": "验证码保护",
@@ -1529,23 +563,7 @@
       "title": "个人介绍",
       "empty": "这位神秘的黑客什么也没有留下..."
     },
-    "joinedGames": "参与赛事",
-    "gameJournal": "作为 {{team}} 成员参与了 {{game}}。",
     "moreJournal": "生命不息，探索不止……",
-    "solvedProblems": "解题情况",
-    "stats": {
-      "title": "生涯数据",
-      "allGames": "全部赛事",
-      "empty": "暂无解题记录",
-      "solved": "已解出",
-      "failed": "未解出"
-    },
-    "statusFilter": {
-      "all": "所有题目",
-      "notAttempted": "待完成",
-      "attempted": "尝试过",
-      "solved": "已解答"
-    },
     "gotoAdminPanel": "转至用户管理",
     "registeredAt": "注册于 {{time}}",
     "title": "用户",
@@ -1571,9 +589,9 @@
       "basic": "基础",
       "verified": "已验证",
       "calendar": "日历发布",
-      "wiki": "知识发布",
+      "wiki": "谱面管理",
       "bulletin": "公告发布",
-      "game": "比赛管理",
+      "tournament": "赛事管理",
       "host": "比赛举办",
       "statistics": "数据统计",
       "devOps": "平台运维",
@@ -1730,11 +748,40 @@
         }
       }
     },
+    "phira": {
+      "title": "绑定 Phira",
+      "description": "使用你的 Phira 邮箱和密码验证账号，验证成功后仅绑定 Phira 用户 ID。密码和令牌不会保存。",
+      "form": {
+        "email": {
+          "label": "Phira 邮箱",
+          "placeholder": "请输入 Phira 邮箱",
+          "required": "Phira 邮箱不能为空"
+        },
+        "password": {
+          "label": "Phira 密码",
+          "placeholder": "请输入 Phira 密码",
+          "required": "Phira 密码不能为空"
+        }
+      },
+      "actions": {
+        "bind": "绑定 Phira",
+        "unbind": "解绑 Phira"
+      },
+      "status": {
+        "bound": "已绑定 Phira 账号：{{name}}",
+        "success": "Phira 账号绑定成功"
+      },
+      "errors": {
+        "bind": {
+          "title": "绑定 Phira 账号失败"
+        }
+      }
+    },
     "register": {
       "tips": "没有账号？现在注册！",
       "status": {
         "success": {
-          "message": "注册成功，欢迎来到 CTF 的世界！"
+          "message": "注册成功，欢迎来到 Rhythm Arena！"
         }
       },
       "errors": {
@@ -1817,277 +864,6 @@
       "title": "验证邮箱"
     }
   },
-  "shell": {
-    "cat": {
-      "man": "查看文件内容。",
-      "errors": {
-        "noFileSpecified": {
-          "title": "没有指定文件。"
-        },
-        "tooManyFiles": {
-          "title": "参数过多！"
-        },
-        "fileNotFound": {
-          "title": "没有那个文件或目录。"
-        },
-        "read": {
-          "title": "读取文件出错。"
-        }
-      }
-    },
-    "errors": {
-      "noGameSpecified": {
-        "title": "不在有效的比赛路径中。"
-      },
-      "permissionDenied": {
-        "title": "权限不足，拒绝访问。"
-      },
-      "noChallengeSpecified": {
-        "title": "不在有效的题目路径中。"
-      },
-      "traversalDetected": {
-        "title": "远程主机拒绝了目录穿越。"
-      },
-      "commandInvalid": {
-        "title": "命令存在语法错误"
-      }
-    },
-    "help": {
-      "man": "输出帮助信息。",
-      "commands": "你有如下命令可以使用："
-    },
-    "welcome": "欢迎使用 {{shell}}!",
-    "tip": "在此终端中直接输入符合格式的 {{flag}} 即可提交，你可以输入 {{help}} 来获取更多的使用帮助。",
-    "clear": {
-      "man": "清空终端的输出内容并重新开始。"
-    },
-    "echo": {
-      "man": "原样输出你的任何输入。"
-    },
-    "ls": {
-      "man": "列出 <文件>（默认为当前目录）的信息。",
-      "errors": {
-        "invalidOption": {
-          "title": "无效的选项 -- {{option}}"
-        },
-        "tooManyArgs": {
-          "title": "参数过多！"
-        },
-        "traversalDetected": {
-          "title": "远程主机拒绝了目录穿越。"
-        },
-        "fileNotFound": {
-          "title": "没有那个文件或目录。"
-        },
-        "list": {
-          "title": "访问目录出错。"
-        }
-      }
-    },
-    "service": {
-      "man": "管理题目环境服务。",
-      "errors": {
-        "needAction": {
-          "title": "需要指定操作。"
-        }
-      },
-      "usage": "使用方法：",
-      "actions": {
-        "start": {
-          "title": "启动题目环境服务。"
-        },
-        "stop": {
-          "title": "停止题目环境服务，此命令可以在这里停止其他题目的环境服务。"
-        },
-        "restart": {
-          "title": "重启题目环境服务，当你不小心将题目环境破坏时使用这个。"
-        },
-        "status": {
-          "title": "显示题目环境服务状态。"
-        },
-        "delay": {
-          "title": "延长题目环境存在时间，题目环境启动后默认服务时间为一小时，如果你认为时间不够，可以使用此命令延长。"
-        }
-      },
-      "starting": "正在启动 {{service}}...",
-      "stopping": "正在停止 {{service}}..."
-    },
-    "submit": {
-      "man": "向平台提交本题 flag。",
-      "submitting": "正在提交",
-      "waitingForChecking": "已提交，正在等待评测...",
-      "errors": {
-        "timeout": {
-          "title": "当前评测队列过长，请约五分钟后刷新查看评测结果，不要反复提交。"
-        }
-      }
-    },
-    "wget": {
-      "man": "下载指定的文件。",
-      "usage": "使用方法：wget <文件名>",
-      "downloading": "下载中",
-      "errors": {
-        "fileNotFound": {
-          "title": "没有那个文件或目录。"
-        }
-      }
-    },
-    "whoami": {
-      "man": "显示与当前的有效用户 ID 相关联的用户名。"
-    },
-    "commandNotFound": "未知命令：{{command}}"
-  },
-  "about": {
-    "contact": "平台软件支持",
-    "donate": "捐助",
-    "source": "支持"
-  },
-  "docs": {
-    "title": "开发者文档",
-    "tip": "回归终端 - 开发者文档",
-    "forVersion": "适用版本",
-    "intro": "简介"
-  },
-  "magic": {
-    "about": {
-      "license": {
-        "commercial": "允许商业服务",
-        "copyleft": "强 Copyleft",
-        "description": "Ret2Shell 使用以 GPL-3.0 为基础的强 Copyleft 许可证，在保留 GPL 基线权利与义务的同时，对付费访问分层和类似的面向用户收费商业化施加有限额外限制。",
-        "gplBase": "基于 GPL-3.0",
-        "noUserFees": "禁止付费访问分层",
-        "view": "查看完整许可证"
-      },
-      "thanks": "感谢使用我的作品",
-      "title": "关于"
-    },
-    "sakana": {
-      "title": "Sakana~",
-      "illustration": "插画",
-      "source": "代码"
-    }
-  },
-  "team": {
-    "status": {
-      "pending": {
-        "title": "待审核",
-        "message": "队伍名称含有敏感词汇，请联系管理员审核",
-        "placeholder": "队伍待审核"
-      },
-      "banned": {
-        "message": "由于作弊行为，队伍已被封禁",
-        "title": "已封禁"
-      },
-      "empty": {
-        "message": "还未参赛，请先参赛"
-      },
-      "hidden": {
-        "title": "已隐藏"
-      },
-      "title": "队伍状态",
-      "passed": {
-        "title": "正常"
-      }
-    },
-    "errors": {
-      "fetchList": {
-        "title": "获取队伍列表失败"
-      },
-      "fetch": {
-        "title": "获取队伍信息失败"
-      },
-      "join": {
-        "title": "加入队伍失败"
-      },
-      "fetchMember": {
-        "title": "获取队伍成员失败"
-      },
-      "fetchSolves": {
-        "title": "获取解题情况失败"
-      },
-      "fetchExtra": {
-        "title": "获取额外分数变动失败"
-      }
-    },
-    "title": "参赛队伍",
-    "coming": "登场！",
-    "empty": "没有队伍参与",
-    "join": {
-      "title": "加入队伍",
-      "tips": "加入一个已有的队伍。你可以通过输入队长分享的队伍密钥来加入队伍。",
-      "form": {
-        "token": {
-          "required": "队伍密钥不能为空",
-          "label": "队伍密钥",
-          "placeholder": "请输入队伍密钥"
-        }
-      }
-    },
-    "create": {
-      "title": "创建队伍",
-      "tips": "创建一只新的队伍。创建队伍后，你将成为队长，拥有管理队伍的权限。"
-    },
-    "choose": {
-      "title": "选择参赛方式"
-    },
-    "solo": "单人赛",
-    "collab": "{{size}} 人组队赛",
-    "unlimited": "不限人数组队赛",
-    "list": {
-      "title": "队伍列表",
-      "selectInstitute": "选择组织...",
-      "filter": "过滤队伍名称"
-    },
-    "sortBy": "排序",
-    "form": {
-      "name": {
-        "label": "队伍名称",
-        "required": "队伍名称不能为空",
-        "maximumLength": "名称最长 32 个字符",
-        "customDisabled": "无法更改队名",
-        "placeholder": "请输入队伍名称",
-        "chuunibyouGenerator": "中二病生成器"
-      },
-      "institute": {
-        "label": "所属组织",
-        "placeholder": "请选择所属组织"
-      },
-      "state": {
-        "label": "队伍状态"
-      },
-      "tag": {
-        "maximumLength": "标签文字不能超过 32 个字符",
-        "label": "标签文字",
-        "placeholder": "请输入标签文字"
-      },
-      "acceptRules": {
-        "required": "请同意参赛规则",
-        "label": "同意参赛规则",
-        "title": "参赛规则须知",
-        "ok": "已同意参赛规则"
-      },
-      "extraScore": {
-        "placeholder": "请输入额外分数变动",
-        "required": "额外分数变动不能为空"
-      },
-      "extraReason": {
-        "placeholder": "请输入额外分数变动原因",
-        "required": "额外分数变动原因不能为空"
-      }
-    },
-    "selfManagement": "队伍管理",
-    "token": "队伍密钥",
-    "scoreChart": "得分曲线",
-    "solves": "解题状况",
-    "noSolves": "没有已解出题目",
-    "solvesJournal": "成员 {{user}} 解出了题目 {{challenge}}。",
-    "extras": "额外分数变动",
-    "noExtras": "没有额外分数变动"
-  },
-  "notification": {
-    "empty": "没有未读提示消息",
-    "title": "提示消息"
-  },
   "bulletin": {
     "title": "公告",
     "errors": {
@@ -2127,71 +903,6 @@
   },
   "license": {
     "title": "Ret2Shell 公共许可证"
-  },
-  "traffic": {
-    "title": "环境路由",
-    "nodeSelector": "节点选择器",
-    "preset": {
-      "title": "脚本预设",
-      "singleNodeDirectScript": "单节点直连",
-      "multiNodeDirectScript": "多节点直连"
-    }
-  },
-  "lifecycle": {
-    "title": "生命周期",
-    "functions": "函数：on_start(ctx) / on_delay(ctx) / on_stop(ctx)",
-    "preset": {
-      "title": "脚本预设",
-      "webhookExample": "Webhook 示例",
-      "reservedBlank": "空置预留"
-    }
-  },
-  "cluster": {
-    "title": "集群管理",
-    "status": {
-      "available": {
-        "title": "集群正常运行中"
-      },
-      "unavailable": {
-        "title": "集群离线"
-      }
-    },
-    "nodeInfo": {
-      "title": "节点信息",
-      "architecture": "架构",
-      "bootID": "启动 ID",
-      "containerRuntimeVersion": "容器运行时",
-      "kernelVersion": "内核版本",
-      "machineID": "机器 ID",
-      "operatingSystem": "操作系统",
-      "osImage": "发行版",
-      "systemUUID": "系统 UUID",
-      "kubeletVersion": "Kubelet",
-      "kubeProxyVersion": "Kube Proxy"
-    },
-    "selectNode": "选择节点",
-    "actions": {
-      "refreshNode": {
-        "title": "刷新节点"
-      },
-      "updateNode": {
-        "title": "升级节点"
-      },
-      "disconnectNode": {
-        "title": "断开节点"
-      }
-    },
-    "nodeResources": {
-      "title": "节点资源"
-    },
-    "errors": {
-      "fetchNodes": {
-        "title": "获取集群节点信息失败"
-      },
-      "fetchConfig": {
-        "title": "获取集群配置失败"
-      }
-    }
   },
   "oauth": {
     "title": "第三方认证",
@@ -2242,9 +953,6 @@
       }
     }
   },
-  "captures": {
-    "title": "容器流量"
-  },
   "institute": {
     "errors": {
       "fetchList": {
@@ -2270,5 +978,172 @@
     "title": "组织管理",
     "manual": "手动管理",
     "withOAuth": "使用认证服务"
+  },
+  "tournament": {
+    "title": "节奏赛事",
+    "listSubtitle": "创建、参与并运营音游赛事。",
+    "past": "历史赛事",
+    "pastSubtitle": "已结束或归档的赛事仍可在这里回顾。",
+    "emptyPast": "暂无历史赛事。",
+    "introduction": "赛事介绍",
+    "noDescription": "主办方尚未发布赛事介绍。",
+    "empty": "暂无赛事。",
+    "noBrief": "暂无简介",
+    "actions": {
+      "create": "创建赛事"
+    },
+    "errors": {
+      "create": "创建赛事失败",
+      "action": "赛事操作失败"
+    },
+    "fields": {
+      "name": "赛事名称",
+      "brief": "简介",
+      "mode": "比赛模式",
+      "evidence": "截图策略",
+      "teamSize": "队伍人数",
+      "lifecycle": "生命周期",
+      "visibility": "排行榜可见性",
+      "description": "赛事介绍",
+      "basicInfo": "基本信息",
+      "save": "保存",
+      "cover": "比赛海报",
+      "teamSizeMin": "最小人数",
+      "teamSizeMax": "最大人数"
+    },
+    "lifecycle": {
+      "draft": "草稿",
+      "registration": "报名中",
+      "running": "进行中",
+      "review": "审核中",
+      "finished": "已结束",
+      "archived": "已归档"
+    },
+    "mode": {
+      "individual": "个人",
+      "team": "团队",
+      "both": "个人 + 团队"
+    },
+    "evidence": {
+      "required": "必须",
+      "optional": "可选",
+      "disabled": "禁用"
+    },
+    "visibility": {
+      "live": "实时公开",
+      "frozen": "冻结",
+      "after_end": "赛后公开"
+    },
+    "nav": {
+      "overview": "概览",
+      "charts": "谱面",
+      "results": "成绩",
+      "individual": "个人榜",
+      "team": "团队榜",
+      "admin": "管理"
+    },
+    "registration": {
+      "title": "报名",
+      "loginRequired": "请先登录以报名参赛。",
+      "displayName": "显示名称",
+      "join": "报名参赛",
+      "withdraw": "退出报名",
+      "status": {
+        "pending": "待审核",
+        "approved": "已通过",
+        "rejected": "已拒绝",
+        "withdrawn": "已退出"
+      }
+    },
+    "pool": {
+      "title": "赛段与谱面池",
+      "empty": "暂无已发布的谱面。",
+      "rounds": "赛段",
+      "tags": "标签",
+      "tagName": "标签名称",
+      "chooseTag": "选择标签",
+      "noTags": "该阶段暂无标签",
+      "charts": "谱面",
+      "roundName": "赛段名称",
+      "chooseRound": "选择赛段",
+      "chartTitle": "谱面标题",
+      "difficulty": "难度"
+    },
+    "charts": {
+      "library": "谱面库",
+      "search": "搜索谱面或标签",
+      "select": "选择谱面",
+      "selectHint": "从左侧阶段与标签树中选择一张谱面。",
+      "artist": "曲师",
+      "charter": "谱师",
+      "constant": "谱面定数",
+      "weight": "计分权重"
+    },
+    "teams": {
+      "title": "队伍",
+      "name": "队伍名称",
+      "create": "创建队伍",
+      "join": "加入",
+      "empty": "暂无队伍。"
+    },
+    "results": {
+      "title": "成绩提交",
+      "subtitle": "提交成绩以供裁判审核并保留截图证据。",
+      "chart": "谱面",
+      "score": "分数",
+      "accuracy": "准确率",
+      "combo": "最大连击",
+      "evidence": "上传截图",
+      "evidenceReady": "截图已就绪",
+      "submit": "提交成绩",
+      "history": "提交记录",
+      "status": "状态",
+      "playedAt": "游玩时间",
+      "empty": "暂无提交记录。",
+      "uploadError": "截图上传失败",
+      "submitError": "成绩提交失败",
+      "states": {
+        "pending": "待审核",
+        "approved": "已通过",
+        "rejected": "已拒绝",
+        "voided": "已作废"
+      }
+    },
+    "leaderboard": {
+      "individual": "个人排行榜",
+      "team": "团队排行榜",
+      "subtitle": "赛事排名，使用稳定平局处理算法。",
+      "stale": "重新计算失败；显示的是上次成功计算的结果。",
+      "empty": "排行榜尚未生成。"
+    },
+    "roles": {
+      "owner": "主办方",
+      "organizer": "组织者",
+      "judge": "裁判"
+    },
+    "admin": {
+      "title": "赛事管理",
+      "subtitle": "配置赛事运营、审核成绩并控制发布。",
+      "settings": "设置",
+      "staff": "工作人员",
+      "pool": "谱面池",
+      "scripts": "计分",
+      "review": "审核",
+      "import": "导入",
+      "advance": "推进阶段",
+      "recompute": "重新计算",
+      "userId": "用户 ID",
+      "role": "角色",
+      "scriptName": "版本名称",
+      "createVersion": "创建不可变版本",
+      "activate": "启用",
+      "active": "已启用",
+      "noPending": "暂无待审核成绩。",
+      "approve": "通过",
+      "reject": "拒绝",
+      "selectFile": "选择 CSV/XLSX 文件",
+      "valid": "有效",
+      "commitImport": "提交原子导入"
+    }
   }
 }

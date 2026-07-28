@@ -1,5 +1,5 @@
 [package]
-description = "Email client for Ret2Shell - A feature-riches CTF challenge platform."
+description = "Email client for Rhythm Arena."
 name        = "r2s-email"
 
 authors      = { workspace = true }

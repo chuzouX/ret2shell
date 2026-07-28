@@ -1,4 +1,4 @@
-use r2s_database::{challenge, game, oauth_provider};
+use r2s_database::oauth_provider;
 
 use crate::{traits::ResponseError, utility::string::account_str};
 
@@ -9,24 +9,6 @@ fn char_len(value: &str) -> usize {
 fn validate_required(value: &str, field: &str) -> Result<(), ResponseError> {
   if value.trim().is_empty() {
     return Err(ResponseError::BadRequest(format!("{field} is required")));
-  }
-  Ok(())
-}
-
-fn validate_max_len(value: &str, field: &str, max: usize) -> Result<(), ResponseError> {
-  if char_len(value) > max {
-    return Err(ResponseError::BadRequest(format!(
-      "{field} must be at most {max} characters"
-    )));
-  }
-  Ok(())
-}
-
-fn validate_range(value: i32, field: &str, min: i32, max: i32) -> Result<(), ResponseError> {
-  if !(min..=max).contains(&value) {
-    return Err(ResponseError::BadRequest(format!(
-      "{field} must be between {min} and {max}"
-    )));
   }
   Ok(())
 }
@@ -103,104 +85,6 @@ pub fn validate_register_request(
   validate_nickname(nickname)?;
   validate_email(email)?;
   validate_password(password)?;
-  Ok(())
-}
-
-pub fn validate_team_form(name: &str, tag: Option<&str>) -> Result<(), ResponseError> {
-  validate_required(name, "team name")?;
-  validate_max_len(name, "team name", 32)?;
-  if let Some(tag) = tag {
-    validate_max_len(tag, "team tag", 32)?;
-  }
-  Ok(())
-}
-
-pub fn validate_game_model(game: &game::Model) -> Result<(), ResponseError> {
-  validate_required(&game.name, "game name")?;
-  validate_required(&game.brief, "game brief")?;
-
-  if game.register_at > game.start_at {
-    return Err(ResponseError::BadRequest(
-      "register time must be before start time".to_owned(),
-    ));
-  }
-  if game.start_at >= game.end_at {
-    return Err(ResponseError::BadRequest(
-      "start time must be before end time".to_owned(),
-    ));
-  }
-  if game.end_at > game.archive_at {
-    return Err(ResponseError::BadRequest(
-      "archive time must be after end time".to_owned(),
-    ));
-  }
-
-  if game.host_type == game::HostType::Game {
-    validate_range(game.team_size, "team size", 0, 99)?;
-  }
-  if let Some(env_limit) = game.env_limit {
-    validate_range(env_limit, "env limit", 1, 99)?;
-  }
-  validate_range(game.award_rate, "award rate", 0, 100)?;
-  if let Some(award_rates) = &game.award_rates {
-    for award_rate in &award_rates.0 {
-      validate_range(*award_rate, "award rate", 0, 100)?;
-    }
-  }
-
-  if let Some(timeline_presets) = &game.timeline_presets {
-    for preset in &timeline_presets.0 {
-      validate_required(&preset.label, "timeline label")?;
-      if preset.start_at >= preset.end_at {
-        return Err(ResponseError::BadRequest(
-          "timeline start time must be before end time".to_owned(),
-        ));
-      }
-      if preset.start_at < game.start_at || preset.end_at > game.end_at {
-        return Err(ResponseError::BadRequest(
-          "timeline must be inside game time range".to_owned(),
-        ));
-      }
-    }
-  }
-
-  if let Some(url) = &game.hammer_policy.outer_url
-    && !url.trim().is_empty()
-    && (!url.starts_with("https://") && !url.starts_with("http://")
-      || url.chars().any(char::is_whitespace))
-  {
-    return Err(ResponseError::BadRequest("invalid hammer url".to_owned()));
-  }
-
-  Ok(())
-}
-
-pub fn validate_challenge_model(challenge: &challenge::Model) -> Result<(), ResponseError> {
-  validate_required(&challenge.name, "challenge name")?;
-  validate_required(
-    challenge.content.as_deref().unwrap_or_default(),
-    "challenge content",
-  )?;
-  if challenge.tag.0.is_empty() {
-    return Err(ResponseError::BadRequest(
-      "challenge tag is required".to_owned(),
-    ));
-  }
-  validate_range(challenge.score_rule.initial, "initial score", 0, 1500)?;
-  validate_range(challenge.score_rule.minimum, "minimum score", 0, 1500)?;
-  validate_range(challenge.score_rule.decay, "score decay", 1, 200)?;
-  if challenge.score_rule.minimum > challenge.score_rule.initial {
-    return Err(ResponseError::BadRequest(
-      "minimum score must not exceed initial score".to_owned(),
-    ));
-  }
-  if let (Some(release_at), Some(archive_at)) = (&challenge.release_at, &challenge.archive_at)
-    && release_at >= archive_at
-  {
-    return Err(ResponseError::BadRequest(
-      "challenge release time must be before archive time".to_owned(),
-    ));
-  }
   Ok(())
 }
 

@@ -1,5 +1,4 @@
-import SidebarLayout from "@blocks/sidebar-layout";
-import { Permission } from "@models/user";
+﻿import SidebarLayout from "@blocks/sidebar-layout";
 import { createBreakpoints } from "@solid-primitives/media";
 import { useNavigate } from "@solidjs/router";
 import { accountStore } from "@storage/account";
@@ -14,17 +13,13 @@ import SideBar from "./_blocks/sidebar";
 
 export default function (props: { children?: JSX.Element }) {
   const navigate = useNavigate();
-  if (
-    !accountStore.permissions.includes(Permission.Statistics) &&
-    !accountStore.permissions.includes(Permission.User) &&
-    !accountStore.permissions.includes(Permission.DevOps)
-  ) {
+  if (!accountStore.token) {
     addToast({
       level: "error",
-      description: t("general.network.status.403.title"),
+      description: t("general.network.status.401.title"),
       duration: 5000,
     });
-    navigate("/sigtrap/403");
+    navigate("/account/login");
     return null;
   }
   const matches = createBreakpoints(breakpoints);

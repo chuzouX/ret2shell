@@ -81,8 +81,6 @@ pub struct ExModel {
 pub enum Relation {
   #[sea_orm(has_many = "super::comment::Entity")]
   Comment,
-  #[sea_orm(has_many = "super::game::Entity")]
-  Game,
   #[sea_orm(
     belongs_to = "super::user::Entity",
     from = "Column::PublisherId",
@@ -96,12 +94,6 @@ pub enum Relation {
 impl Related<super::comment::Entity> for Entity {
   fn to() -> RelationDef {
     Relation::Comment.def()
-  }
-}
-
-impl Related<super::game::Entity> for Entity {
-  fn to() -> RelationDef {
-    Relation::Game.def()
   }
 }
 

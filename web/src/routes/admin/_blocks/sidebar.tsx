@@ -38,6 +38,13 @@ export default function SideBar() {
       </li>
       <Divider />
       <li class="w-full">
+        <Link activeMatch="partial" class="w-full" ghost href="/admin/tournaments" justify="start">
+          <span class="shrink-0 icon-[fluent--trophy-20-regular] w-5 h-5" />
+          <span>比赛管理</span>
+        </Link>
+      </li>
+      <Divider />
+      <li class="w-full">
         <Link
           activeMatch="exact"
           class="w-full"
@@ -116,59 +123,6 @@ export default function SideBar() {
         >
           <span class="shrink-0 icon-[fluent--person-20-regular] w-5 h-5" />
           <span>{t("user.list.title")}</span>
-        </Link>
-      </li>
-      <Divider />
-      <li class="w-full">
-        <Link
-          activeMatch="exact"
-          class="w-full"
-          ghost
-          href="/admin/sync"
-          justify="start"
-          disabled={!accountStore.permissions.includes(Permission.DevOps)}
-        >
-          <span class="shrink-0 icon-[fluent--flowchart-20-regular] w-5 h-5" />
-          <span>{t("platform.sync.title")}</span>
-        </Link>
-      </li>
-      <li class="w-full">
-        <Link
-          activeMatch="exact"
-          class="w-full"
-          ghost
-          href="/admin/cluster"
-          justify="start"
-          disabled={!accountStore.permissions.includes(Permission.DevOps)}
-        >
-          <span class="shrink-0 icon-[fluent--hexagon-three-20-regular] w-5 h-5" />
-          <span>{t("cluster.title")}</span>
-        </Link>
-      </li>
-      <li class="w-full">
-        <Link
-          activeMatch="exact"
-          class="w-full"
-          ghost
-          href="/admin/traffic"
-          justify="start"
-          disabled={!accountStore.permissions.includes(Permission.DevOps)}
-        >
-          <span class="shrink-0 icon-[fluent--airplane-20-regular] w-5 h-5" />
-          <span>{t("traffic.title")}</span>
-        </Link>
-      </li>
-      <li class="w-full">
-        <Link
-          activeMatch="exact"
-          class="w-full"
-          ghost
-          href="/admin/lifecycle"
-          justify="start"
-          disabled={!accountStore.permissions.includes(Permission.DevOps)}
-        >
-          <span class="shrink-0 icon-[fluent--script-20-regular] w-5 h-5" />
-          <span>{t("lifecycle.title")}</span>
         </Link>
       </li>
       <li class="w-full">

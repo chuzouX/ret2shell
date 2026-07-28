@@ -1,4 +1,4 @@
-import { useDeleteWikiMutation, useWiki, useWikiTree } from "@api/wiki";
+﻿import { useDeleteWikiMutation, useWiki, useWikiTree } from "@api/wiki";
 import Spin from "@assets/animates/spin";
 import { Permission } from "@models/user";
 import { A, useNavigate, useParams, useSearchParams } from "@solidjs/router";
@@ -25,16 +25,16 @@ export default function () {
     enabled: () => !Number.isNaN(article_id()),
     onError: (err: Error) => {
       if (err instanceof HTTPError) {
-        navigate(`/sigtrap/${err.response.status}`, { replace: true });
+        navigate(`/error/${err.response.status}`, { replace: true });
       } else {
-        navigate("/sigtrap/unknown", { replace: true });
+        navigate("/error/unknown", { replace: true });
       }
       return false;
     },
   });
 
   createEffect(() => {
-    if (Number.isNaN(article_id())) navigate("/sigtrap/404", { replace: true });
+    if (Number.isNaN(article_id())) navigate("/error/404", { replace: true });
   });
 
   function onDelete() {

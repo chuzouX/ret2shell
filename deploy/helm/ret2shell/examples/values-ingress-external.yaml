@@ -4,13 +4,13 @@ platform:
   ingress:
     className: nginx
     hosts:
-      - host: ctf.example.com
+      - host: rhythm.example.com
         paths:
           - path: /
             pathType: Prefix
   config:
     server:
-      externalDomain: ctf.example.com
+      externalDomain: rhythm.example.com
 
 postgresql:
   mode: external
@@ -34,15 +34,6 @@ nats:
     port: 4222
     token: replace-me
     tls: false
-
-registry:
-  mode: external
-  external:
-    server: registry.example.com
-    external: registry.example.com
-    insecure: false
-    username: ""
-    password: ""
 
 victoriaLogs:
   mode: external

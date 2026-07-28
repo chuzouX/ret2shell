@@ -1,4 +1,4 @@
-import type { Article } from "@models/article";
+﻿import type { Article } from "@models/article";
 import { Permission } from "@models/user";
 import { useNavigate } from "@solidjs/router";
 import { accountStore } from "@storage/account";
@@ -9,7 +9,7 @@ import CreateForm from "./_blocks/form";
 export default function () {
   const navigate = useNavigate();
   if (!accountStore.permissions.includes(Permission.Bulletin)) {
-    navigate("/sigtrap/403", { replace: true });
+    navigate("/error/403", { replace: true });
   }
   function onDone(article: Article) {
     navigate(`/bulletin/${article.id}`);

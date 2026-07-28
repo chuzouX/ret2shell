@@ -1,5 +1,5 @@
 [package]
-description = "Database for Ret2Shell - A feature-riches CTF challenge platform."
+description = "Database entities for Rhythm Arena."
 name        = "r2s-database"
 
 authors      = { workspace = true }

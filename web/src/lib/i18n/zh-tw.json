@@ -249,10 +249,11 @@
       "accept": {
         "title": "接受"
       }
-    }
+    },
+    "updated": "Rhythm Arena 已完成不相容更新，頁面已自動重新整理。你可能需要重新登入。"
   },
   "platform": {
-    "name": "迴歸終端",
+    "name": "Rhythm Arena",
     "subject": "基於返回地址構建世界",
     "cookiePolicy": "我們不使用任何 Cookie 來追蹤你。",
     "updated": "迴歸終端進行了一項非兼容更新，已重新加載此頁面應用更新。請注意你需要重新登錄。",
@@ -471,42 +472,6 @@
     },
     "unknownPublisher": "佚名"
   },
-  "training": {
-    "title": "訓練",
-    "list": "練習場列表",
-    "empty": "沒有練習場",
-    "noArchives": "沒有歸檔的往期賽事",
-    "placeholder": "開始今日份的訓練！",
-    "openForever": "永久開放",
-    "gotoGamePage": "查看比賽信息",
-    "errors": {
-      "fetchList": {
-        "title": "獲取練習場列表失敗"
-      },
-      "fetchArchives": {
-        "title": "獲取往期賽事失敗"
-      },
-      "fetchTraining": {
-        "title": "獲取練習場失敗"
-      },
-      "gameNotArchived": {
-        "title": "比賽尚未歸檔",
-        "message": "請少安毋躁"
-      }
-    },
-    "form": {
-      "name": {
-        "label": "練習場標題",
-        "placeholder": "請輸入標題",
-        "required": "標題不能為空"
-      },
-      "brief": {
-        "label": "練習場簡介",
-        "placeholder": "請輸入簡介",
-        "required": "簡介不能為空"
-      }
-    }
-  },
   "calendar": {
     "day": {
       "sun": "日",
@@ -536,937 +501,6 @@
     },
     "startAt": "開始時間",
     "endAt": "結束時間"
-  },
-  "game": {
-    "title": "賽事",
-    "list": "賽事列表",
-    "noGameHosted": "沒有舉辦過賽事",
-    "otherGames": "其他賽事",
-    "noOtherGames": "沒有其他賽事",
-    "pending": "未開始",
-    "notStarted": "尚未開始，少安毋躁",
-    "started": "進行中",
-    "start": "開始",
-    "ended": "已結束",
-    "end": "結束",
-    "archived": "已歸檔",
-    "archive": "歸檔",
-    "welcome": "歡迎參賽",
-    "join": "參加比賽",
-    "introduction": {
-      "title": "賽事介紹",
-      "empty": "主辦方很懶，什麼也沒有寫",
-      "form": {
-        "content": {
-          "label": "內容",
-          "placeholder": "請輸入內容",
-          "required": "內容不能為空"
-        }
-      }
-    },
-    "rules": {
-      "title": "比賽規則"
-    },
-    "scoreboard": {
-      "title": "積分板",
-      "empty": "暫無參賽隊伍",
-      "selectInstitute": "選擇組織...",
-      "currentPeriod": "本週目",
-      "errors": {
-        "fetchScoreboard": {
-          "title": "獲取積分板失敗"
-        }
-      }
-    },
-    "writeups": {
-      "title": "題解",
-      "empty": "暫無題解"
-    },
-    "statistics": {
-      "title": "統計數據",
-      "errors": {
-        "fetch": "獲取賽事統計信息失敗",
-        "export": "導出賽事統計信息失敗"
-      },
-      "selectInstitute": "選擇組織...",
-      "submission": "提交評測情況",
-      "challengeStats": "解題情況",
-      "players": "選手統計",
-      "institutePlayers": "組織參賽選手統計",
-      "others": "其他",
-      "teams": "隊伍統計",
-      "instituteTeams": "組織參賽隊伍統計"
-    },
-    "monitor": {
-      "title": "事件看板",
-      "empty": "沒有審計日誌",
-      "status": {
-        "pending": {
-          "title": "等待人工複核"
-        },
-        "misjudged": {
-          "title": "誤判"
-        },
-        "confirmed": {
-          "title": "屬實"
-        }
-      },
-      "errors": {
-        "fetchAudit": {
-          "title": "獲取審計日誌失敗"
-        },
-        "fetchSubmission": {
-          "title": "獲取提交記錄失敗"
-        }
-      },
-      "autoRefreshEnabled": "自動刷新已開啟",
-      "submissions": "提交記錄",
-      "audits": "審計事件"
-    },
-    "git": {
-      "title": "題目倉庫",
-      "status": {
-        "readonly": {
-          "message": "比賽對選手可見時，此處倉庫為只讀狀態，無法推送本地更改或者合併分支，請使用網頁功能操作比賽數據。"
-        },
-        "writable": {
-          "message": "比賽已經隱藏，此處倉庫可以通過 Git 客戶端進行寫入操作。請注意，直接操作原始數據可能會導致比賽數據損壞，請確定你知道自己在做什麼。在推送本地更改後，平臺會自動進行數據庫同步與可用性檢查，請等待同步完成後再進行其他操作。"
-        }
-      },
-      "cloneTip": "使用如下鏈接可以將比賽數據克隆到本地，訪問倉庫所使用的賬戶與平臺賬戶保持一致，方便備份與後續遷移。請注意，用戶與隊伍等信息不包含在此。",
-      "listTip": "此處僅供查看基礎的文件結構與提交歷史，由於倉庫體積可能很大，整理 Git 數據庫會消耗大量時間。",
-      "errors": {
-        "fetchRepo": {
-          "title": "獲取題目倉庫失敗"
-        }
-      }
-    },
-    "form": {
-      "title": "編輯信息",
-      "name": {
-        "label": "賽事名稱",
-        "placeholder": "請輸入賽事名稱",
-        "required": "賽事名稱不能為空"
-      },
-      "brief": {
-        "label": "賽事簡介",
-        "placeholder": "請輸入簡介",
-        "required": "簡介不能為空"
-      },
-      "startAt": {
-        "label": "開始時間",
-        "placeholder": "請選擇開始時間",
-        "required": "開始時間不能為空",
-        "canNotLaterThanEnd": "開始時間不能晚於結束時間"
-      },
-      "endAt": {
-        "label": "結束時間",
-        "placeholder": "請選擇結束時間",
-        "required": "結束時間不能為空",
-        "canNotEarlierThanStart": "結束時間不能早於開始時間"
-      },
-      "registerAt": {
-        "label": "報名時間",
-        "placeholder": "請選擇報名時間",
-        "required": "報名時間不能為空",
-        "canNotLaterThanEnd": "報名時間不能晚於結束時間"
-      },
-      "archiveAt": {
-        "label": "歸檔時間",
-        "placeholder": "請選擇歸檔時間",
-        "required": "歸檔時間不能為空",
-        "canNotEarlierThanStart": "歸檔時間不能早於開始時間"
-      },
-      "weight": {
-        "label": "權重"
-      },
-      "misc": {
-        "label": "雜項設置"
-      },
-      "awardRate": {
-        "label": "額外獎勵分數比例",
-        "firstBlood": "一血獎勵分數比例",
-        "secondBlood": "二血獎勵分數比例",
-        "thirdBlood": "三血獎勵分數比例",
-        "placeholder": "請輸入獎勵分數比例",
-        "required": "獎勵分數比例不能為空",
-        "mustBeNumber": "獎勵分數比例必須是數字",
-        "mustBePositiveNumber": "獎勵分數比例必須是正數"
-      },
-      "hidden": {
-        "label": "隱藏",
-        "placeholder": "是否隱藏",
-        "message": "隱藏後，只有管理員才能看到該賽事"
-      },
-      "frozen": {
-        "label": "凍結",
-        "placeholder": "是否凍結",
-        "message": "凍結後，選手將暫時無法訪問題目"
-      },
-      "offline": {
-        "label": "啟用線下賽事特性"
-      },
-      "teamSize": {
-        "label": "隊伍人數",
-        "placeholder": "請輸入隊伍人數，0 表示不限制",
-        "required": "隊伍人數不能為空",
-        "mustBeNumber": "隊伍人數必須是數字",
-        "mustBePositiveNumber": "隊伍人數必須是正數",
-        "minimum": "人數不能少於 0",
-        "maximum": "人數不能多於 99"
-      },
-      "envLimit": {
-        "label": "容器限制",
-        "placeholder": "留空則默認跟隨隊伍人數（無限制時為 1）",
-        "minimum": "容器限制不能少於 1",
-        "maximum": "容器限制不能多於 99"
-      },
-      "enableTeamAudit": {
-        "label": "啟用隊伍審核",
-        "placeholder": "是否啟用隊伍審核",
-        "message": "啟用後，隊伍需要審核才能參賽"
-      },
-      "canRegisterAfterStart": {
-        "label": "允許賽事開始後報名",
-        "placeholder": "是否允許賽事開始後報名",
-        "message": "允許後，選手可以在賽事開始後報名參賽"
-      },
-      "introduction": {
-        "label": "比賽介紹",
-        "required": "比賽介紹不能為空"
-      },
-      "enableHammer": {
-        "label": "啟用錘子反饋",
-        "placeholder": "是否啟用錘子反饋",
-        "message": "啟用後，選手可以通過錘子反饋功能與出題人交流"
-      },
-      "outerHammerUrl": {
-        "label": "外部反饋地址",
-        "placeholder": "請輸入外部反饋地址",
-        "message": "如果不啟用錘子反饋，平臺將根據此處鏈接引導選手前往外部反饋系統。"
-      },
-      "outerHammerLabel": {
-        "label": "外部反饋鏈接名稱",
-        "placeholder": "請輸入外部反饋鏈接名稱",
-        "message": "如果不啟用錘子反饋，平臺將根據此處名稱引導選手前往外部反饋系統。"
-      }
-    },
-    "admin": {
-      "title": "管理",
-      "gotoChallenges": "前往題目管理"
-    },
-    "administrator": {
-      "errors": {
-        "fetchList": {
-          "title": "獲取賽事管理員列表失敗"
-        },
-        "noPermission": {
-          "title": "無基礎權限"
-        },
-        "alreadyAdded": {
-          "title": "已添加"
-        }
-      },
-      "title": "賽事管理員",
-      "form": {
-        "search": {
-          "title": "添加賽事管理員",
-          "placeholder": "搜索用戶名或郵箱"
-        },
-        "confirm": {
-          "message": "確認添加 {{name}} 為賽事管理員？"
-        }
-      },
-      "empty": "沒有管理員，請聯繫運維手動添加"
-    },
-    "registerNotStarted": "註冊暫未開放，少安毋躁",
-    "registerEnded": "報名註冊已經結束，請等待比賽歸檔",
-    "policies": {
-      "title": "策略管理",
-      "form": {
-        "challenge": {
-          "showAnswer": {
-            "label": "允許歸檔後查看題解"
-          },
-          "showHints": {
-            "label": "允許歸檔後免費查看提示"
-          }
-        }
-      }
-    },
-    "timeline": {
-      "title": "時段管理",
-      "form": {
-        "label": {
-          "label": "時段標籤",
-          "required": "時段標籤不能為空",
-          "placeholder": "請填寫時段標籤"
-        },
-        "startAt": {
-          "required": "時段開始時間不能為空"
-        },
-        "endAt": {
-          "required": "時段結束時間不能為空"
-        },
-        "startEndTime": {
-          "label": "開始與結束時間",
-          "placeholder": "請選擇開始與結束時間"
-        }
-      },
-      "empty": "沒有已定義時段",
-      "deleteWarning": "確定要刪除這個時段嗎？即使刪除了也不影響現有題目的時段控制。"
-    },
-    "hammer": {
-      "title": "錘子反饋",
-      "errors": {
-        "fetchSessions": {
-          "title": "獲取反饋會話列表失敗"
-        }
-      },
-      "empty": "還沒有反饋",
-      "status": {
-        "adminUnread": {
-          "title": "管理員未讀"
-        },
-        "playerUnread": {
-          "title": "選手未讀"
-        },
-        "notReply": {
-          "title": "已讀不回"
-        }
-      },
-      "placeholder": "請選擇會話來查看和回覆消息",
-      "newMessages": "出題人在 {{challenge}} 回覆了你的消息"
-    },
-    "delete": {
-      "title": "刪除比賽",
-      "warning": "確定要刪除這個比賽嗎？刪除後不可恢復，相關數據將被清除。",
-      "requirements": "請特別注意，刪除比賽前需要清空比賽中所有的題目，有題目存在時無法刪除比賽。",
-      "confirm": "如果決定刪除比賽，請在下方輸入比賽名稱 {{name}}"
-    },
-    "events": {
-      "title": "事件推送",
-      "errors": {
-        "fetchDevices": {
-          "title": "獲取已連接設備失敗"
-        }
-      },
-      "howto": "連接下述 WebSocket 地址即可接入平臺事件 API 訂閱。你可以在這裡找到事件 API 的對接方法：",
-      "tokenWarning": "請注意，事件 API 只通過 Token 進行鑑權，謹防此鏈接洩露。",
-      "regenerateTokenWarning": "確定要重新生成 Token 嗎？已連接的設備將失去連接。",
-      "linkedDevices": "已連接的設備",
-      "emptyDevices": "沒有已連接的設備"
-    },
-    "organize": {
-      "title": "組織管理",
-      "actions": {
-        "restrict": {
-          "confirm": "是否阻止以下組織之外的用戶參賽？（點擊後立即生效！）",
-          "title": "限定此賽事"
-        }
-      },
-      "instituteEnabled": "組織分榜"
-    },
-    "errors": {
-      "fetch": {
-        "title": "獲取賽事失敗"
-      },
-      "fetchList": {
-        "title": "獲取比賽列表失敗"
-      },
-      "regenerateToken": {
-        "title": "生成管理密鑰失敗"
-      },
-      "fetchDoc": {
-        "title": "獲取賽事文檔失敗"
-      },
-      "fetchIntroduction": {
-        "title": "獲取比賽介紹失敗"
-      }
-    },
-    "seeOtherInteresting": "看看別的地方吧",
-    "notArchived": "比賽尚未歸檔",
-    "canNotParticipate": "無法參與",
-    "adminMode": "管理員模式",
-    "miscSettings": "雜項設置",
-    "register": "註冊",
-    "timeLast": "距離 {{period}} 還有",
-    "accessPolicy": {
-      "open": "開放賽事"
-    },
-    "gotoTraining": "已歸檔，請前往練習場",
-    "enterChallenge": "攻克挑戰！",
-    "manageChallenges": "管理賽事題目",
-    "loginThenBack": "登錄後參與",
-    "notification": {
-      "errors": {
-        "fetch": {
-          "title": "獲取通知消息失敗"
-        }
-      },
-      "form": {
-        "title": {
-          "required": "通知標題不能為空",
-          "placeholder": "請填寫通知標題",
-          "label": "通知標題"
-        },
-        "content": {
-          "required": "通知內容不能為空",
-          "label": "通知內容"
-        }
-      },
-      "empty": "沒有通知"
-    }
-  },
-  "challenge": {
-    "title": "題目",
-    "list": "題目列表",
-    "empty": "暫無題目",
-    "tag": {
-      "title": "題目標籤",
-      "unknown": "未知分類"
-    },
-    "search": {
-      "placeholder": "搜索名稱或者標籤",
-      "hideSolved": "隱藏已解出題目",
-      "solved": "已解出",
-      "hideArchived": "隱藏已歸檔題目",
-      "archived": "已歸檔"
-    },
-    "status": {
-      "solved": {
-        "title": "已解決",
-        "message": "恭喜你，奪旗成功！"
-      },
-      "archived": {
-        "title": "已歸檔",
-        "message": "歸檔後解題將不再計分"
-      },
-      "inPeriod": {
-        "title": "進行中",
-        "message": "限時題目，僅在當前周目解題計分",
-        "countdown": "題目歸檔倒計時"
-      },
-      "unreleased": {
-        "title": "未發佈",
-        "message": "題目尚未發佈，選手看不到這道題",
-        "countdown": "題目發佈倒計時"
-      },
-      "hidden": {
-        "title": "已隱藏",
-        "message": "題目已隱藏，僅供管理員測試。",
-        "alert": "請在題目準備好後點擊“公開”按鈕公開題目。平臺不會主動更改題目可見性，自動放題功能會使用時間節點與隱藏狀態來計算題目的最終可見性。"
-      }
-    },
-    "actions": {
-      "up": {
-        "title": "公開",
-        "message": "確定要公開此題？公開後選手即可在開賽並進入相應周目之後閱覽並解題（請確保比賽開始時所有題目都屬於公開狀態，自動放題功能會根據時間節點來計算選手可見性，不會更改此狀態），公開期間無法修改題目。"
-      },
-      "down": {
-        "title": "隱藏",
-        "message": "確定要隱藏此題？隱藏後可以修改題目內容並再次公開，隱藏狀態下選手無法閱覽並解題，平臺不會更改此狀態。"
-      }
-    },
-    "form": {
-      "name": {
-        "label": "題目名稱",
-        "placeholder": "請輸入名稱",
-        "required": "名稱不能為空"
-      },
-      "tag": {
-        "label": "題目標籤",
-        "placeholder": "請輸入標籤，以 / 分隔，第一個標籤將成為分類",
-        "required": "標籤不能為空"
-      },
-      "scoreRule": {
-        "initial": {
-          "label": "初始分數",
-          "placeholder": "請輸入分數"
-        },
-        "minimum": {
-          "label": "最低分數",
-          "placeholder": "請輸入分數"
-        },
-        "range": {
-          "label": "分數區間"
-        },
-        "decay": {
-          "label": "衰減次數",
-          "placeholder": "請輸入衰減次數"
-        }
-      },
-      "scoringPeriod": {
-        "label": "計分周目",
-        "placeholder": "請選擇計分周目"
-      },
-      "content": {
-        "label": "題目內容",
-        "placeholder": "請輸入內容",
-        "required": "內容不能為空"
-      }
-    },
-    "errors": {
-      "fetchList": {
-        "title": "獲取題目列表失敗"
-      },
-      "fetch": {
-        "title": "獲取題目失敗"
-      },
-      "up": {
-        "title": "公開題目失敗"
-      },
-      "down": {
-        "title": "隱藏題目失敗"
-      }
-    },
-    "terminal": {
-      "title": "終端"
-    },
-    "hint": {
-      "title": "提示",
-      "empty": "出題人還沒有發佈提示哦，再想想吧",
-      "unlockConfirm": "確定要花費 {{cost}} pts 解鎖這條提示嗎？",
-      "form": {
-        "content": {
-          "required": "提示內容不能為空",
-          "label": "提示內容",
-          "placeholder": "請輸入提示內容"
-        },
-        "cost": {
-          "label": "分數",
-          "placeholder": "分數"
-        }
-      },
-      "errors": {
-        "fetch": {
-          "title": "獲取提示失敗"
-        },
-        "unlock": {
-          "title": "解鎖提示失敗"
-        }
-      }
-    },
-    "file": {
-      "title": "附件",
-      "empty": "暫無附件",
-      "type": {
-        "static": {
-          "title": "靜態附件",
-          "tip": "這裡的文件會全部原樣提供給比賽選手。"
-        },
-        "mapped": {
-          "title": "動態附件",
-          "tip": "這裡的文件將會以哈希映射的形式為選手分配其中一個，如若需要動態分發多個附件，請打包進壓縮包裡。"
-        },
-        "checker": {
-          "title": "評測文件",
-          "tip": "這裡的文件用於評測，永遠不會被選手訪問到。"
-        }
-      },
-      "errors": {
-        "fetchFiles": {
-          "title": "獲取文件失敗"
-        },
-        "uploadFiles": {
-          "title": "上傳文件失敗"
-        },
-        "deleteFiles": {
-          "title": "刪除文件失敗"
-        }
-      }
-    },
-    "answer": {
-      "title": "題解",
-      "empty": "暫無題解",
-      "errors": {
-        "fetchAnswer": {
-          "title": "獲取題解失敗"
-        },
-        "invisibleBeforeArchive": {
-          "title": "題解不可見",
-          "message": "題解在歸檔前不可見"
-        }
-      }
-    },
-    "hammer": {
-      "title": "錘子",
-      "solved": "題目已經解決，恭喜！",
-      "adminGoto": "管理員請前往比賽管理面板查看選手反饋消息。",
-      "outerGoto": "本場比賽未開啟錘子功能，請前往這裡反饋比賽與題目問題",
-      "outerFollow": "本場比賽不啟用錘子功能，請遵照主辦方要求在其他渠道反饋問題。",
-      "tips": {
-        "0": "你在這裡發送的消息將會與題目狀態一起轉發給出題人，出題人可能會在這裡回覆或者通過其他渠道聯繫你。",
-        "1": "請注意，在出題人回覆之前，你只能發送三條消息，所以請儘量合併發送你的問題。",
-        "2": "日誌、代碼等過長的消息建議使用網絡剪貼板發送，例如："
-      },
-      "role": {
-        "admin": "管理員",
-        "player": "選手"
-      },
-      "freeMessages": "還可以發送 {{last}} 條消息",
-      "markdownHoto": "如何使用 Markdown？",
-      "markdownSupport": "請輸入你要反饋的問題，支持 Markdown 語法",
-      "errors": {
-        "send": {
-          "title": "發送消息失敗"
-        },
-        "fetch": {
-          "title": "獲取消息歷史記錄失敗"
-        },
-        "fetchSolve": {
-          "title": "獲取解題狀態失敗"
-        },
-        "maxMessageLimit": {
-          "title": "已經到達消息上限，請等待反饋..."
-        }
-      }
-    },
-    "submission": {
-      "submit": "提交了",
-      "status": {
-        "pending": {
-          "title": "隊列中"
-        },
-        "solved": {
-          "title": "正確"
-        },
-        "failed": {
-          "title": "錯誤"
-        }
-      },
-      "errors": {
-        "submit": {
-          "title": "提交失敗"
-        },
-        "fetchSolves": {
-          "title": "獲取解題情況失敗"
-        },
-        "fetchSolveStatus": {
-          "title": "獲取解出狀態失敗"
-        }
-      },
-      "title": "提交記錄",
-      "total": "總共"
-    },
-    "statistics": {
-      "title": "統計",
-      "empty": "暫無統計數據",
-      "showAll": "顯示全部",
-      "solves": {
-        "title": "解題統計",
-        "subject": "誰做了我的題？"
-      },
-      "commits": {
-        "title": "操作歷史",
-        "subject": "誰動了我的題？"
-      },
-      "errors": {
-        "fetchStatistics": {
-          "title": "獲取統計數據失敗"
-        },
-        "fetchSubmission": {
-          "title": "獲取題目解題情況失敗"
-        },
-        "fetchCommitHistory": "獲取題目操作歷史失敗"
-      }
-    },
-    "instance": {
-      "title": "實例",
-      "empty": "暫無實例",
-      "delete": "刪除環境配置後，題目將變回附件類題目。",
-      "internet": "允許容器內訪問互聯網",
-      "restrict": "限制 Root 權限",
-      "privileged": "以特權執行",
-      "registrySecret": "倉庫密鑰（需預先配置資源）",
-      "runningContainers": "運行中的環境",
-      "status": {
-        "idle": {
-          "title": "題目可開啟在線環境"
-        },
-        "running": {
-          "title": "題目環境已啟動"
-        },
-        "pending": {
-          "title": "題目環境啟動中，請稍候..."
-        },
-        "failed": {
-          "title": "題目環境啟動失敗"
-        }
-      },
-      "image": {
-        "label": "題目環境鏡像",
-        "upload": "上傳到鏡像倉庫",
-        "empty": "沒有鏡像配置",
-        "form": {
-          "containerName": {
-            "label": "容器名稱",
-            "placeholder": "請輸入容器名稱",
-            "required": "容器名稱不能為空",
-            "mustBeValidName": "容器名稱需為 3-40 位，以小寫字母開頭，僅含小寫字母、數字或連字號(-)，且不能以連字號結尾"
-          },
-          "tag": {
-            "label": "鏡像標籤",
-            "placeholder": "請輸入鏡像標籤",
-            "required": "鏡像標籤不能為空"
-          },
-          "version": {
-            "label": "鏡像版本",
-            "placeholder": "請輸入鏡像版本"
-          },
-          "restrict": {
-            "label": "限制 Root 權限",
-            "placeholder": "是否限制 Root 權限",
-            "message": "限制後，容器內非 root 用戶將無法使用特權端口與其他容器提升的特性"
-          },
-          "service": {
-            "description": {
-              "label": "服務描述",
-              "placeholder": "請輸入服務描述，不開放端口時可以留空",
-              "requiredWhenHavePort": "當填寫了服務端口時，服務描述不能為空"
-            },
-            "type": {
-              "label": "服務類型",
-              "placeholder": "請選擇服務類型",
-              "items": {
-                "tcp": "原始 (TCP)",
-                "http": "HTTP",
-                "udp": "UDP"
-              },
-              "udpNotWorkingWithWsrx": "由於集群的端口轉發功能不支持 UDP 轉發，UDP 服務無法使用平臺代理與 WSRX 訪問，請妥善配置流量轉發腳本。",
-              "requiredWhenHavePort": "當填寫了服務端口時，服務類型不能為空"
-            },
-            "protocol": {
-              "label": "傳輸協議",
-              "placeholder": "請選擇傳輸協議",
-              "items": {
-                "tcp": "TCP",
-                "stcp": "STCP",
-                "udp": "UDP"
-              },
-              "udpNotWorkingWithWsrx": "由於集群的端口轉發功能不支持 UDP 轉發，UDP 服務無法使用平臺代理與 WSRX 訪問，請妥善配置流量轉發腳本。",
-              "requiredWhenHavePort": "當填寫了服務端口時，傳輸協議不能為空"
-            },
-            "appProtocol": {
-              "label": "應用協議",
-              "placeholder": "請選擇應用協議",
-              "items": {
-                "raw": "原始",
-                "http": "HTTP"
-              },
-              "requiredWhenHavePort": "當填寫了服務端口時，應用協議不能為空"
-            },
-            "port": {
-              "label": "服務端口",
-              "placeholder": "請輸入服務端口",
-              "required": "啟用服務時，服務端口不能為空",
-              "mustBeNumber": "服務端口必須是數字",
-              "mustBeInRange": "服務端口必須在 1-65535 範圍內",
-              "conflict": "服務端口與其他服務端口衝突"
-            },
-            "cpu": {
-              "label": "CPU 限制",
-              "required": "CPU 限制不能為空"
-            },
-            "mem": {
-              "label": "內存限制",
-              "required": "內存限制不能為空"
-            },
-            "storage": {
-              "label": "存儲限制",
-              "required": "存儲限制不能為空"
-            }
-          }
-        }
-      },
-      "actions": {
-        "addImage": {
-          "title": "添加鏡像",
-          "message": "添加鏡像後，鏡像將會被自動拉取到服務器上。"
-        },
-        "start": {
-          "title": "啟動！"
-        },
-        "delay": {
-          "title": "延長一小時"
-        },
-        "stop": {
-          "title": "停止環境"
-        },
-        "copy": {
-          "title": "複製題目環境地址"
-        }
-      },
-      "errors": {
-        "fetchInstances": {
-          "title": "獲取實例失敗"
-        },
-        "fetchConfigImages": {
-          "title": "獲取鏡像列表失敗"
-        },
-        "fetchRegistry": {
-          "title": "獲取鏡像倉庫失敗"
-        },
-        "toggleNetworkConfig": {
-          "title": "更改網絡配置失敗"
-        },
-        "toggleRestrict": {
-          "title": "更改限制 Root 權限失敗"
-        },
-        "noExportedServices": {
-          "title": "還未指定外部服務",
-          "message": "請為環境添加至少一個服務端口。"
-        },
-        "start": {
-          "title": "啟動實例失敗"
-        },
-        "stop": {
-          "title": "停止實例失敗"
-        },
-        "delay": {
-          "title": "延長實例失敗"
-        },
-        "calmdown": {
-          "title": "正在重整貨箱"
-        },
-        "managedByMate": {
-          "title": "隊友的環境，僅可訪問"
-        },
-        "noConfig": {
-          "title": "此題不提供在線環境"
-        },
-        "singleton": {
-          "title": "你可以同時啟動的題目服務數量已達上限",
-          "current": "當前正在運行的服務",
-          "action": "是否停止其他題目服務並啟動當前題目？",
-          "stop": "請選擇停止某個題目服務並啟動當前題目"
-        },
-        "noAction": {
-          "title": "不會執行任何操作。"
-        }
-      }
-    },
-    "checker": {
-      "title": "評測",
-      "script": "評測腳本",
-      "preset": {
-        "placeholder": "請選擇腳本預設",
-        "simple": {
-          "label": "簡單評測"
-        },
-        "leet": {
-          "label": "動態環境評測（Leet）"
-        },
-        "uuid": {
-          "label": "動態環境評測（UUID）"
-        },
-        "mapped": {
-          "label": "動態附件評測"
-        }
-      },
-      "errors": {
-        "fetchCheckerScript": {
-          "title": "獲取評測腳本失敗"
-        },
-        "fetchScript": {
-          "title": "獲取腳本配置失敗"
-        }
-      }
-    },
-    "settings": {
-      "title": "設置"
-    },
-    "inGame": "賽中題目",
-    "total": "所有題目"
-  },
-  "wsrx": {
-    "title": "WebSocket Reflector X",
-    "status": {
-      "invalid": {
-        "title": "WSRX 未連接"
-      },
-      "pending": {
-        "title": "正在等待本地授權"
-      },
-      "usable": {
-        "title": "WSRX 已連接"
-      },
-      "connecting": {
-        "title": "正在連接..."
-      }
-    },
-    "retry": "重試連接",
-    "download": {
-      "title": "下載 WSRX 客戶端",
-      "message": "請前往 GitHub 下載最新版本的 WSRX"
-    },
-    "actions": {
-      "copy": {
-        "title": "複製 WebSocket 鏈接"
-      },
-      "copyLocal": {
-        "title": "複製本地地址"
-      },
-      "retry": {
-        "title": "重試連接"
-      },
-      "resetDefault": {
-        "title": "重置為默認"
-      },
-      "refresh": {
-        "title": "刷新路由"
-      },
-      "openAll": {
-        "title": "打開所有路由"
-      },
-      "deleteAll": {
-        "title": "關閉所有路由"
-      },
-      "deleteOutdated": {
-        "title": "關閉過期路由"
-      }
-    },
-    "settings": {
-      "title": "WSRX 設置",
-      "address": {
-        "label": "WSRX 控制地址",
-        "placeholder": "請輸入 WSRX 控制地址",
-        "required": "WSRX 控制地址不能為空",
-        "invalid": "WSRX 控制地址不合法"
-      }
-    },
-    "errors": {
-      "versionMismatch": {
-        "title": "WSRX 版本過低",
-        "message": "請更新到最新版本後使用平臺集成"
-      },
-      "daemonOffline": {
-        "title": "WSRX 守護進程離線",
-        "message": "如若桌面客戶端已經啟動，請檢查平臺設置中的 WSRX 控制地址是否正確"
-      },
-      "disconnected": {
-        "title": "WSRX 守護進程已斷開",
-        "message": "請檢查本地客戶端運行狀況"
-      },
-      "daemonError": {
-        "title": "WSRX 守護進程錯誤",
-        "message": "請檢查本地客戶端運行狀況"
-      },
-      "fetchTunnel": {
-        "title": "獲取 WSRX 映射列表失敗",
-        "message": "請檢查本地客戶端日誌"
-      },
-      "deleteTunnel": {
-        "title": "刪除 WSRX 映射失敗",
-        "message": "請檢查本地客戶端日誌"
-      },
-      "createTunnel": {
-        "title": "創建 WSRX 映射失敗",
-        "message": "請檢查本地客戶端日誌"
-      }
-    },
-    "downloadClient": "下載客戶端",
-    "tunnels": "連接路由"
   },
   "captcha": {
     "title": "驗證碼保護",
@@ -1529,23 +563,7 @@
       "title": "個人介紹",
       "empty": "這位神秘的黑客什麼也沒有留下..."
     },
-    "joinedGames": "參與賽事",
-    "gameJournal": "作為 {{team}} 成員參與了 {{game}}。",
     "moreJournal": "生命不息，探索不止……",
-    "solvedProblems": "解題情況",
-    "stats": {
-      "title": "生涯數據",
-      "allGames": "全部賽事",
-      "empty": "暫無解題記錄",
-      "solved": "已解出",
-      "failed": "未解出"
-    },
-    "statusFilter": {
-      "all": "所有題目",
-      "notAttempted": "待完成",
-      "attempted": "嘗試過",
-      "solved": "已解答"
-    },
     "gotoAdminPanel": "轉至用戶管理",
     "registeredAt": "註冊於 {{time}}",
     "title": "用戶",
@@ -1573,7 +591,7 @@
       "calendar": "日曆發佈",
       "wiki": "知識發佈",
       "bulletin": "公告發布",
-      "game": "比賽管理",
+      "tournament": "賽事管理",
       "host": "比賽舉辦",
       "statistics": "數據統計",
       "devOps": "平臺運維",
@@ -1730,11 +748,40 @@
         }
       }
     },
+    "phira": {
+      "title": "綁定 Phira",
+      "description": "使用你的 Phira 郵箱和密碼驗證賬號，驗證成功後僅綁定 Phira 用戶 ID。密碼和令牌不會保存。",
+      "form": {
+        "email": {
+          "label": "Phira 郵箱",
+          "placeholder": "請輸入 Phira 郵箱",
+          "required": "Phira 郵箱不能為空"
+        },
+        "password": {
+          "label": "Phira 密碼",
+          "placeholder": "請輸入 Phira 密碼",
+          "required": "Phira 密碼不能為空"
+        }
+      },
+      "actions": {
+        "bind": "綁定 Phira",
+        "unbind": "解綁 Phira"
+      },
+      "status": {
+        "bound": "已綁定 Phira 賬戶：{{name}}",
+        "success": "Phira 賬戶綁定成功"
+      },
+      "errors": {
+        "bind": {
+          "title": "綁定 Phira 賬戶失敗"
+        }
+      }
+    },
     "register": {
       "tips": "沒有賬號？現在註冊！",
       "status": {
         "success": {
-          "message": "註冊成功，歡迎來到 CTF 的世界！"
+          "message": "註冊成功，歡迎來到 Rhythm Arena！"
         }
       },
       "errors": {
@@ -1817,277 +864,6 @@
       "title": "驗證郵箱"
     }
   },
-  "shell": {
-    "cat": {
-      "man": "查看文件內容。",
-      "errors": {
-        "noFileSpecified": {
-          "title": "沒有指定文件。"
-        },
-        "tooManyFiles": {
-          "title": "參數過多！"
-        },
-        "fileNotFound": {
-          "title": "沒有那個文件或目錄。"
-        },
-        "read": {
-          "title": "讀取文件出錯。"
-        }
-      }
-    },
-    "errors": {
-      "noGameSpecified": {
-        "title": "不在有效的比賽路徑中。"
-      },
-      "permissionDenied": {
-        "title": "權限不足，拒絕訪問。"
-      },
-      "noChallengeSpecified": {
-        "title": "不在有效的題目路徑中。"
-      },
-      "traversalDetected": {
-        "title": "遠程主機拒絕了目錄穿越。"
-      },
-      "commandInvalid": {
-        "title": "命令存在語法錯誤"
-      }
-    },
-    "help": {
-      "man": "輸出幫助信息。",
-      "commands": "你有如下命令可以使用："
-    },
-    "welcome": "歡迎使用 {{shell}}!",
-    "tip": "在此終端中直接輸入符合格式的 {{flag}} 即可提交，你可以輸入 {{help}} 來獲取更多的使用幫助。",
-    "clear": {
-      "man": "清空終端的輸出內容並重新開始。"
-    },
-    "echo": {
-      "man": "原樣輸出你的任何輸入。"
-    },
-    "ls": {
-      "man": "列出 <文件>（默認為當前目錄）的信息。",
-      "errors": {
-        "invalidOption": {
-          "title": "無效的選項 -- {{option}}"
-        },
-        "tooManyArgs": {
-          "title": "參數過多！"
-        },
-        "traversalDetected": {
-          "title": "遠程主機拒絕了目錄穿越。"
-        },
-        "fileNotFound": {
-          "title": "沒有那個文件或目錄。"
-        },
-        "list": {
-          "title": "訪問目錄出錯。"
-        }
-      }
-    },
-    "service": {
-      "man": "管理題目環境服務。",
-      "errors": {
-        "needAction": {
-          "title": "需要指定操作。"
-        }
-      },
-      "usage": "使用方法：",
-      "actions": {
-        "start": {
-          "title": "啟動題目環境服務。"
-        },
-        "stop": {
-          "title": "停止題目環境服務，此命令可以在這裡停止其他題目的環境服務。"
-        },
-        "restart": {
-          "title": "重啟題目環境服務，當你不小心將題目環境破壞時使用這個。"
-        },
-        "status": {
-          "title": "顯示題目環境服務狀態。"
-        },
-        "delay": {
-          "title": "延長題目環境存在時間，題目環境啟動後默認服務時間為一小時，如果你認為時間不夠，可以使用此命令延長。"
-        }
-      },
-      "starting": "正在啟動 {{service}}...",
-      "stopping": "正在停止 {{service}}..."
-    },
-    "submit": {
-      "man": "向平臺提交本題 flag。",
-      "submitting": "正在提交",
-      "waitingForChecking": "已提交，正在等待評測...",
-      "errors": {
-        "timeout": {
-          "title": "當前評測隊列過長，請約五分鐘後刷新查看評測結果，不要反覆提交。"
-        }
-      }
-    },
-    "wget": {
-      "man": "下載指定的文件。",
-      "usage": "使用方法：wget \\\"<文件名>\\\"",
-      "downloading": "下載中",
-      "errors": {
-        "fileNotFound": {
-          "title": "沒有那個文件或目錄。"
-        }
-      }
-    },
-    "whoami": {
-      "man": "顯示與當前的有效用戶 ID 相關聯的用戶名。"
-    },
-    "commandNotFound": "未知命令：{{command}}"
-  },
-  "about": {
-    "contact": "平臺軟件支持",
-    "donate": "捐助",
-    "source": "支持"
-  },
-  "docs": {
-    "title": "開發者文檔",
-    "tip": "迴歸終端 - 開發者文檔",
-    "forVersion": "適用版本",
-    "intro": "簡介"
-  },
-  "magic": {
-    "about": {
-      "license": {
-        "commercial": "允許商業服務",
-        "copyleft": "強 Copyleft",
-        "description": "Ret2Shell 使用以 GPL-3.0 為基礎的強 Copyleft 許可證，在保留 GPL 基線權利與義務的同時，對付費訪問分層和類似的面向用戶收費商業化施加有限額外限制。",
-        "gplBase": "基於 GPL-3.0",
-        "noUserFees": "禁止付費訪問分層",
-        "view": "查看完整許可證"
-      },
-      "thanks": "感謝使用我的作品",
-      "title": "關於"
-    },
-    "sakana": {
-      "title": "Sakana~",
-      "illustration": "插畫",
-      "source": "代碼"
-    }
-  },
-  "team": {
-    "status": {
-      "pending": {
-        "title": "待審核",
-        "message": "隊伍名稱含有敏感詞彙，請聯繫管理員審核",
-        "placeholder": "隊伍待審核"
-      },
-      "banned": {
-        "message": "由於作弊行為，隊伍已被封禁",
-        "title": "已封禁"
-      },
-      "empty": {
-        "message": "還未參賽，請先參賽"
-      },
-      "hidden": {
-        "title": "已隱藏"
-      },
-      "title": "隊伍狀態",
-      "passed": {
-        "title": "正常"
-      }
-    },
-    "errors": {
-      "fetchList": {
-        "title": "獲取隊伍列表失敗"
-      },
-      "fetch": {
-        "title": "獲取隊伍信息失敗"
-      },
-      "join": {
-        "title": "加入隊伍失敗"
-      },
-      "fetchMember": {
-        "title": "獲取隊伍成員失敗"
-      },
-      "fetchSolves": {
-        "title": "獲取解題情況失敗"
-      },
-      "fetchExtra": {
-        "title": "獲取額外分數變動失敗"
-      }
-    },
-    "title": "參賽隊伍",
-    "coming": "登場！",
-    "empty": "沒有隊伍參與",
-    "join": {
-      "title": "加入隊伍",
-      "tips": "加入一個已有的隊伍。你可以通過輸入隊長分享的隊伍密鑰來加入隊伍。",
-      "form": {
-        "token": {
-          "required": "隊伍密鑰不能為空",
-          "label": "隊伍密鑰",
-          "placeholder": "請輸入隊伍密鑰"
-        }
-      }
-    },
-    "create": {
-      "title": "創建隊伍",
-      "tips": "創建一隻新的隊伍。創建隊伍後，你將成為隊長，擁有管理隊伍的權限。"
-    },
-    "choose": {
-      "title": "選擇參賽方式"
-    },
-    "solo": "單人賽",
-    "collab": "{{size}} 人組隊賽",
-    "unlimited": "不限人數組隊賽",
-    "list": {
-      "title": "隊伍列表",
-      "selectInstitute": "選擇組織...",
-      "filter": "過濾隊伍名稱"
-    },
-    "sortBy": "排序",
-    "form": {
-      "name": {
-        "label": "隊伍名稱",
-        "required": "隊伍名稱不能為空",
-        "maximumLength": "名稱最長 32 個字符",
-        "customDisabled": "無法更改隊名",
-        "placeholder": "請輸入隊伍名稱",
-        "chuunibyouGenerator": "中二病生成器"
-      },
-      "institute": {
-        "label": "所屬組織",
-        "placeholder": "請選擇所屬組織"
-      },
-      "state": {
-        "label": "隊伍狀態"
-      },
-      "tag": {
-        "maximumLength": "標籤文字不能超過 32 個字符",
-        "label": "標籤文字",
-        "placeholder": "請輸入標籤文字"
-      },
-      "acceptRules": {
-        "required": "請同意參賽規則",
-        "label": "同意參賽規則",
-        "title": "參賽規則須知",
-        "ok": "已同意參賽規則"
-      },
-      "extraScore": {
-        "placeholder": "請輸入額外分數變動",
-        "required": "額外分數變動不能為空"
-      },
-      "extraReason": {
-        "placeholder": "請輸入額外分數變動原因",
-        "required": "額外分數變動原因不能為空"
-      }
-    },
-    "selfManagement": "隊伍管理",
-    "token": "隊伍密鑰",
-    "scoreChart": "得分曲線",
-    "solves": "解題狀況",
-    "noSolves": "沒有已解出題目",
-    "solvesJournal": "成員 {{user}} 解出了題目 {{challenge}}。",
-    "extras": "額外分數變動",
-    "noExtras": "沒有額外分數變動"
-  },
-  "notification": {
-    "empty": "沒有未讀提示消息",
-    "title": "提示消息"
-  },
   "bulletin": {
     "title": "公告",
     "errors": {
@@ -2127,71 +903,6 @@
   },
   "license": {
     "title": "Ret2Shell 公共授權"
-  },
-  "traffic": {
-    "title": "環境路由",
-    "nodeSelector": "節點選擇器",
-    "preset": {
-      "title": "腳本預設",
-      "singleNodeDirectScript": "單節點直連",
-      "multiNodeDirectScript": "多節點直連"
-    }
-  },
-  "lifecycle": {
-    "title": "生命週期",
-    "functions": "函式：on_start(ctx) / on_delay(ctx) / on_stop(ctx)",
-    "preset": {
-      "title": "腳本預設",
-      "webhookExample": "Webhook 範例",
-      "reservedBlank": "保留空白"
-    }
-  },
-  "cluster": {
-    "title": "集群管理",
-    "status": {
-      "available": {
-        "title": "集群正常運行中"
-      },
-      "unavailable": {
-        "title": "集群離線"
-      }
-    },
-    "nodeInfo": {
-      "title": "節點信息",
-      "architecture": "架構",
-      "bootID": "啟動 ID",
-      "containerRuntimeVersion": "容器運行時",
-      "kernelVersion": "內核版本",
-      "machineID": "機器 ID",
-      "operatingSystem": "操作系統",
-      "osImage": "發行版",
-      "systemUUID": "系統 UUID",
-      "kubeletVersion": "Kubelet",
-      "kubeProxyVersion": "Kube Proxy"
-    },
-    "selectNode": "選擇節點",
-    "actions": {
-      "refreshNode": {
-        "title": "刷新節點"
-      },
-      "updateNode": {
-        "title": "升級節點"
-      },
-      "disconnectNode": {
-        "title": "斷開節點"
-      }
-    },
-    "nodeResources": {
-      "title": "節點資源"
-    },
-    "errors": {
-      "fetchNodes": {
-        "title": "獲取集群節點信息失敗"
-      },
-      "fetchConfig": {
-        "title": "獲取集群配置失敗"
-      }
-    }
   },
   "oauth": {
     "title": "第三方認證",
@@ -2242,9 +953,6 @@
       }
     }
   },
-  "captures": {
-    "title": "容器流量"
-  },
   "institute": {
     "errors": {
       "fetchList": {
@@ -2270,5 +978,165 @@
     "title": "組織管理",
     "manual": "手動管理",
     "withOAuth": "使用認證服務"
+  },
+  "tournament": {
+    "title": "Rhythm tournaments",
+    "listSubtitle": "Create, enter, and operate rhythm game competitions.",
+    "past": "歷史賽事",
+    "pastSubtitle": "已結束或封存的賽事仍可在這裡回顧。",
+    "emptyPast": "暫無歷史賽事。",
+    "introduction": "賽事介紹",
+    "noDescription": "主辦方尚未發布賽事介紹。",
+    "empty": "No tournaments yet.",
+    "noBrief": "No summary",
+    "actions": {
+      "create": "Create tournament"
+    },
+    "errors": {
+      "create": "Failed to create tournament",
+      "action": "Tournament operation failed"
+    },
+    "fields": {
+      "name": "Tournament name",
+      "brief": "Summary",
+      "mode": "Competition mode",
+      "evidence": "Screenshot policy",
+      "teamSize": "Team size",
+      "lifecycle": "Lifecycle",
+      "visibility": "Leaderboard visibility"
+    },
+    "lifecycle": {
+      "draft": "Draft",
+      "registration": "Registration",
+      "running": "Running",
+      "review": "Review",
+      "finished": "Finished",
+      "archived": "Archived"
+    },
+    "mode": {
+      "individual": "Individual",
+      "team": "Team",
+      "both": "Individual + team"
+    },
+    "evidence": {
+      "required": "Required",
+      "optional": "Optional",
+      "disabled": "Disabled"
+    },
+    "visibility": {
+      "live": "Live",
+      "frozen": "Frozen",
+      "after_end": "After finish"
+    },
+    "nav": {
+      "overview": "Overview",
+      "charts": "譜面庫",
+      "results": "Results",
+      "individual": "Individual board",
+      "team": "Team board",
+      "admin": "Manage"
+    },
+    "registration": {
+      "title": "Registration",
+      "loginRequired": "Sign in to register.",
+      "displayName": "Display name",
+      "join": "Register",
+      "withdraw": "Withdraw",
+      "status": {
+        "pending": "Pending",
+        "approved": "Approved",
+        "rejected": "Rejected",
+        "withdrawn": "Withdrawn"
+      }
+    },
+    "pool": {
+      "title": "Rounds and chart pool",
+      "empty": "No charts published.",
+      "rounds": "Rounds",
+      "tags": "標籤",
+      "tagName": "標籤名稱",
+      "chooseTag": "選擇標籤",
+      "noTags": "該階段暫無標籤",
+      "charts": "Charts",
+      "roundName": "Round name",
+      "chooseRound": "Choose round",
+      "chartTitle": "Chart title",
+      "difficulty": "Difficulty"
+    },
+    "charts": {
+      "library": "譜面庫",
+      "search": "搜尋譜面或標籤",
+      "select": "選擇譜面",
+      "selectHint": "從左側階段與標籤樹中選擇一張譜面。",
+      "charter": "譜師",
+      "constant": "譜面定數",
+      "weight": "計分權重"
+    },
+    "teams": {
+      "title": "Teams",
+      "name": "Team name",
+      "create": "Create team",
+      "join": "Join",
+      "empty": "No teams yet."
+    },
+    "results": {
+      "title": "Result submission",
+      "subtitle": "Submit a play for judge review and keep its evidence.",
+      "chart": "Chart",
+      "score": "Score",
+      "accuracy": "Accuracy",
+      "combo": "Max combo",
+      "evidence": "Add screenshot",
+      "evidenceReady": "Screenshot ready",
+      "submit": "Submit result",
+      "history": "Submission history",
+      "status": "Status",
+      "playedAt": "Played at",
+      "empty": "No submitted results.",
+      "uploadError": "Screenshot upload failed",
+      "submitError": "Result submission failed",
+      "states": {
+        "pending": "Pending",
+        "approved": "Approved",
+        "rejected": "Rejected",
+        "voided": "Voided"
+      }
+    },
+    "leaderboard": {
+      "individual": "Individual leaderboard",
+      "team": "Team leaderboard",
+      "subtitle": "Competition ranking with stable tie handling.",
+      "stale": "Recalculation failed; showing the last successful scores.",
+      "empty": "The leaderboard is not available yet."
+    },
+    "roles": {
+      "owner": "Owner",
+      "organizer": "Organizer",
+      "judge": "Judge"
+    },
+    "admin": {
+      "title": "Tournament management",
+      "subtitle": "Configure operations, review results, and control publishing.",
+      "settings": "Settings",
+      "staff": "Staff",
+      "pool": "Chart pool",
+      "scripts": "Scoring",
+      "review": "Review",
+      "import": "Import",
+      "advance": "Advance lifecycle",
+      "recompute": "Recompute",
+      "userId": "User ID",
+      "role": "Role",
+      "scriptName": "Version name",
+      "createVersion": "Create immutable version",
+      "activate": "Activate",
+      "active": "Active",
+      "noPending": "No pending results.",
+      "approve": "Approve",
+      "reject": "Reject",
+      "selectFile": "Select CSV/XLSX",
+      "valid": "Valid",
+      "commitImport": "Commit atomic import"
+    }
   }
 }

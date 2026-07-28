@@ -1,4 +1,3 @@
-import { useGames } from "@api/game";
 import { usePlatformConfig, usePlatformInfo, useUpdatePlatformConfigMutation } from "@api/platform";
 import LogoAnimate from "@assets/animates/logo-animate";
 import type { Config } from "@models/config";
@@ -7,8 +6,6 @@ import { Title } from "@storage/header";
 import { t } from "@storage/theme";
 import Button from "@widgets/button";
 import Input from "@widgets/input";
-import Select from "@widgets/select";
-import { DateTime } from "luxon";
 import { createEffect, untrack } from "solid-js";
 
 type PlatformConfigForm = {
@@ -20,7 +17,6 @@ type PlatformConfigForm = {
   record?: string;
   hide_maker: boolean;
   highlight_banner?: string;
-  zen_game?: number | null;
 };
 
 export default function () {
@@ -30,9 +26,6 @@ export default function () {
     initialValues: {
       ...JSON.parse(JSON.stringify(config.data?.server || {})),
     },
-  });
-  const games = useGames({
-    weight: () => 3,
   });
   const mutation = useUpdatePlatformConfigMutation({
     onSuccess: () => {
@@ -53,7 +46,6 @@ export default function () {
         record: result.record,
         hide_maker: false,
         highlight_banner: result.highlight_banner,
-        zen_game: result.zen_game,
       },
     } as Config;
     mutation.mutate(mergedConfig);
@@ -70,7 +62,6 @@ export default function () {
           record: config.data.server.record || "",
           hide_maker: false,
           highlight_banner: config.data.server.highlight_banner || "",
-          zen_game: config.data.server.zen_game || null,
         });
       });
   });
@@ -85,7 +76,7 @@ export default function () {
           <Field name="name">
             {(field, props) => (
               <Input
-                icon={<span class="shrink-0 icon-[fluent--flag-20-regular] w-5 h-5" />}
+                icon={<span class="shrink-0 icon-[fluent--music-note-2-20-regular] w-5 h-5" />}
                 placeholder={t("platform.name")}
                 title={t("platform.form.name.label")}
                 {...props}
@@ -134,7 +125,7 @@ export default function () {
             {(field, props) => (
               <Input
                 icon={<span class="shrink-0 icon-[fluent--link-20-regular] w-5 h-5" />}
-                placeholder="https://github.com/ret2shell"
+                placeholder="https://rhythm.example.com/about"
                 title={t("platform.form.subjectUrl.label")}
                 {...props}
                 value={field.value}
@@ -151,32 +142,6 @@ export default function () {
                 {...props}
                 value={field.value}
                 error={field.error}
-              />
-            )}
-          </Field>
-          <Field name="zen_game" type="number">
-            {(field, props) => (
-              <Select
-                name={field.name}
-                label={t("platform.form.zenGame.label")}
-                class="flex-1"
-                error={field.error}
-                placeholder={t("platform.form.zenGame.placeholder")}
-                items={
-                  games.data?.[0]
-                    .filter((g) => g.archive_at > DateTime.now())
-                    .map((game) => ({
-                      value: game.id.toString(),
-                      label: `${game.name} => ~ ${game.archive_at.toFormat("yyyy-MM-dd HH:mm:ss")}`,
-                      icon: "icon-[fluent--flag-20-regular]",
-                    })) ?? []
-                }
-                inputProps={props}
-                value={field.value ? [field.value.toString()] : []}
-                onValueChange={(val) => {
-                  const gameId = val.value.length > 0 ? Number.parseInt(val.value[0], 10) : null;
-                  setValues(form, { zen_game: gameId });
-                }}
               />
             )}
           </Field>

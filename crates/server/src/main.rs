@@ -1,20 +1,23 @@
-use std::{path::PathBuf, process::exit};
+use std::process::exit;
 
-use clap::{Parser, Subcommand, ValueEnum};
+use clap::{Parser, Subcommand};
 use owo_colors::OwoColorize;
 use r2s_config::GlobalConfig;
-use r2s_server::{R2S_VERSION, down, greet, run_post_receive, up};
+use r2s_engine::Engine;
+use r2s_server::{R2S_VERSION, down, greet, up};
+use serde::Deserialize;
+use tokio::io::AsyncReadExt;
 
 /// Clap arg definition.
 #[derive(Parser, Debug)]
 #[command(
   author = "Reverier-Xu <reverier.xu@woooo.tech>",
   version,
-  about = "Ret 2 Shell Challenge API Platform",
+  about = "Rhythm Arena Tournament API Platform",
   long_about = r#"
-Ret 2 Shell Challenge API Platform
+Rhythm Arena Tournament API Platform
 
-Ret2Shell is released under the Ret2Shell Public License 2.0,
+Rhythm Arena is released under the Ret2Shell Public License 2.0,
 a GPL-3.0-derived copyleft license with limited user-facing
 monetization restrictions.
 
@@ -34,7 +37,7 @@ enum Commands {
   /// Remove all data and drop database, NEVER USE IT AT PRODUCTION
   /// ENVIRONMENT.
   Down,
-  /// Internal utilities.
+  #[command(hide = true)]
   Internal(InternalArgs),
 }
 
@@ -46,49 +49,33 @@ struct InternalArgs {
 
 #[derive(Subcommand, Debug)]
 enum InternalCommands {
-  /// Run an internal git hook forwarder.
-  Hook(HookArgs),
+  Score,
 }
 
-#[derive(clap::Args, Debug)]
-struct HookArgs {
-  #[arg(value_enum)]
-  kind: HookKind,
-  #[arg(long)]
-  session: String,
-  #[arg(long)]
-  auth_key: String,
-  #[arg(long)]
-  base_url: String,
-  #[arg(long)]
-  repo_path: PathBuf,
-}
-
-#[derive(Clone, Debug, ValueEnum)]
-enum HookKind {
-  PostReceive,
+#[derive(Deserialize)]
+struct ScoreRequest {
+  source: String,
+  context: String,
 }
 
 /// Server entry.
 #[tokio::main]
 async fn main() {
-  let command = match CliArgs::parse().command {
-    Some(Commands::Internal(internal)) => {
-      if let Err(err) = run_internal(internal).await {
-        eprintln!("{} internal hook failed: {err}", "[ERROR]".red().bold());
-        exit(1);
-      }
-      return;
+  let command = CliArgs::parse().command;
+  if let Some(Commands::Internal(args)) = command {
+    if let Err(error) = run_internal(args).await {
+      eprintln!("{error}");
+      exit(1);
     }
-    other => other,
-  };
+    return;
+  }
 
   let config = match GlobalConfig::load() {
     Ok(config) => config,
     Err(e) => {
       eprintln!(
         "{}",
-        "Ret 2 Shell Challenge API Platform failed to init!"
+        "Rhythm Arena Tournament API Platform failed to init!"
           .red()
           .bold()
       );
@@ -105,14 +92,14 @@ async fn main() {
   match match command {
     Some(Commands::Up) => up(config).await,
     Some(Commands::Down) => down(config).await,
-    Some(Commands::Internal(_)) => Ok(()),
+    Some(Commands::Internal(_)) => unreachable!(),
     None => up(config).await,
   } {
     Ok(_) => {}
     Err(e) => {
       eprintln!(
         "{}",
-        "Ret 2 Shell Challenge API Platform failed to start!"
+        "Rhythm Arena Tournament API Platform failed to start!"
           .red()
           .bold()
       );
@@ -129,16 +116,15 @@ async fn main() {
 
 async fn run_internal(args: InternalArgs) -> anyhow::Result<()> {
   match args.command {
-    InternalCommands::Hook(hook) => match hook.kind {
-      HookKind::PostReceive => {
-        run_post_receive(
-          &hook.session,
-          &hook.auth_key,
-          &hook.base_url,
-          &hook.repo_path,
-        )
-        .await
-      }
-    },
+    InternalCommands::Score => {
+      let mut input = String::new();
+      tokio::io::stdin().read_to_string(&mut input).await?;
+      let request: ScoreRequest = serde_json::from_str(&input)?;
+      let output =
+        Engine::execute_pure_json_limited(request.source, request.context, 64 * 1024 * 1024)
+          .await?;
+      println!("{output}");
+      Ok(())
+    }
   }
 }

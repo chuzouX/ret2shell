@@ -50,7 +50,7 @@ export default function (props: { user: User | null; loading?: boolean }) {
               )}
               href={`mailto:${props.user?.email}`}
             >
-              {props.user?.email ?? "fake.email@ret.sh.cn"}
+              {props.user?.email ?? "hidden@example.com"}
             </a>
           </div>
           <Divider />

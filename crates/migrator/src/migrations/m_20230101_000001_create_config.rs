@@ -15,10 +15,8 @@ pub enum Config {
   Auditor,
   Auth,
   Automate,
-  Bucket,
   Cache,
   Captcha,
-  Cluster,
   Database,
   Email,
   Logging,
@@ -44,10 +42,8 @@ impl MigrationTrait for Migration {
           .col(ColumnDef::new(Config::Auditor).json_binary())
           .col(ColumnDef::new(Config::Auth).json_binary())
           .col(ColumnDef::new(Config::Automate).json_binary())
-          .col(ColumnDef::new(Config::Bucket).json_binary())
           .col(ColumnDef::new(Config::Cache).json_binary())
           .col(ColumnDef::new(Config::Captcha).json_binary())
-          .col(ColumnDef::new(Config::Cluster).json_binary())
           .col(ColumnDef::new(Config::Database).json_binary())
           .col(ColumnDef::new(Config::Email).json_binary())
           .col(ColumnDef::new(Config::Logging).json_binary())

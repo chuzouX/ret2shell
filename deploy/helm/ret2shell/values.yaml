@@ -66,7 +66,7 @@ platform:
       enabled: false
       host: smtp.example.com
       port: 587
-      sender: Ret2Shell
+      sender: Rhythm Arena
       senderAddress: ""
       username: dev@example.com
       password: ""
@@ -75,16 +75,10 @@ platform:
       compress: true
       filesKept: 3
       level: info,tower_http=info,sqlx=warn
-    cluster:
-      enabled: true
-      nodeSelector: ""
-      traffic: ""
-      lifecycle: ""
-      enableCapture: true
     server:
       apiBasePath: /api
       corsOrigins: "*"
-      externalDomain: ret2shell.local
+      externalDomain: rhythm-arena.local
       externalHttps: true
       name: ""
       footerInfo: ""
@@ -94,7 +88,6 @@ platform:
       record: ""
       hideMaker: false
       highlightBanner: ""
-      zenGame: 0
       rateLimit:
         burstLimit: 32
         burstRestoreRate: 500
@@ -265,62 +258,6 @@ nats:
     user: ""
     password: ""
     tls: false
-
-registry:
-  mode: internal
-  replicaCount: 1
-  image:
-    repository: registry
-    tag: "3"
-    digest: ""
-    pullPolicy: IfNotPresent
-  service:
-    port: 5000
-    annotations: {}
-  podAnnotations: {}
-  podLabels: {}
-  priorityClassName: ""
-  topologySpreadConstraints: []
-  updateStrategy:
-    type: Recreate
-    rollingUpdate: {}
-  podDisruptionBudget:
-    enabled: false
-    minAvailable: 1
-    maxUnavailable: null
-  externalAccess:
-    enabled: true
-    serviceType: NodePort
-    annotations: {}
-    nodePort: 30310
-    host: registry.example.com:30310
-    insecure: true
-  persistence:
-    enabled: true
-    existingClaim: ""
-    accessMode: ReadWriteOnce
-    size: 300Gi
-    storageClass: ""
-  resources: {}
-  nodeSelector: {}
-  tolerations: []
-  affinity: {}
-  metrics:
-    enabled: false
-    port: 5001
-    serviceMonitor:
-      enabled: false
-      namespace: ""
-      interval: 30s
-      scrapeTimeout: 10s
-      labels: {}
-      annotations: {}
-  external:
-    server: registry.example.com
-    external: registry.example.com
-    insecure: false
-    username: ""
-    password: ""
 
 victoriaLogs:
   mode: internal

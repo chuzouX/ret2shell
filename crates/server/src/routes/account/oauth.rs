@@ -29,7 +29,7 @@ use crate::{
     auth::{Token, TokenTracker, captcha_protected, permission_required_all},
     data,
   },
-  routes::account::{EmailType, send_email},
+  routes::account::{EmailType, ensure_user_not_in_active_tournament, send_email},
   traits::{GlobalState, ResponseError},
   utility::{
     password::hash_password,
@@ -300,14 +300,14 @@ async fn register_with_oauth_account(
 
   let password = hash_password(&req.password)?;
 
-  let mut permissions = match user::count(&txn, true, None, None, false).await? {
+  let mut permissions = match user::count(&txn, true, None).await? {
     0 => Permissions(vec![
       Permission::Basic,
       Permission::Verified,
       Permission::Calendar,
       Permission::Wiki,
       Permission::Bulletin,
-      Permission::Game,
+      Permission::Tournament,
       Permission::Host,
       Permission::User,
       Permission::Statistics,
@@ -507,26 +507,7 @@ async fn unbind_oauth_account(
     }
   };
   if oauth_item.institute_id.is_some() {
-    let games =
-      r2s_database::game::get_list(&db.conn, Some(Utc::now()), None, None, Some(Utc::now()))
-        .await?;
-    for game in games {
-      if r2s_database::team::get_by_user_id(&db.conn, game.id, token.id)
-        .await?
-        .is_some()
-      {
-        warn!(
-          provider = %oauth_item.provider,
-          auth_key = %oauth_item.auth_key,
-          game_id = game.id,
-          game_name = %game.name,
-          "user try to unbind oauth account before game archived"
-        );
-        return Err(ResponseError::Forbidden(
-          "you can not unbind oauth account before game archived".to_owned(),
-        ));
-      }
-    }
+    ensure_user_not_in_active_tournament(&db.conn, token.id).await?;
   }
   if oauth_item.user_id != token.id {
     warn!(

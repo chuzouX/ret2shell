@@ -23,7 +23,7 @@ pub enum Permission {
   Calendar,
   Wiki,
   Bulletin,
-  Game,
+  Tournament,
   Host,
   User,
   Statistics,
@@ -139,8 +139,6 @@ impl From<ExModel> for Model {
 pub enum Relation {
   #[sea_orm(has_many = "super::article::Entity")]
   Article,
-  #[sea_orm(has_many = "super::audit::Entity")]
-  Audit,
   #[sea_orm(has_many = "super::calendar::Entity")]
   Calendar,
   #[sea_orm(has_many = "super::comment::Entity")]
@@ -157,12 +155,8 @@ pub enum Relation {
   Media,
   #[sea_orm(has_many = "super::oauth::Entity")]
   Oauth,
-  #[sea_orm(has_many = "super::submission::Entity")]
-  Submission,
   #[sea_orm(has_many = "super::user2_ip::Entity")]
   User2Ip,
-  #[sea_orm(has_many = "super::user2_team::Entity")]
-  User2Team,
   #[sea_orm(has_many = "super::notification::Entity")]
   Notification,
 }
@@ -170,12 +164,6 @@ pub enum Relation {
 impl Related<super::article::Entity> for Entity {
   fn to() -> RelationDef {
     Relation::Article.def()
-  }
-}
-
-impl Related<super::audit::Entity> for Entity {
-  fn to() -> RelationDef {
-    Relation::Audit.def()
   }
 }
 
@@ -209,12 +197,6 @@ impl Related<super::oauth::Entity> for Entity {
   }
 }
 
-impl Related<super::submission::Entity> for Entity {
-  fn to() -> RelationDef {
-    Relation::Submission.def()
-  }
-}
-
 impl Related<super::user2_ip::Entity> for Entity {
   fn to() -> RelationDef {
     Relation::User2Ip.def()
@@ -227,21 +209,6 @@ impl Related<super::ip::Entity> for Entity {
   }
   fn via() -> Option<RelationDef> {
     Some(super::user2_ip::Relation::User.def().rev())
-  }
-}
-
-impl Related<super::user2_team::Entity> for Entity {
-  fn to() -> RelationDef {
-    Relation::User2Team.def()
-  }
-}
-
-impl Related<super::team::Entity> for Entity {
-  fn to() -> RelationDef {
-    super::user2_team::Relation::Team.def()
-  }
-  fn via() -> Option<RelationDef> {
-    Some(super::user2_team::Relation::User.def().rev())
   }
 }
 
@@ -359,9 +326,7 @@ fn filter_and_order(
   Ok(sql)
 }
 
-pub async fn count<C>(
-  db: &C, with_banned: bool, institute_id: Option<i64>, game_id: Option<i64>, training: bool,
-) -> Result<u64, DbErr>
+pub async fn count<C>(db: &C, with_banned: bool, institute_id: Option<i64>) -> Result<u64, DbErr>
 where
   C: ConnectionTrait, {
   let mut sql = Entity::find();
@@ -370,18 +335,6 @@ where
   }
   if let Some(institute_id) = institute_id {
     sql = sql.filter(Column::InstituteId.eq(institute_id));
-  }
-  if let Some(game_id) = game_id {
-    sql = sql
-      .join(JoinType::InnerJoin, Relation::Submission.def())
-      .join(
-        JoinType::InnerJoin,
-        super::submission::Relation::Challenge.def(),
-      )
-      .filter(super::challenge::Column::GameId.eq(game_id));
-    if !training {
-      sql = sql.filter(super::submission::Column::TeamId.is_not_null());
-    }
   }
   sql.distinct_on([Column::Id]).count(db).await
 }

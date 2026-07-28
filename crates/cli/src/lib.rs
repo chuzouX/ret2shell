@@ -18,15 +18,10 @@ use crate::{
     article::{BulletinCommands, WikiCommands},
     auth::AuthCommands,
     calendar::CalendarCommands,
-    challenge::ChallengeCommands,
-    cluster::ClusterCommands,
-    game::GameCommands,
     media::MediaCommands,
     ping::PingCommand,
     platform::PlatformCommands,
     rpc::RpcCommands,
-    submission::SubmissionCommands,
-    team::TeamCommands,
     user::UserCommands,
   },
   config::ClientConfig,
@@ -36,7 +31,7 @@ use crate::{
 #[command(
   author = "ZacharyZcR <ZacharyZcR1984@gmail.com>",
   version,
-  about = "Ret2Shell command line client"
+  about = "Rhythm Arena command line client"
 )]
 pub struct Cli {
   #[arg(long)]
@@ -59,15 +54,10 @@ pub enum Commands {
   Auth(AuthCommands),
   Bulletin(BulletinCommands),
   Calendar(CalendarCommands),
-  Cluster(ClusterCommands),
   Media(MediaCommands),
   Ping(PingCommand),
   Platform(PlatformCommands),
   Rpc(RpcCommands),
-  Game(GameCommands),
-  Challenge(ChallengeCommands),
-  Team(TeamCommands),
-  Submission(SubmissionCommands),
   User(UserCommands),
   Wiki(WikiCommands),
 }
@@ -98,15 +88,10 @@ pub async fn run(cli: Cli) -> CliResult<()> {
     Commands::Auth(command) => command.run(&client, cli.json).await,
     Commands::Bulletin(command) => command.run(&client, cli.json).await,
     Commands::Calendar(command) => command.run(&client, cli.json).await,
-    Commands::Cluster(command) => command.run(&client, cli.json).await,
     Commands::Media(command) => command.run(&client, cli.json).await,
     Commands::Ping(command) => command.run(&client, cli.json).await,
     Commands::Platform(command) => command.run(&client, cli.json).await,
     Commands::Rpc(command) => command.run(&client, cli.json).await,
-    Commands::Game(command) => command.run(&client, cli.json).await,
-    Commands::Challenge(command) => command.run(&client, cli.json).await,
-    Commands::Team(command) => command.run(&client, cli.json).await,
-    Commands::Submission(command) => command.run(&client, cli.json).await,
     Commands::User(command) => command.run(&client, cli.json).await,
     Commands::Wiki(command) => command.run(&client, cli.json).await,
   }

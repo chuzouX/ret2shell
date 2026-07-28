@@ -29,8 +29,6 @@ impl Model {
 pub enum Relation {
   #[sea_orm(has_many = "super::oauth::Entity")]
   Oauth,
-  #[sea_orm(has_many = "super::team::Entity")]
-  Team,
   #[sea_orm(has_many = "super::user::Entity")]
   User,
 }
@@ -38,12 +36,6 @@ pub enum Relation {
 impl Related<super::oauth::Entity> for Entity {
   fn to() -> RelationDef {
     Relation::Oauth.def()
-  }
-}
-
-impl Related<super::team::Entity> for Entity {
-  fn to() -> RelationDef {
-    Relation::Team.def()
   }
 }
 

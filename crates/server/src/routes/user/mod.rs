@@ -7,11 +7,12 @@ use axum::{
 };
 use r2s_cache::Cache;
 use r2s_database::{
-  ip, oauth, submission, team,
+  ip, oauth, registration, result, team_member, tournament_team,
   user::{self, Permission},
 };
 use r2s_migrator::Database;
-use serde::Deserialize;
+use sea_orm::{ColumnTrait, EntityTrait, PaginatorTrait, QueryFilter};
+use serde::{Deserialize, Serialize};
 use tracing::info;
 
 use crate::{
@@ -58,8 +59,8 @@ struct UserListQuery {
 }
 
 #[derive(Deserialize)]
-struct SubmissionQuery {
-  game_id: Option<i64>,
+struct ResultQuery {
+  tournament_id: Option<i64>,
 }
 
 async fn get_user_list(
@@ -104,12 +105,24 @@ async fn get_user(
 async fn get_teams(
   State(ref db): State<Database>, Extension(user): Extension<user::Model>,
 ) -> Result<impl IntoResponse, ResponseError> {
-  let teams = team::get_list_by_user_id_ex(&db.conn, user.id).await?;
+  let registrations = registration::Entity::find()
+    .filter(registration::Column::UserId.eq(user.id))
+    .all(&db.conn)
+    .await?;
+  let registration_ids = registrations.iter().map(|row| row.id).collect::<Vec<_>>();
+  let memberships = team_member::Entity::find()
+    .filter(team_member::Column::RegistrationId.is_in(registration_ids))
+    .all(&db.conn)
+    .await?;
+  let team_ids = memberships
+    .iter()
+    .map(|row| row.team_id)
+    .collect::<Vec<_>>();
   Ok(Json(
-    teams
-      .into_iter()
-      .map(|t| t.desensitize())
-      .collect::<Vec<_>>(),
+    tournament_team::Entity::find()
+      .filter(tournament_team::Column::Id.is_in(team_ids))
+      .all(&db.conn)
+      .await?,
   ))
 }
 
@@ -205,19 +218,32 @@ async fn get_oauth_list(
 
 async fn get_user_stats(
   State(ref db): State<Database>, Extension(token): Extension<Token>,
-  Extension(user): Extension<user::Model>, Query(query): Query<SubmissionQuery>,
+  Extension(user): Extension<user::Model>, Query(query): Query<ResultQuery>,
 ) -> Result<impl IntoResponse, ResponseError> {
   if user.hidden && !token.permissions.0.contains(&Permission::User) && token.id != user.id {
     return Err(ResponseError::NotFound("user not found".to_owned()));
   }
-  match query.game_id {
-    Some(game_id) => {
-      let stats = submission::get_user_challenge_stats(&db.conn, game_id, user.id).await?;
-      Ok(Json(stats).into_response())
-    }
-    None => {
-      let stats = submission::get_user_game_stats(&db.conn, user.id).await?;
-      Ok(Json(stats).into_response())
-    }
+  let registrations = registration::Entity::find()
+    .filter(registration::Column::UserId.eq(user.id))
+    .all(&db.conn)
+    .await?;
+  let registration_ids = registrations.iter().map(|row| row.id).collect::<Vec<_>>();
+  let mut results =
+    result::Entity::find().filter(result::Column::RegistrationId.is_in(registration_ids));
+  if let Some(tournament_id) = query.tournament_id {
+    results = results.filter(result::Column::TournamentId.eq(tournament_id));
   }
+  Ok(Json(UserTournamentStatistics {
+    registrations: registrations.len() as u64,
+    approved_results: results
+      .filter(result::Column::Status.eq(result::ResultStatus::Approved))
+      .count(&db.conn)
+      .await?,
+  }))
+}
+
+#[derive(Serialize)]
+struct UserTournamentStatistics {
+  registrations: u64,
+  approved_results: u64,
 }

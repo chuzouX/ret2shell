@@ -43,7 +43,7 @@ async fn proxy_to_frontend_server(
     Some(frontend_config) => frontend_config.path,
     None => {
       return Err(ResponseError::PreconditionFailed(String::from(
-        "frontend proxy not set for ret2shell, please contact the website devops",
+        "frontend proxy not set for Rhythm Arena; please contact the website operator",
       )));
     }
   };
@@ -68,6 +68,6 @@ async fn proxy_to_frontend_server(
 
 async fn no_frontend_proxy() -> Result<(), ResponseError> {
   Err(ResponseError::PreconditionFailed(String::from(
-    "frontend proxy not set for ret2shell, please contact the website devops",
+    "frontend proxy not set for Rhythm Arena; please contact the website operator",
   )))
 }

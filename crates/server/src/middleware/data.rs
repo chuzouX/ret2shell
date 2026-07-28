@@ -6,9 +6,8 @@ use axum::{
 };
 use r2s_cache::Cache;
 use r2s_config::GlobalConfig;
-use r2s_database::game;
 use r2s_migrator::Database;
-use tracing::{Span, debug};
+use tracing::debug;
 
 use super::auth::Token;
 use crate::traits::ResponseError;
@@ -53,21 +52,6 @@ pub async fn prepare_user_info(
     }
     None => Err(ResponseError::Unauthorized("please login first".into())),
   }
-}
-
-pub async fn prepare_team_info(
-  State(ref db): State<Database>, Extension(token): Extension<Token>,
-  Extension(game): Extension<game::Model>, mut req: Request, next: Next,
-) -> Result<impl IntoResponse, ResponseError> {
-  let team = r2s_database::team::get_by_user_id(&db.conn, game.id, token.id).await?;
-  if let Some(ref team) = team {
-    Span::current().record("team-id", team.id);
-    Span::current().record("team-name", team.name.as_str());
-  }
-  req
-    .extensions_mut()
-    .insert::<Option<r2s_database::team::Model>>(team);
-  Ok(next.run(req).await)
 }
 
 macro_rules! get_path_param_i64 {
@@ -148,40 +132,3 @@ macro_rules! prepare_data {
 }
 
 pub(crate) use prepare_data;
-
-macro_rules! extract_team {
-  ($game:expr, $team_ext: expr, $token: expr) => {{
-    let team = if $game.in_progress()
-      && !($game.admins.0.contains(&$token.id)
-        && $token
-          .permissions
-          .0
-          .contains(&r2s_database::user::Permission::Game))
-    {
-      if let axum::Extension(Some(team)) = $team_ext {
-        if team.state == r2s_database::team::State::Banned {
-          tracing::warn!("banned user try to access in-progress game");
-          return Err(crate::traits::ResponseError::Forbidden(
-            "you are banned in this game".to_owned(),
-          ));
-        } else if team.state == r2s_database::team::State::Pending {
-          tracing::warn!("pending user try to access in-progress game");
-          return Err(crate::traits::ResponseError::Forbidden(
-            "your team is pending, please contact admin".to_owned(),
-          ));
-        }
-        Some(team)
-      } else {
-        tracing::warn!("user try to access in-progress game without take part in it");
-        return Err(crate::traits::ResponseError::Forbidden(
-          "please take part in first".to_owned(),
-        ));
-      }
-    } else {
-      None
-    };
-    team
-  }};
-}
-
-pub(crate) use extract_team;

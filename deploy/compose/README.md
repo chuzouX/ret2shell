@@ -12,4 +12,4 @@ Directory [config/](config/) must contain `config.toml` (mount to `/etc/ret2shel
 
 Directory [static/](static/) contains frontend static files (mount to `/var/www/html/`), for `nginx` service.
 
-It's recommended to modify or put other configuration files like sensitive word list or kubernetes configuration `kubeconfig.yaml` in the [config/](config/) directory.
+Put other configuration files, such as the sensitive-word list, in the [config/](config/) directory.

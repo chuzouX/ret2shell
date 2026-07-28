@@ -124,7 +124,7 @@ export default function ProviderForm(props: {
           <Field name="name" validate={[required(t("oauth.form.name.required"))]}>
             {(field, props) => (
               <Input
-                icon={<span class="shrink-0 icon-[fluent--flag-20-regular] w-5 h-5" />}
+                icon={<span class="shrink-0 icon-[fluent--text-field-20-regular] w-5 h-5" />}
                 title={t("oauth.form.name.label")}
                 placeholder={t("oauth.form.name.placeholder")}
                 {...props}
@@ -146,7 +146,7 @@ export default function ProviderForm(props: {
           >
             {(field, props) => (
               <Input
-                icon={<span class="shrink-0 icon-[fluent--flag-20-regular] w-5 h-5" />}
+                icon={<span class="shrink-0 icon-[fluent--key-20-regular] w-5 h-5" />}
                 title={t("oauth.form.provider.label")}
                 placeholder={t("oauth.form.provider.placeholder")}
                 {...props}
@@ -201,7 +201,7 @@ export default function ProviderForm(props: {
       <Field name="portal" validate={[url(t("oauth.form.portal.invalid"))]}>
         {(field, props) => (
           <Input
-            icon={<span class="shrink-0 icon-[fluent--flag-20-regular] w-5 h-5" />}
+            icon={<span class="shrink-0 icon-[fluent--link-20-regular] w-5 h-5" />}
             title={t("oauth.form.portal.label")}
             placeholder={t("oauth.form.portal.placeholder")}
             {...props}

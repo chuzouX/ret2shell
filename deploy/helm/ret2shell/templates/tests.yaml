@@ -27,38 +27,6 @@ spec:
             - -ec
             - curl -fsS http://{{ include "ret2shell.platformName" . }}:{{ .Values.platform.service.port }}/api/ping
 
-{{- if eq .Values.registry.mode "internal" }}
----
-apiVersion: batch/v1
-kind: Job
-metadata:
-  name: {{ include "ret2shell.registryName" . }}-smoke
-  namespace: {{ .Release.Namespace }}
-  labels:
-    {{- include "ret2shell.commonLabels" . | nindent 4 }}
-    app.kubernetes.io/component: tests
-  annotations:
-    helm.sh/hook: test
-spec:
-  template:
-    spec:
-      restartPolicy: Never
-      {{- with .Values.global.imagePullSecrets }}
-      imagePullSecrets:
-        {{- range . }}
-        - name: {{ . }}
-        {{- end }}
-      {{- end }}
-      containers:
-        - name: smoke-registry
-          image: {{ include "ret2shell.testImage" . }}
-          imagePullPolicy: {{ .Values.global.testImage.pullPolicy }}
-          command:
-            - sh
-            - -ec
-            - curl -sS http://{{ include "ret2shell.registryName" . }}:{{ .Values.registry.service.port }}/v2/ >/dev/null
-{{- end }}
-
 {{- if eq .Values.victoriaLogs.mode "internal" }}
 ---
 apiVersion: batch/v1

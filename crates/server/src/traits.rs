@@ -6,10 +6,7 @@ use axum::{
 };
 use hyper_util::client::legacy::{Client as HyperLegacyClient, connect::HttpConnector};
 use r2s_auditor::Auditor;
-use r2s_bucket::Bucket;
 use r2s_cache::Cache;
-use r2s_checker::Checker;
-use r2s_cluster::Cluster;
 use r2s_config::GlobalConfig;
 use r2s_database::DbErr;
 use r2s_engine::Engine;
@@ -30,13 +27,10 @@ pub struct GlobalState {
   pub db: Database,
   pub cache: Cache,
   pub auditor: Auditor,
-  pub bucket: Bucket,
   pub engine: Engine,
   pub queue: Queue,
   pub oauth: OAuth,
-  pub cluster: Cluster,
   pub media: Media,
-  pub checker: Checker,
   pub event: EventManager,
   pub version: String,
 }
@@ -73,16 +67,14 @@ pub enum ResponseError {
   PasswordHashError(#[from] crate::utility::password::PasswordHashingError),
   #[error("serialize error: {0}")]
   SerializeError(#[from] serde_json::Error),
-  #[error("bucket error: {0}")]
-  BucketError(#[from] r2s_bucket::BucketError),
   #[error("media storage error: {0}")]
   MediaError(#[from] r2s_media::MediaError),
   #[error("file io error: {0}")]
   FileIoError(#[from] std::io::Error),
-  #[error("cluster error: {0}")]
-  ClusterError(#[from] r2s_cluster::ClusterError),
   #[error("oauth error: {0}")]
   OAuthError(#[from] r2s_oauth::OAuthError),
+  #[error("phira error: {0}")]
+  PhiraError(#[from] r2s_oauth::phira::PhiraError),
   #[error("script engine error: {0}")]
   EngineError(#[from] r2s_engine::EngineError),
   #[error("string decode error: {0}")]
@@ -191,44 +183,6 @@ impl IntoResponse for ResponseError {
           e.to_string()
         )
       }
-      ResponseError::BucketError(e) => match e {
-        r2s_bucket::BucketError::PathDoesNotExist(s) => {
-          log_with_resp!(
-            StatusCode::NOT_FOUND,
-            "bucket path does not exist".to_owned(),
-            s
-          )
-        }
-        r2s_bucket::BucketError::PathConflict(s) => {
-          log_with_resp!(StatusCode::CONFLICT, "bucket path conflict".to_owned(), s)
-        }
-        r2s_bucket::BucketError::LockError => {
-          log_with_resp!(
-            StatusCode::INTERNAL_SERVER_ERROR,
-            "could not lock the bucket".to_owned(),
-            "bucket is locked by another process"
-          )
-        }
-        r2s_bucket::BucketError::DataConvertError(e) => {
-          log_with_resp!(
-            StatusCode::INTERNAL_SERVER_ERROR,
-            "failed to read string from bucket, data maybe binary".to_owned(),
-            format!("failed to convert data type from bucket: {e:?}")
-          )
-        }
-        r2s_bucket::BucketError::PathTraversal => {
-          log_with_resp!(
-            StatusCode::BAD_REQUEST,
-            "bucket path traversal detected".to_owned(),
-            "path traversal detected"
-          )
-        }
-        _ => log_with_resp!(
-          StatusCode::INTERNAL_SERVER_ERROR,
-          "bucket internal error".to_owned(),
-          e.to_string()
-        ),
-      },
       ResponseError::MediaError(e) => match e {
         r2s_media::MediaError::ParseContentTypeError(e) => {
           log_with_resp!(
@@ -264,72 +218,6 @@ impl IntoResponse for ResponseError {
           format!("failed to read/write file: {e:?}")
         )
       }
-      ResponseError::ClusterError(e) => match e {
-        r2s_cluster::ClusterError::NeedNamespace(s) => {
-          log_with_resp!(
-            StatusCode::BAD_REQUEST,
-            "cluster called without namespace, maybe a bug for ret2shell".to_owned(),
-            s
-          )
-        }
-        r2s_cluster::ClusterError::ConfigNeeded => {
-          log_with_resp!(
-            StatusCode::INTERNAL_SERVER_ERROR,
-            "missing cluster config".to_owned(),
-            "cluster config is not set yet"
-          )
-        }
-        r2s_cluster::ClusterError::ClusterDisabled => {
-          log_with_resp!(
-            StatusCode::NOT_FOUND,
-            "cluster is disabled".to_owned(),
-            "please setup cluster first and enable it in the config file"
-          )
-        }
-        r2s_cluster::ClusterError::PodRenewExceedLimit(s) => {
-          log_with_resp!(
-            StatusCode::TOO_MANY_REQUESTS,
-            "pod renew exceed limit".to_owned(),
-            s
-          )
-        }
-        r2s_cluster::ClusterError::InvalidImageFileType(e) => (
-          StatusCode::BAD_REQUEST,
-          format!("invalid image file type: {e:?}"),
-        ),
-        r2s_cluster::ClusterError::MissingField(e) => (
-          StatusCode::BAD_REQUEST,
-          format!("missing traffic script function parameters: {e:?}"),
-        ),
-        r2s_cluster::ClusterError::TrafficMapperNotFound(e) => (
-          StatusCode::NOT_FOUND,
-          format!("traffic mapper not found: {e:?}"),
-        ),
-        r2s_cluster::ClusterError::PodNotFound(e) => (
-          StatusCode::NOT_FOUND,
-          format!("requested instance is not found in cluster: {e:?}"),
-        ),
-        r2s_cluster::ClusterError::NetworkError(e) => log_with_resp!(
-          StatusCode::INTERNAL_SERVER_ERROR,
-          "failed to sync with managed registry in cluster".to_owned(),
-          format!("failed to sync with managed registry: {e:?}")
-        ),
-        r2s_cluster::ClusterError::ProxyError(e) => log_with_resp!(
-          StatusCode::INTERNAL_SERVER_ERROR,
-          "failed to proxy traffic through wsrx".to_owned(),
-          format!("failed to proxy traffic through wsrx: {e:?}")
-        ),
-        r2s_cluster::ClusterError::UploadFailed(e) => log_with_resp!(
-          StatusCode::BAD_REQUEST,
-          "failed to upload image into registry".to_owned(),
-          format!("failed to upload image into registry: {e:?}")
-        ),
-        _ => log_with_resp!(
-          StatusCode::INTERNAL_SERVER_ERROR,
-          "cluster internal error".to_owned(),
-          format!("cluster internal error: {e:?}")
-        ),
-      },
       ResponseError::OAuthError(e) => match e {
         r2s_oauth::OAuthError::NetworkError(_) => {
           log_with_resp!(
@@ -344,81 +232,97 @@ impl IntoResponse for ResponseError {
           format!("failed to login with 3rd account: {e:?}")
         ),
       },
+      ResponseError::PhiraError(e) => match e {
+        r2s_oauth::phira::PhiraError::Authentication => (
+          StatusCode::FORBIDDEN,
+          "phira email or password is wrong".to_owned(),
+        ),
+        r2s_oauth::phira::PhiraError::Request(_) => log_with_resp!(
+          StatusCode::BAD_GATEWAY,
+          "phira service is unavailable".to_owned(),
+          "failed to request Phira"
+        ),
+        r2s_oauth::phira::PhiraError::InvalidResponse => log_with_resp!(
+          StatusCode::BAD_GATEWAY,
+          "invalid response from Phira".to_owned(),
+          "Phira returned an invalid response"
+        ),
+      },
       ResponseError::EngineError(e) => match e {
-        r2s_engine::EngineError::MissingCheckerScript(_) => {
+        r2s_engine::EngineError::MissingScript(_) => {
           log_with_resp!(
             StatusCode::PRECONDITION_FAILED,
-            "missing checker script for challenge".to_owned(),
-            format!("missing checker script for challenge: {e:?}")
+            "missing scoring script".to_owned(),
+            format!("missing scoring script: {e:?}")
           )
         }
         r2s_engine::EngineError::MissingFunction(e) => {
           log_with_resp!(
             StatusCode::PRECONDITION_FAILED,
-            format!("missing function for challenge: {e:?}"),
-            format!("missing function for challenge: {e:?}")
+            format!("missing script function: {e:?}"),
+            format!("missing script function: {e:?}")
           )
         }
         r2s_engine::EngineError::CompileError(e) => {
           log_with_resp!(
             StatusCode::PRECONDITION_FAILED,
-            "failed to compile checker script".to_owned(),
-            format!("failed to compile checker script: {e:?}")
+            "failed to compile scoring script".to_owned(),
+            format!("failed to compile scoring script: {e:?}")
           )
         }
         r2s_engine::EngineError::AllocError(e) => log_with_resp!(
           StatusCode::INTERNAL_SERVER_ERROR,
-          "failed to build checker script engine".to_owned(),
-          format!("failed to build checker script engine: {e:?}")
+          "failed to build scoring script engine".to_owned(),
+          format!("failed to build scoring script engine: {e:?}")
         ),
         r2s_engine::EngineError::ExecError(e) => log_with_resp!(
           StatusCode::INTERNAL_SERVER_ERROR,
-          "failed to execute checker script".to_owned(),
-          format!("failed to execute checker script: {e:?}")
+          "failed to execute scoring script".to_owned(),
+          format!("failed to execute scoring script: {e:?}")
         ),
         r2s_engine::EngineError::MissingResultField(e) => {
           log_with_resp!(
             StatusCode::INTERNAL_SERVER_ERROR,
-            "missing values in checker script results".to_owned(),
-            format!("missing values in checker script results: {e:?}")
+            "missing values in scoring script results".to_owned(),
+            format!("missing values in scoring script results: {e:?}")
           )
         }
         r2s_engine::EngineError::BuildError(e) => {
           log_with_resp!(
             StatusCode::INTERNAL_SERVER_ERROR,
-            "failed to build checker script unit".to_owned(),
-            format!("failed to build checker script unit: {e:?}")
+            "failed to build scoring script unit".to_owned(),
+            format!("failed to build scoring script unit: {e:?}")
           )
         }
         r2s_engine::EngineError::SourceError(e) => {
           log_with_resp!(
             StatusCode::INTERNAL_SERVER_ERROR,
-            "failed to load checker script source".to_owned(),
-            format!("failed to load checker script source: {e:?}")
+            "failed to load scoring script source".to_owned(),
+            format!("failed to load scoring script source: {e:?}")
           )
         }
         r2s_engine::EngineError::RuneError(e) => {
           log_with_resp!(
             StatusCode::INTERNAL_SERVER_ERROR,
-            "error occurs in checker script context, please check server logs".to_owned(),
-            format!("error occurs in checker script context: {e:?}")
+            "error occurred in scoring script context; check server logs".to_owned(),
+            format!("error occurred in scoring script context: {e:?}")
           )
         }
         r2s_engine::EngineError::RuneRuntimeError(e) => {
           log_with_resp!(
             StatusCode::INTERNAL_SERVER_ERROR,
-            "error occurs in checker script engine, please check server logs".to_owned(),
-            format!("error occurs in checker script engine: {e:?}")
+            "error occurred in scoring script engine; check server logs".to_owned(),
+            format!("error occurred in scoring script engine: {e:?}")
           )
         }
         r2s_engine::EngineError::ScriptError(_) => (
           StatusCode::PRECONDITION_FAILED,
-          "checker fails on your input, incorrect".to_owned(),
+          "scoring script rejected the input".to_owned(),
         ),
         _ => {
           log_with_resp!(
             StatusCode::INTERNAL_SERVER_ERROR,
-            "checker internal error".to_owned(),
+            "scoring script internal error".to_owned(),
             e.to_string()
           )
         }

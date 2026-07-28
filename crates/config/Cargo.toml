@@ -1,5 +1,5 @@
 [package]
-description = "Config provider for Ret2Shell - A feature-riches CTF challenge platform."
+description = "Configuration provider for Rhythm Arena."
 name        = "r2s-config"
 
 authors      = { workspace = true }

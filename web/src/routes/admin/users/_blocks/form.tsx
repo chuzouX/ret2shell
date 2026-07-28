@@ -43,7 +43,7 @@ export type UserForm = {
   permCalendar: boolean;
   permWiki: boolean;
   permBulletin: boolean;
-  permGame: boolean;
+  permTournament: boolean;
   permHost: boolean;
   permUser: boolean;
   permStat: boolean;
@@ -67,7 +67,7 @@ export default function (compProps: { onDone?: (result: User) => void; editSourc
       permCalendar: compProps.editSource?.permissions.includes(Permission.Calendar) || false,
       permWiki: compProps.editSource?.permissions.includes(Permission.Wiki) || false,
       permBulletin: compProps.editSource?.permissions.includes(Permission.Bulletin) || false,
-      permGame: compProps.editSource?.permissions.includes(Permission.Game) || false,
+      permTournament: compProps.editSource?.permissions.includes(Permission.Tournament) || false,
       permHost: compProps.editSource?.permissions.includes(Permission.Host) || false,
       permUser: compProps.editSource?.permissions.includes(Permission.User) || false,
       permStat: compProps.editSource?.permissions.includes(Permission.Statistics) || false,
@@ -91,7 +91,7 @@ export default function (compProps: { onDone?: (result: User) => void; editSourc
           permCalendar: compProps.editSource?.permissions.includes(Permission.Calendar) || false,
           permWiki: compProps.editSource?.permissions.includes(Permission.Wiki) || false,
           permBulletin: compProps.editSource?.permissions.includes(Permission.Bulletin) || false,
-          permGame: compProps.editSource?.permissions.includes(Permission.Game) || false,
+          permTournament: compProps.editSource?.permissions.includes(Permission.Tournament) || false,
           permHost: compProps.editSource?.permissions.includes(Permission.Host) || false,
           permUser: compProps.editSource?.permissions.includes(Permission.User) || false,
           permStat: compProps.editSource?.permissions.includes(Permission.Statistics) || false,
@@ -163,7 +163,7 @@ export default function (compProps: { onDone?: (result: User) => void; editSourc
     if (result.permCalendar) permissions.push(Permission.Calendar);
     if (result.permWiki) permissions.push(Permission.Wiki);
     if (result.permBulletin) permissions.push(Permission.Bulletin);
-    if (result.permGame) permissions.push(Permission.Game);
+    if (result.permTournament) permissions.push(Permission.Tournament);
     if (result.permHost) permissions.push(Permission.Host);
     if (result.permUser) permissions.push(Permission.User);
     if (result.permStat) permissions.push(Permission.Statistics);
@@ -416,10 +416,10 @@ export default function (compProps: { onDone?: (result: User) => void; editSourc
               </Checkbox>
             )}
           </Field>
-          <Field name="permGame" type="boolean">
+          <Field name="permTournament" type="boolean">
             {(field, props) => (
               <Checkbox class="flex-none m-1" inputProps={props} checked={field.value ?? false} error={field.error}>
-                <span class="flex-1 text-start truncate">{permissionToString(Permission.Game)}</span>
+                <span class="flex-1 text-start truncate">{permissionToString(Permission.Tournament)}</span>
               </Checkbox>
             )}
           </Field>

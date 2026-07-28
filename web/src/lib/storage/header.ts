@@ -63,14 +63,14 @@ class RouteHeader {
 
 export const headerStore = new RouteHeader();
 
-export function Title(props: { page?: string; route: string; domain?: string }) {
+export function Title(props: { page?: string; route?: string; domain?: string }) {
   const watchedLocation = useLocation();
   createEffect(() => {
-    if (props.page || props.domain || props.route) {
+    if (props.route && (props.page || props.domain)) {
       const fullRoutes = props.route.split("/").filter((r) => r);
       untrack(() => headerStore.insert(fullRoutes, props.domain, props.page));
     }
-    if (watchedLocation.pathname.startsWith(props.route)) {
+    if (props.route && watchedLocation.pathname.startsWith(props.route)) {
       untrack(() => {
         document.title = headerStore.title(watchedLocation.pathname.split("/").filter((r) => r));
       });

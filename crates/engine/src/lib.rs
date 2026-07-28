@@ -1,4 +1,4 @@
-mod traits;
+﻿mod traits;
 mod utils;
 
 use std::{
@@ -107,6 +107,51 @@ impl Engine {
     Ok(markers)
   }
 
+  /// Compile a pure scoring script with JSON as its only optional module.
+  pub async fn lint_pure_json(
+    script: impl AsRef<str>, required_funcs: &[&'static str],
+  ) -> Result<Vec<DiagnosticMarker>, EngineError> {
+    Self::lint(vec![rune_modules::json::module], script, required_funcs).await
+  }
+
+  /// Execute `rank(context)` in a fresh, pure Rune context.
+  ///
+  /// JSON is used only as a boundary format. The user function receives a Rune
+  /// object and returns an object, matching the public scoring contract.
+  pub async fn execute_pure_json(
+    script: impl AsRef<str>, context_json: impl AsRef<str>,
+  ) -> Result<String, EngineError> {
+    let source = format!(
+      "{}\n\npub fn __rhythm_arena_rank(input) {{\n  let context = json::from_string(input).unwrap();\n  json::to_string(rank(context)).unwrap()\n}}",
+      script.as_ref()
+    );
+    let engine = Self::default();
+    engine
+      .preload(
+        vec![rune_modules::json::module],
+        "rhythm-arena-score",
+        source,
+        None,
+      )
+      .await?;
+    let output = engine
+      .execute(
+        "rhythm-arena-score",
+        "__rhythm_arena_rank",
+        (context_json.as_ref().to_owned(),),
+      )
+      .await?;
+    Ok(rune::from_value(output)?)
+  }
+
+  pub async fn execute_pure_json_limited(
+    script: impl AsRef<str>, context_json: impl AsRef<str>, memory_limit: usize,
+  ) -> Result<String, EngineError> {
+    let script = script.as_ref().to_owned();
+    let context_json = context_json.as_ref().to_owned();
+    rune::alloc::limit::with(memory_limit, Self::execute_pure_json(script, context_json)).await
+  }
+
   pub async fn expire(&self, key: impl AsRef<str>) {
     self.contexts.write().await.remove(key.as_ref());
   }
@@ -156,7 +201,7 @@ impl Engine {
     let contexts = self.contexts.read().await;
     let (unit, runtime, _) = contexts
       .get(key)
-      .ok_or_else(|| EngineError::MissingCheckerScript(key.to_string()))?;
+      .ok_or_else(|| EngineError::MissingScript(key.to_string()))?;
     let vm = Vm::new(runtime.clone(), unit.clone());
     let result = vm.send_execute([func], args)?;
     let result = result.async_complete().await.into_result()?;
@@ -171,7 +216,7 @@ impl Engine {
     let contexts = self.contexts.read().await;
     let (unit, runtime, _) = contexts
       .get(key)
-      .ok_or_else(|| EngineError::MissingCheckerScript(key.to_string()))?;
+      .ok_or_else(|| EngineError::MissingScript(key.to_string()))?;
     let vm = Vm::new(runtime.clone(), unit.clone());
     Ok(vm.lookup_function([func]).is_ok())
   }

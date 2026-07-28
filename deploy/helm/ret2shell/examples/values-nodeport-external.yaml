@@ -31,8 +31,5 @@ nats:
     token: replace-me
     tls: false
 
-registry:
-  mode: disabled
-
 victoriaLogs:
   mode: disabled

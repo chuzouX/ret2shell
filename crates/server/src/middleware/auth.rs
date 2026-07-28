@@ -13,7 +13,7 @@ use jsonwebtoken::{Algorithm, DecodingKey, EncodingKey, Header, Validation, deco
 use r2s_cache::Cache;
 use r2s_config::auth;
 use r2s_database::{
-  challenge, config, game, team,
+  config,
   user::{self, Permission, Permissions},
 };
 use r2s_migrator::Database;
@@ -420,92 +420,3 @@ macro_rules! permission_required_any {
 pub(crate) use permission_required_all;
 #[allow(unused_imports)]
 pub(crate) use permission_required_any;
-
-use super::data::extract_team;
-
-macro_rules! is_game_admin {
-  ($token:expr, $game:expr) => {{ $token.permissions.0.contains(&Permission::Game) && $game.admins.0.contains(&$token.id) }};
-}
-
-pub(crate) use is_game_admin;
-
-pub async fn game_admin_required(
-  Extension(token): Extension<Token>, Extension(game): Extension<game::Model>, req: Request,
-  next: Next,
-) -> Result<impl IntoResponse, ResponseError> {
-  if token.id <= 0 {
-    return Err(ResponseError::Unauthorized("please login first".to_owned()));
-  }
-  if is_game_admin!(token, game) {
-    Ok(next.run(req).await)
-  } else {
-    warn!("user wants to access game admin api without permission",);
-    Err(ResponseError::Forbidden("permission denied".to_owned()))
-  }
-}
-
-pub async fn game_access_required(
-  Extension(token): Extension<Token>, Extension(game): Extension<game::Model>,
-  team_ext: Extension<Option<team::Model>>, req: Request, next: Next,
-) -> Result<impl IntoResponse, ResponseError> {
-  if token.id <= 0 {
-    return Err(ResponseError::Unauthorized("please login first".to_owned()));
-  }
-  if is_game_admin!(token, game) {
-    return Ok(next.run(req).await);
-  }
-  if game.hidden {
-    warn!("user wants to access hidden game api",);
-    return Err(ResponseError::Forbidden("permission denied".to_owned()));
-  }
-  if game.host_type == game::HostType::Training {
-    return Ok(next.run(req).await);
-  }
-  if game.archive_at < Utc::now() {
-    return Ok(next.run(req).await);
-  }
-
-  let team = if let Extension(Some(team)) = team_ext {
-    Some(team)
-  } else {
-    None
-  };
-
-  if team.is_none() || team.is_some_and(|team| team.state == team::State::Banned) {
-    warn!("user wants to access game api without participation or banned",);
-    return Err(ResponseError::Forbidden("permission denied".to_owned()));
-  }
-  Ok(next.run(req).await)
-}
-
-pub async fn challenge_access_required(
-  Extension(token): Extension<Token>, Extension(game): Extension<game::Model>,
-  Extension(challenge): Extension<challenge::Model>, team_ext: Extension<Option<team::Model>>,
-  req: Request, next: Next,
-) -> Result<impl IntoResponse, ResponseError> {
-  if token.id <= 0 {
-    return Err(ResponseError::Unauthorized("please login first".to_owned()));
-  }
-  if game.id != challenge.game_id {
-    warn!("user wants to access cross-game challenge");
-    return Err(ResponseError::Forbidden("permission denied".to_owned()));
-  }
-  if is_game_admin!(token, game) {
-    return Ok(next.run(req).await);
-  }
-  if game.hidden
-    || challenge.hidden
-    || game.frozen
-    || challenge.release_at.is_some_and(|c| c > Utc::now())
-  {
-    warn!("user wants to access hidden or unreleased challenge",);
-    return Err(ResponseError::Forbidden("permission denied".to_owned()));
-  }
-  if game.start_at > Utc::now() {
-    return Err(ResponseError::PreconditionFailed(
-      "game has not started".to_owned(),
-    ));
-  }
-  let _team = extract_team!(game, team_ext, token);
-  Ok(next.run(req).await)
-}

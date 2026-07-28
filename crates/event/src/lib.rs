@@ -57,7 +57,7 @@ impl EventManager {
     while let Ok(event) = rx.recv().await {
       match event {
         Broadcast::Publish(event) => {
-          if event.game_id != id {
+          if event.tournament_id != id {
             continue;
           }
           let message = match serde_json::to_string(&event.event).ok() {

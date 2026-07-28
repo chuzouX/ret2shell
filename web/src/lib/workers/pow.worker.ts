@@ -3,7 +3,8 @@ import { hashToHex } from "@lib/utils/hash";
 self.addEventListener(
   "message",
   async function (e: { data: { challenge: string } }) {
-    const criteria = e.data.challenge;
+    const criteria = e.data?.challenge;
+    if (!criteria) return;
     const difficulty = Number.parseInt(criteria.split("#")[0], 10);
     const challenge = criteria.split("#")[1];
     let nonce = 0;
