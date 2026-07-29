@@ -5,6 +5,7 @@ export const routes = {
   component: lazy(() => import("./layout")),
   children: [
     { path: "/", component: lazy(() => import("./index")) },
+    { path: "/charts", component: lazy(() => import("./charts/index")) },
     {
       path: "/tournaments",
       component: lazy(() => import("./tournaments/layout")),

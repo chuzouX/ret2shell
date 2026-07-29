@@ -1070,7 +1070,13 @@
       "selectHint": "ラウンドとタグのツリーから譜面を選択してください。",
       "charter": "譜面制作者",
       "constant": "譜面定数",
-      "weight": "スコア重み"
+      "weight": "スコア重み",
+      "allTournaments": "すべての大会",
+      "allSources": "すべてのソース",
+      "allDifficulties": "すべての難易度",
+      "localSource": "ローカルライブラリ",
+      "phiraSource": "Phira",
+      "exclusiveSource": "大会専用"
     },
     "teams": {
       "title": "Teams",

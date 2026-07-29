@@ -1070,7 +1070,13 @@
       "selectHint": "從左側階段與標籤樹中選擇一張譜面。",
       "charter": "譜師",
       "constant": "譜面定數",
-      "weight": "計分權重"
+      "weight": "計分權重",
+      "allTournaments": "全部賽事",
+      "allSources": "全部來源",
+      "allDifficulties": "全部難度",
+      "localSource": "本地譜面庫",
+      "phiraSource": "Phira",
+      "exclusiveSource": "賽事專屬"
     },
     "teams": {
       "title": "Teams",

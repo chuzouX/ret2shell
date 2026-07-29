@@ -1,5 +1,9 @@
 import type { AuthConfig, Config, ServerConfig } from "@models/config";
 import type { Institute } from "@models/institute";
+import type { PlatformLicense } from "@models/platform";
+
+export type { PlatformLicense } from "@models/platform";
+
 import { luxonReplacer } from "@models/utils";
 import { t } from "@storage/theme";
 import { useMutation, useQuery } from "@tanstack/solid-query";
@@ -200,14 +204,6 @@ export function useQueryPlatformLog({
     () => inflyClient
   );
 }
-
-export type PlatformLicense = {
-  spdx_id: string;
-  name: string;
-  url: string;
-  notice: string;
-  content: string;
-};
 
 export async function getPlatformLicense() {
   return await api.get(`${api_root}/platform/license`).json<PlatformLicense>();

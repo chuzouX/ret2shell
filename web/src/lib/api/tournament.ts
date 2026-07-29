@@ -1,10 +1,12 @@
 import type {
+  ChartLibrary,
   ChartTag,
   LeaderboardSnapshot,
   Registration,
   ScoringScript,
   Tournament,
   TournamentChart,
+  TournamentChartLibrary,
   TournamentResult,
   TournamentRound,
   TournamentStaff,
@@ -45,6 +47,26 @@ export const createChart = async (id: number, input: Omit<TournamentChart, "id" 
   await api.post(`${root}/${id}/charts`, { json: input }).json<TournamentChart>();
 export const deleteChart = async (id: number, chart: number) =>
   await safeJson(api.delete(`${root}/${id}/charts/${chart}`).json<null>());
+export const getChartLibrary = async () => await api.get(`${api_root}/charts/library`).json<ChartLibrary[]>();
+export const createLibraryChart = async (input: Omit<ChartLibrary, "id">) =>
+  await api.post(`${api_root}/charts/library`, { json: input }).json<ChartLibrary>();
+export const importPhiraChart = async (external_id: number) =>
+  await api.post(`${api_root}/charts/library/import/phira`, { json: { external_id } }).json<ChartLibrary>();
+export const getTournamentChartLibrary = async (id: number) =>
+  await api.get(`${root}/${id}/chart-library`).json<TournamentChartLibrary[]>();
+export interface TournamentChartLibraryInput {
+  chart_library_id: number;
+  round_id: number;
+  tag_id: number;
+  order_index: number;
+  weight_millionths?: number;
+}
+export const addTournamentChartLibrary = async (id: number, input: TournamentChartLibraryInput) =>
+  await api.post(`${root}/${id}/chart-library`, { json: input }).json<unknown>();
+export const updateTournamentChartLibrary = async (id: number, link: number, input: TournamentChartLibraryInput) =>
+  await api.patch(`${root}/${id}/chart-library/${link}`, { json: input }).json<unknown>();
+export const removeTournamentChartLibrary = async (id: number, link: number) =>
+  await safeJson(api.delete(`${root}/${id}/chart-library/${link}`).json<null>());
 
 export const getMyRegistration = async (id: number) =>
   await api.get(`${root}/${id}/registrations/me`).json<Registration | null>();

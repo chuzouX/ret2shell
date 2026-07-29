@@ -2,11 +2,20 @@ import type { Permission, Token } from "@models/user";
 import { base64urlnopad } from "@scure/base";
 import { makePersisted } from "@solid-primitives/storage";
 import { createRoot } from "solid-js";
-import { createStore } from "solid-js/store";
+import { createStore, type StoreReturn } from "solid-js/store";
+
+type AccountStore = {
+  id: number | null;
+  account: string | null;
+  nickname: string | null;
+  token: string | null;
+  permissions: Permission[];
+  warnedCodeGeneration: boolean;
+};
 
 const accountRoot = createRoot(() =>
-  makePersisted(
-    createStore({
+  makePersisted<AccountStore, StoreReturn<AccountStore>>(
+    createStore<AccountStore>({
       id: null as number | null,
       account: null as string | null,
       nickname: null as string | null,

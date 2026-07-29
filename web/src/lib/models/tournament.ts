@@ -57,6 +57,31 @@ export interface TournamentChart {
   weight_millionths: number;
   metadata: Record<string, unknown>;
 }
+export interface ChartLibrary {
+  id: number;
+  title: string;
+  artist: string;
+  charter: string;
+  difficulty: string;
+  level_constant: number;
+  cover?: string;
+  metadata: Record<string, unknown>;
+  source?: string;
+  source_type?: string;
+  tournaments?: string;
+}
+export interface TournamentChartLibrary {
+  link: {
+    id: number;
+    tournament_id: number;
+    chart_library_id: number;
+    round_id: number;
+    tag_id: number;
+    order_index: number;
+    weight_millionths: number;
+  };
+  chart: ChartLibrary;
+}
 export interface Registration {
   id: number;
   tournament_id: number;

@@ -3,6 +3,7 @@
 pub mod article;
 pub mod calendar;
 pub mod chart;
+pub mod chart_library;
 pub mod chart_tag;
 pub mod chat;
 pub mod comment;
@@ -20,6 +21,7 @@ pub mod result_review;
 pub mod scoring_script_version;
 pub mod team_member;
 pub mod tournament;
+pub mod tournament_chart_library;
 pub mod tournament_round;
 pub mod tournament_staff;
 pub mod tournament_team;

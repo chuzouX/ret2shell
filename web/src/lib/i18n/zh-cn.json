@@ -1077,7 +1077,13 @@
       "artist": "曲师",
       "charter": "谱师",
       "constant": "谱面定数",
-      "weight": "计分权重"
+      "weight": "计分权重",
+      "allTournaments": "全部赛事",
+      "allSources": "全部来源",
+      "allDifficulties": "全部难度",
+      "localSource": "本地谱面库",
+      "phiraSource": "Phira",
+      "exclusiveSource": "赛事专属"
     },
     "teams": {
       "title": "队伍",

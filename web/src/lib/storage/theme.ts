@@ -1,9 +1,18 @@
 import { defaultDict, fetchDictionary, hasLocale, type Locale } from "@lib/i18n";
+import type { BaseRecordDict } from "@solid-primitives/i18n";
 import { resolveTemplate, translator } from "@solid-primitives/i18n";
 import { createPrefersDark } from "@solid-primitives/media";
 import { makePersisted } from "@solid-primitives/storage";
 import { createEffect, createResource, createRoot, untrack } from "solid-js";
-import { createStore } from "solid-js/store";
+import { createStore, type StoreReturn } from "solid-js/store";
+
+type ThemeStore = {
+  theme: string;
+  locale: Locale;
+  colorScheme: string;
+  colorSchemeFollowsSystem: boolean;
+  showBackgroundImg: boolean;
+};
 
 let systemPrefersLocale = (window.navigator.language || window.navigator.languages[0])
   .replace("-", "_")
@@ -15,8 +24,8 @@ if (!hasLocale(systemPrefersLocale)) {
 
 const themeRoot = createRoot(() => {
   const prefersDark = createPrefersDark();
-  const [themeStore, setThemeStore] = makePersisted(
-    createStore({
+  const [themeStore, setThemeStore] = makePersisted<ThemeStore, StoreReturn<ThemeStore>>(
+    createStore<ThemeStore>({
       theme: "cyber",
       locale: systemPrefersLocale,
       colorScheme: "dark",
@@ -25,9 +34,13 @@ const themeRoot = createRoot(() => {
     }),
     { name: "theme" }
   );
-  const [dict] = createResource(() => themeStore.locale || systemPrefersLocale, fetchDictionary, {
-    initialValue: defaultDict,
-  });
+  const [dict] = createResource<BaseRecordDict, Locale>(
+    () => themeStore.locale || systemPrefersLocale,
+    async (locale) => (await fetchDictionary(locale)) as BaseRecordDict,
+    {
+      initialValue: defaultDict as BaseRecordDict,
+    }
+  );
   return { prefersDark, themeStore, setThemeStore, dict };
 });
 
@@ -80,7 +93,7 @@ export function initTheme() {
   window.onbeforeprint = onBeforePrint;
   window.onafterprint = onAfterPrint;
 }
-export const t = translator(dict, resolveTemplate);
+export const t = translator(dict as () => BaseRecordDict, resolveTemplate);
 export const colorPalette = {
   fg: () => (themeStore.colorScheme === "dark" ? "#eee" : "#121212"),
   primary: "#0991ed",

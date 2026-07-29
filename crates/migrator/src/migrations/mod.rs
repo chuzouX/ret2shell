@@ -13,3 +13,6 @@ pub mod m_20250114_000001_create_oauth_index;
 pub mod m_20250721_000001_create_ip_time_info;
 pub mod m_20260727_000001_create_tournament_domain;
 pub mod m_20260727_000002_create_chart_tags;
+pub mod m_20260728_000001_add_chart_review;
+pub mod m_20260728_000002_create_chart_library;
+pub mod m_20260728_000003_repair_chart_library;

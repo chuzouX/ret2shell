@@ -5,7 +5,7 @@ use axum::{
 
 use crate::traits::GlobalState;
 
-mod access;
+pub(crate) mod access;
 mod communication;
 mod core;
 mod results;
@@ -39,6 +39,14 @@ pub fn router(_state: &GlobalState) -> Router<GlobalState> {
     .route(
       "/{tournament}/charts",
       get(core::list_charts).post(core::create_chart),
+    )
+    .route(
+      "/{tournament}/chart-library",
+      get(super::chart_library::list_links).post(super::chart_library::create_link),
+    )
+    .route(
+      "/{tournament}/chart-library/{link}",
+      patch(super::chart_library::update_link).delete(super::chart_library::delete_link),
     )
     .route(
       "/{tournament}/chart-tags",

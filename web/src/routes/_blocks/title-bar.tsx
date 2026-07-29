@@ -19,6 +19,10 @@ function GlobalNav(props: { canAdmin: boolean }) {
         <span class="icon-[fluent--trophy-20-regular] w-5 h-5" />
         <span class="hidden md:inline">{t("tournament.title")}</span>
       </Link>
+      <Link href="/charts" activeMatch="exact" ghost size="sm">
+        <span class="icon-[fluent--library-20-regular] w-5 h-5" />
+        <span class="hidden md:inline">{t("tournament.charts.library")}</span>
+      </Link>
       <Link href="/wiki" activeMatch="partial" ghost size="sm">
         <span class="icon-[fluent--book-number-20-regular] w-5 h-5" />
         <span class="hidden md:inline">{t("wiki.title")}</span>

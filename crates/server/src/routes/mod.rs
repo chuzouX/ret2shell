@@ -34,6 +34,7 @@ use crate::{
 mod account;
 mod bulletin;
 mod calendar;
+mod chart_library;
 mod event;
 mod media;
 mod platform;
@@ -77,6 +78,12 @@ fn construct_router(state: &GlobalState) -> Router<GlobalState> {
   let route = Router::new()
     .nest("/account", account::router(state))
     .nest("/bulletin", bulletin::router(state))
+    .route("/charts/library", get(chart_library::list).post(chart_library::create))
+    .route("/charts/library/import/phira", axum::routing::post(chart_library::import_phira))
+    .route(
+      "/charts/library/{id}",
+      axum::routing::patch(chart_library::update).delete(chart_library::delete),
+    )
     .nest("/calendar", calendar::router(state))
     .nest("/event", event::router(state))
     .nest("/media", media::router(state))

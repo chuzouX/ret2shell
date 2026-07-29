@@ -1,13 +1,24 @@
-import type { PlatformLicense } from "@api/platform";
+import type { PlatformLicense } from "@models/platform";
 import { makePersisted } from "@solid-primitives/storage";
 import { createRoot } from "solid-js";
-import { createStore } from "solid-js/store";
+import { createStore, type StoreReturn } from "solid-js/store";
+
+type PlatformStore = {
+  version: string;
+  accept_cookies: boolean;
+  under_maintenance: boolean;
+  backend_online: boolean;
+  license: PlatformLicense | null;
+  enable_ret2codec: boolean | null;
+  readonly isOnline: boolean;
+  readonly isCompatible: boolean;
+};
 
 export const frontendCompatVersion = import.meta.env.VITE_COMPAT_VERSION as string;
 
 const platformRoot = createRoot(() =>
-  makePersisted(
-    createStore({
+  makePersisted<PlatformStore, StoreReturn<PlatformStore>>(
+    createStore<PlatformStore>({
       version: `${frontendCompatVersion}-UNKNOWN-0.0.0`,
       accept_cookies: false,
       under_maintenance: false,

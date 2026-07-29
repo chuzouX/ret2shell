@@ -1077,7 +1077,13 @@
       "artist": "Artist",
       "charter": "Charter",
       "constant": "Level constant",
-      "weight": "Scoring weight"
+      "weight": "Scoring weight",
+      "allTournaments": "All tournaments",
+      "allSources": "All sources",
+      "allDifficulties": "All difficulties",
+      "localSource": "Local library",
+      "phiraSource": "Phira",
+      "exclusiveSource": "Tournament-only"
     },
     "teams": {
       "title": "Teams",
