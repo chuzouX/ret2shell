@@ -1,10 +1,11 @@
-import { getCharts, getChartTags, getRounds } from "@api/tournament";
+import { getChartTags, getRounds, getTournamentChartLibrary } from "@api/tournament";
 import SidebarLayout from "@blocks/sidebar-layout";
 import { mediaPath } from "@lib/utils/media";
 import { createBreakpoints } from "@solid-primitives/media";
 import { useParams, useSearchParams } from "@solidjs/router";
 import { Title } from "@storage/header";
 import { breakpoints, fullTheme, t } from "@storage/theme";
+import Article from "@widgets/article";
 import Button from "@widgets/button";
 import Input from "@widgets/input";
 import LoadingTips from "@widgets/loading-tips";
@@ -21,15 +22,30 @@ export default function () {
   const [searchParams] = useSearchParams();
   const [rounds] = createResource(tournamentId, getRounds);
   const [tags] = createResource(tournamentId, getChartTags);
-  const [charts] = createResource(tournamentId, getCharts);
+  const [chartLibrary] = createResource(tournamentId, getTournamentChartLibrary);
   const [search, setSearch] = createSignal("");
   const [showLeftSidebar, setShowLeftSidebar] = createSignal(false);
   const matches = createBreakpoints(breakpoints);
 
   const selectedChartId = createMemo(() => Number.parseInt(String(searchParams.chart ?? ""), 10) || null);
-  const selectedChart = createMemo(() => charts()?.find((chart) => chart.id === selectedChartId()));
-  const selectedRound = createMemo(() => rounds()?.find((round) => round.id === selectedChart()?.round_id));
-  const selectedTag = createMemo(() => tags()?.find((tag) => tag.id === selectedChart()?.tag_id));
+  const selectedItem = createMemo(() => chartLibrary()?.find((item) => item.link.id === selectedChartId()));
+  const selectedChart = createMemo(() => selectedItem()?.chart);
+  const selectedDescription = createMemo(() => selectedItem()?.link.description);
+  const selectedRound = createMemo(() => rounds()?.find((round) => round.id === selectedItem()?.link.round_id));
+  const selectedTag = createMemo(() => tags()?.find((tag) => tag.id === selectedItem()?.link.tag_id));
+  const sourceLabel = (sourceType?: string, custom = false) => {
+    if (custom) return t("tournament.charts.customSource");
+    switch (sourceType) {
+      case "personal":
+        return t("tournament.charts.localSource");
+      case "phira":
+        return t("tournament.charts.phiraSource");
+      case "phigros":
+        return t("tournament.charts.phigrosSource");
+      default:
+        return sourceType || t("tournament.charts.source");
+    }
+  };
   const tree = createMemo<TreeNode[]>(() => {
     const query = search().trim().toLowerCase();
     return (rounds() ?? []).map((round) => ({
@@ -44,22 +60,22 @@ export default function () {
           name: tag.name,
           type: "category" as const,
           icon: "icon-[fluent--tag-20-regular]",
-          children: (charts() ?? [])
-            .filter((chart) => chart.tag_id === tag.id)
+          children: (chartLibrary() ?? [])
+            .filter((item) => item.link.tag_id === tag.id)
             .filter((chart) =>
-              [chart.title, chart.artist, chart.charter, chart.difficulty, tag.name, round.name]
+              [chart.chart.title, chart.chart.artist, chart.chart.charter, chart.chart.difficulty, tag.name, round.name]
                 .join(" ")
                 .toLowerCase()
                 .includes(query)
             )
-            .map((chart) => ({
-              id: chart.id,
-              name: chart.title,
+            .map((item) => ({
+              id: item.link.id,
+              name: item.chart.title,
               type: "item" as const,
-              searchValue: String(chart.id),
-              link: `/tournaments/${tournamentId()}/charts?chart=${chart.id}`,
+              searchValue: String(item.link.id),
+              link: `/tournaments/${tournamentId()}/charts?chart=${item.link.id}`,
               icon: "icon-[fluent--music-note-2-20-regular]",
-              extraPart: <span class="text-xs opacity-50">{chart.difficulty}</span>,
+              extraPart: <span class="text-xs opacity-50">{item.chart.difficulty}</span>,
               children: [],
             })),
         })),
@@ -90,7 +106,7 @@ export default function () {
               onInput={(event) => setSearch(event.currentTarget.value)}
             />
             <Switch>
-              <Match when={rounds.loading || tags.loading || charts.loading}>
+              <Match when={rounds.loading || tags.loading || chartLibrary.loading}>
                 <div class="p-4 flex justify-center">
                   <LoadingTips />
                 </div>
@@ -100,11 +116,11 @@ export default function () {
                   tree={tree()}
                   activeSearchParams="chart"
                   highlightPaths={
-                    selectedChart()
+                    selectedItem()
                       ? [
-                          `round-${selectedChart()!.round_id}`,
-                          `tag-${selectedChart()!.tag_id}`,
-                          String(selectedChart()!.id),
+                          `round-${selectedItem()!.link.round_id}`,
+                          `tag-${selectedItem()!.link.tag_id}`,
+                          String(selectedItem()!.link.id),
                         ]
                       : undefined
                   }
@@ -140,11 +156,16 @@ export default function () {
             {(chart) => (
               <article class="w-full max-w-6xl mx-auto p-4 lg:p-8">
                 <div class="grid lg:grid-cols-[minmax(18rem,28rem)_1fr] gap-8 items-start">
-                  <Picture
-                    class="aspect-square rounded-lg border border-layer-content/15"
-                    src={mediaPath(chart().cover)}
-                    alt={chart().title}
-                  />
+                  <div class="relative">
+                    <Picture
+                      class="aspect-square rounded-lg border border-layer-content/15"
+                      src={mediaPath(chart().cover)}
+                      alt={chart().title}
+                    />
+                    <span class="absolute top-2 right-2 rounded bg-black/65 px-2 py-1 text-xs text-white">
+                      {sourceLabel(chart().source_type, selectedItem()?.link.chart_library_id === null)}
+                    </span>
+                  </div>
                   <div class="min-w-0 py-2">
                     <div class="flex flex-wrap items-center gap-2 text-sm opacity-60">
                       <span>{selectedRound()?.name}</span>
@@ -171,9 +192,16 @@ export default function () {
                       </div>
                       <div>
                         <dt class="text-xs opacity-50">{t("tournament.charts.weight")}</dt>
-                        <dd class="font-mono font-bold mt-1">{(chart().weight_millionths / 1_000_000).toFixed(2)}x</dd>
+                        <dd class="font-mono font-bold mt-1">
+                          {((chart().weight_millionths ?? 1_000_000) / 1_000_000).toFixed(2)}x
+                        </dd>
                       </div>
                     </dl>
+                    <Show when={selectedDescription()}>
+                      <div class="mt-8 border-t border-layer-content/15 pt-6">
+                        <Article content={selectedDescription()!} compact />
+                      </div>
+                    </Show>
                   </div>
                 </div>
               </article>

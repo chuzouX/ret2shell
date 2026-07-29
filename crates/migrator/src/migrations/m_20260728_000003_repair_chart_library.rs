@@ -12,7 +12,8 @@ impl MigrationTrait for Migration {
         r#"
 CREATE TABLE IF NOT EXISTS chart_source (
   id BIGSERIAL PRIMARY KEY,
-  source_type VARCHAR(63) NOT NULL UNIQUE
+  source_type VARCHAR(63) NOT NULL UNIQUE,
+  name VARCHAR(255) NOT NULL DEFAULT ''
 );
 INSERT INTO chart_source (source_type, name)
 VALUES ('phira', 'Phira')

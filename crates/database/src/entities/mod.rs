@@ -4,6 +4,7 @@ pub mod article;
 pub mod calendar;
 pub mod chart;
 pub mod chart_library;
+pub mod chart_source;
 pub mod chart_tag;
 pub mod chat;
 pub mod comment;

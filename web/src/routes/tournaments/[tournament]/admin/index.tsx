@@ -5,9 +5,7 @@ import {
   addStaff,
   addTournamentChartLibrary,
   commitImport,
-  createChart,
   createChartTag,
-  createLibraryChart,
   createRound,
   createScript,
   deleteChart,
@@ -36,7 +34,7 @@ import {
   updateTournamentChartLibrary,
 } from "@api/tournament";
 import XLSX from "@e965/xlsx";
-import type { CompetitionMode, EvidencePolicy } from "@models/tournament";
+import type { ChartSourceType, ChartVisibility, CompetitionMode, EvidencePolicy } from "@models/tournament";
 import { useParams } from "@solidjs/router";
 import { t } from "@storage/theme";
 import Button from "@widgets/button";
@@ -46,7 +44,8 @@ import Select from "@widgets/select";
 import { DateTime } from "luxon";
 import { createResource, createSignal, For, Match, Show, Switch } from "solid-js";
 
-type Tab = "settings" | "staff" | "pool" | "scripts" | "review" | "import";
+type Tab = "settings" | "staff" | "rounds" | "charts" | "scripts" | "review" | "import";
+type ChartImportMethod = "custom" | "library" | "phira";
 
 export default function () {
   const params = useParams();
@@ -73,15 +72,6 @@ export default function () {
   const [roundOrder, setRoundOrder] = createSignal("0");
   const [tagRound, setTagRound] = createSignal("");
   const [tagName, setTagName] = createSignal("");
-  const [chartRound, setChartRound] = createSignal("");
-  const [chartTag, setChartTag] = createSignal("");
-  const [chartTitle, setChartTitle] = createSignal("");
-  const [chartArtist, setChartArtist] = createSignal("");
-  const [chartCharter, setChartCharter] = createSignal("");
-  const [chartDifficulty, setChartDifficulty] = createSignal("");
-  const [chartLevel, setChartLevel] = createSignal("0");
-  const [chartWeight, setChartWeight] = createSignal("1.0");
-  const [chartCover, setChartCover] = createSignal<File>();
   const [libraryRound, setLibraryRound] = createSignal("");
   const [libraryTag, setLibraryTag] = createSignal("");
   const [librarySelection, setLibrarySelection] = createSignal("");
@@ -93,6 +83,13 @@ export default function () {
   const [libraryDifficulty, setLibraryDifficulty] = createSignal("");
   const [libraryLevel, setLibraryLevel] = createSignal("0");
   const [showLibraryAdd, setShowLibraryAdd] = createSignal(true);
+  const [chartImportMethod, setChartImportMethod] = createSignal<ChartImportMethod>("custom");
+  const [chartSource, setChartSource] = createSignal<ChartSourceType>("personal");
+  const [chartDescription, setChartDescription] = createSignal("");
+  const [chartCover, setChartCover] = createSignal<File>();
+  const [libraryCover, setLibraryCover] = createSignal("");
+  const [metadataLocked, setMetadataLocked] = createSignal(false);
+  const [phiraDialogOpen, setPhiraDialogOpen] = createSignal(false);
   // Confirm dialog
   const [confirmOpen, setConfirmOpen] = createSignal(false);
   const [confirmMsg, setConfirmMsg] = createSignal("");
@@ -113,6 +110,7 @@ export default function () {
   const [editDescription, setEditDescription] = createSignal("");
   const [editMode, setEditMode] = createSignal<CompetitionMode>("both");
   const [editEvidence, setEditEvidence] = createSignal<EvidencePolicy>("optional");
+  const [libraryVisibility, setLibraryVisibility] = createSignal<ChartVisibility>();
   const [editTeamMin, setEditTeamMin] = createSignal("1");
   const [editTeamMax, setEditTeamMax] = createSignal("5");
   const [showEdit, setShowEdit] = createSignal(false);
@@ -169,6 +167,7 @@ export default function () {
         running: "review",
         review: "finished",
         finished: "archived",
+        archived: "archived",
       }) as const
     )[tournament()?.lifecycle ?? "archived"];
   const chooseTemplate = (key: string) => {
@@ -178,6 +177,30 @@ export default function () {
       setSource(value.source);
       setScriptName(value.name);
     }
+  };
+  const selectLibraryChart = (chartId: string) => {
+    const chart = chartLibrary()?.find((item) => item.id === Number(chartId));
+    setLibrarySelection(chartId);
+    if (!chart) return;
+    setLibraryTitle(chart.title);
+    setLibraryArtist(chart.artist);
+    setLibraryCharter(chart.charter);
+    setLibraryDifficulty(chart.difficulty);
+    setLibraryLevel(String(chart.level_constant));
+    setLibraryCover(chart.cover ?? "");
+    setChartDescription("");
+    setMetadataLocked(true);
+  };
+  const resetPersonalForm = () => {
+    setLibrarySelection("");
+    setLibraryTitle("");
+    setLibraryArtist("");
+    setLibraryCharter("");
+    setLibraryDifficulty("");
+    setLibraryLevel("0");
+    setLibraryCover("");
+    setChartDescription("");
+    setMetadataLocked(false);
   };
 
   const parseImport = async (file?: File) => {
@@ -205,7 +228,8 @@ export default function () {
   const tabs: Array<[Tab, string, string]> = [
     ["settings", "icon-[fluent--options-20-regular]", "tournament.admin.settings"],
     ["staff", "icon-[fluent--people-settings-20-regular]", "tournament.admin.staff"],
-    ["pool", "icon-[fluent--music-note-2-20-regular]", "tournament.admin.pool"],
+    ["rounds", "icon-[fluent--layers-20-regular]", "tournament.admin.rounds"],
+    ["charts", "icon-[fluent--music-note-2-20-regular]", "tournament.admin.charts"],
     ["scripts", "icon-[fluent--code-20-regular]", "tournament.admin.scripts"],
     ["review", "icon-[fluent--clipboard-checkmark-20-regular]", "tournament.admin.review"],
     ["import", "icon-[fluent--table-arrow-up-20-regular]", "tournament.admin.import"],
@@ -425,516 +449,420 @@ export default function () {
             </div>
           </section>
         </Match>
-        <Match when={tab() === "pool"}>
+        <Match when={tab() === "rounds" || tab() === "charts"}>
           <section class="grid lg:grid-cols-[minmax(260px,0.8fr)_minmax(0,1.6fr)] gap-6 items-start">
-            <div class="space-y-4">
-              <h2 class="font-bold">{t("tournament.pool.rounds")}</h2>
-              <div class="flex gap-2 items-end">
-                <Input
-                  size="sm"
-                  noLabel
-                  class="min-w-40"
-                  placeholder={t("tournament.pool.roundName")}
-                  value={roundName()}
-                  onInput={(event) => setRoundName(event.currentTarget.value)}
-                />
-                <Input
-                  size="sm"
-                  noLabel
-                  class="w-20"
-                  type="number"
-                  value={roundOrder()}
-                  onInput={(event) => setRoundOrder(event.currentTarget.value)}
-                />
-                <Button
-                  size="sm"
-                  level="primary"
-                  onClick={() =>
-                    run(
-                      async () =>
-                        await createRound(id(), {
-                          name: roundName(),
-                          description: undefined,
-                          order_index: Number(roundOrder()),
-                          start_at: undefined,
-                          end_at: undefined,
-                        }),
-                      refetchRounds
-                    )
-                  }
-                >
-                  {t("general.actions.add.title")}
-                </Button>
-              </div>
-              <For each={rounds()}>
-                {(round) => (
-                  <div class="p-3 border border-layer-content/10 hover:border-layer-content/20 rounded-lg space-y-2 transition-colors bg-layer-content/[0.02]">
-                    <div class="flex items-center gap-3">
-                      <span class="font-mono text-primary text-sm font-bold w-6">{round.order_index}</span>
-                      <strong class="flex-1">{round.name}</strong>
-                      <Button
-                        square
-                        size="sm"
-                        ghost
-                        level="error"
-                        title={t("general.actions.delete.title")}
-                        onClick={() =>
-                          askConfirm(`删除赛段 "${round.name}"？`, async () => {
-                            await deleteRound(id(), round.id);
-                            await refetchRounds();
-                          })
-                        }
-                      >
-                        <span class="icon-[fluent--delete-20-regular] w-4 h-4" />
-                      </Button>
-                    </div>
-                    <div class="flex flex-wrap gap-2 pl-6">
-                      <For
-                        each={chartTags()?.filter((tag) => tag.round_id === round.id)}
-                        fallback={<span class="text-xs opacity-50">{t("tournament.pool.noTags")}</span>}
-                      >
-                        {(tag) => (
-                          <button
-                            type="button"
-                            class="inline-flex items-center gap-1 text-xs pl-2 pr-1 py-1 bg-layer-content/10 hover:bg-error/20 rounded transition-colors cursor-pointer group/tag"
-                            title={t("general.actions.delete.title")}
-                            onClick={() =>
-                              askConfirm(`删除标签 "${tag.name}"？`, async () => {
-                                await deleteChartTag(id(), tag.id);
-                                await refetchChartTags();
-                              })
-                            }
-                          >
-                            <span class="icon-[fluent--tag-20-regular] w-3.5 h-3.5" />
-                            {tag.name}
-                            <span class="icon-[fluent--dismiss-12-regular] w-3 h-3 opacity-0 group-hover/tag:opacity-50" />
-                          </button>
-                        )}
-                      </For>
-                    </div>
-                  </div>
-                )}
-              </For>
-              <div class="border-t border-layer-content/15 pt-4 space-y-2">
-                <h3 class="text-sm font-bold">{t("tournament.pool.tags")}</h3>
-                <div class="grid sm:grid-cols-[1fr_1fr_auto] gap-2">
-                  <Select
+            <Show when={tab() === "rounds"}>
+              <div class="space-y-4">
+                <h2 class="font-bold">{t("tournament.pool.rounds")}</h2>
+                <div class="flex gap-2 items-end">
+                  <Input
                     size="sm"
-                    placeholder={t("tournament.pool.chooseRound")}
-                    value={tagRound() ? [tagRound()] : []}
-                    onValueChange={(e) => setTagRound(e.value[0] ?? "")}
-                    items={(rounds() ?? []).map((r) => ({ label: r.name, value: String(r.id) }))}
+                    noLabel
+                    class="min-w-40"
+                    placeholder={t("tournament.pool.roundName")}
+                    value={roundName()}
+                    onInput={(event) => setRoundName(event.currentTarget.value)}
                   />
                   <Input
                     size="sm"
                     noLabel
-                    placeholder={t("tournament.pool.tagName")}
-                    value={tagName()}
-                    onInput={(event) => setTagName(event.currentTarget.value)}
+                    class="w-20"
+                    type="number"
+                    value={roundOrder()}
+                    onInput={(event) => setRoundOrder(event.currentTarget.value)}
                   />
                   <Button
                     size="sm"
                     level="primary"
-                    disabled={!tagRound() || !tagName().trim()}
-                    onClick={() =>
-                      run(async () => {
-                        await createChartTag(id(), {
-                          round_id: Number(tagRound()),
-                          name: tagName().trim(),
-                          order_index: chartTags()?.filter((tag) => tag.round_id === Number(tagRound())).length ?? 0,
-                        });
-                        setTagName("");
-                      }, refetchChartTags)
-                    }
-                  >
-                    {t("general.actions.add.title")}
-                  </Button>
-                </div>
-              </div>
-            </div>
-            <div class="space-y-4">
-              <div class="flex items-center gap-2">
-                <h2 class="font-bold">{t("tournament.pool.charts")}</h2>
-                <span class="flex-1" />
-                <Button size="sm" ghost onClick={() => setShowLibraryAdd(!showLibraryAdd())}>
-                  <span class="icon-[fluent--add-20-regular] w-4 h-4" />
-                  {t("general.actions.add.title")}
-                  <span
-                    class={`${showLibraryAdd() ? "icon-[fluent--chevron-up-20-regular]" : "icon-[fluent--chevron-down-20-regular]"} w-4 h-4`}
-                  />
-                </Button>
-              </div>
-              <Show when={showLibraryAdd()}>
-                <div class="border border-primary/25 rounded-lg p-4 space-y-4 bg-primary/[0.03]">
-                  <div class="flex gap-2 flex-wrap">
-                    <Select
-                      size="sm"
-                      class="min-w-40"
-                      placeholder={t("tournament.pool.chooseRound")}
-                      value={libraryRound() ? [libraryRound()] : []}
-                      onValueChange={(e) => {
-                        setLibraryRound(e.value[0] ?? "");
-                        setLibraryTag("");
-                      }}
-                      items={(rounds() ?? []).map((r) => ({ label: r.name, value: String(r.id) }))}
-                    />
-                    <Select
-                      size="sm"
-                      class="min-w-40"
-                      placeholder={t("tournament.pool.chooseTag")}
-                      disabled={!libraryRound()}
-                      value={libraryTag() ? [libraryTag()] : []}
-                      onValueChange={(e) => setLibraryTag(e.value[0] ?? "")}
-                      items={(chartTags()?.filter((tag) => tag.round_id === Number(libraryRound())) ?? []).map(
-                        (tag) => ({
-                          label: tag.name,
-                          value: String(tag.id),
-                        })
-                      )}
-                    />
-                  </div>
-                  <div class="grid sm:grid-cols-[1fr_auto] gap-2">
-                    <Select
-                      size="sm"
-                      placeholder={t("tournament.charts.select")}
-                      value={librarySelection() ? [librarySelection()] : []}
-                      onValueChange={(e) => setLibrarySelection(e.value[0] ?? "")}
-                      items={(chartLibrary() ?? []).map((chart) => ({
-                        label: `${chart.title} · ${chart.difficulty}`,
-                        value: String(chart.id),
-                      }))}
-                    />
-                    <Input
-                      size="sm"
-                      type="number"
-                      step="0.01"
-                      min="0"
-                      title={t("tournament.charts.weight")}
-                      value={libraryWeight()}
-                      onInput={(e) => setLibraryWeight(e.currentTarget.value)}
-                    />
-                  </div>
-                  <div class="flex gap-2 items-end flex-wrap">
-                    <Input
-                      size="sm"
-                      class="w-40"
-                      title="Phira ID"
-                      type="number"
-                      value={phiraId()}
-                      onInput={(e) => setPhiraId(e.currentTarget.value)}
-                    />
-                    <Button
-                      size="sm"
-                      disabled={!phiraId()}
-                      onClick={() =>
-                        run(async () => {
-                          const chart = await importPhiraChart(Number(phiraId()));
-                          setLibrarySelection(String(chart.id));
-                          setPhiraId("");
-                        })
-                      }
-                    >
-                      <span class="icon-[fluent--arrow-download-20-regular] w-4 h-4" />
-                      {t("general.actions.import.title")}
-                    </Button>
-                  </div>
-                  <div class="border-t border-layer-content/10 pt-4 space-y-2">
-                    <div class="text-sm font-bold">{t("tournament.pool.chartTitle")}</div>
-                    <div class="grid sm:grid-cols-2 gap-2">
-                      <Input
-                        size="sm"
-                        noLabel
-                        placeholder={t("tournament.pool.chartTitle")}
-                        value={libraryTitle()}
-                        onInput={(e) => setLibraryTitle(e.currentTarget.value)}
-                      />
-                      <Input
-                        size="sm"
-                        noLabel
-                        placeholder={t("tournament.charts.artist")}
-                        value={libraryArtist()}
-                        onInput={(e) => setLibraryArtist(e.currentTarget.value)}
-                      />
-                      <Input
-                        size="sm"
-                        noLabel
-                        placeholder={t("tournament.charts.charter")}
-                        value={libraryCharter()}
-                        onInput={(e) => setLibraryCharter(e.currentTarget.value)}
-                      />
-                      <Input
-                        size="sm"
-                        noLabel
-                        placeholder={t("tournament.pool.difficulty")}
-                        value={libraryDifficulty()}
-                        onInput={(e) => setLibraryDifficulty(e.currentTarget.value)}
-                      />
-                      <Input
-                        size="sm"
-                        noLabel
-                        type="number"
-                        step="0.1"
-                        placeholder={t("tournament.charts.constant")}
-                        value={libraryLevel()}
-                        onInput={(e) => setLibraryLevel(e.currentTarget.value)}
-                      />
-                      <Button
-                        size="sm"
-                        level="primary"
-                        disabled={!libraryTitle().trim()}
-                        onClick={() =>
-                          run(async () => {
-                            const chart = await createLibraryChart({
-                              title: libraryTitle().trim(),
-                              artist: libraryArtist().trim(),
-                              charter: libraryCharter().trim(),
-                              difficulty: libraryDifficulty().trim(),
-                              level_constant: Number(libraryLevel()) || 0,
-                              metadata: {},
-                            });
-                            setLibrarySelection(String(chart.id));
-                            setLibraryTitle("");
-                            setLibraryArtist("");
-                            setLibraryCharter("");
-                            setLibraryDifficulty("");
-                            setLibraryLevel("0");
-                          })
-                        }
-                      >
-                        <span class="icon-[fluent--save-20-regular] w-4 h-4" />
-                        {t("general.actions.create.title")}
-                      </Button>
-                    </div>
-                  </div>
-                  <Button
-                    level="primary"
-                    class="w-full"
-                    disabled={!libraryRound() || !libraryTag() || !librarySelection()}
                     onClick={() =>
                       run(
                         async () =>
-                          await addTournamentChartLibrary(id(), {
-                            chart_library_id: Number(librarySelection()),
-                            round_id: Number(libraryRound()),
-                            tag_id: Number(libraryTag()),
-                            order_index:
-                              tournamentChartLibrary()?.filter((item) => item.link.tag_id === Number(libraryTag()))
-                                .length ?? 0,
-                            weight_millionths: Math.round((Number(libraryWeight()) || 1) * 1_000_000),
+                          await createRound(id(), {
+                            name: roundName(),
+                            description: undefined,
+                            order_index: Number(roundOrder()),
+                            start_at: undefined,
+                            end_at: undefined,
                           }),
-                        refetchTournamentChartLibrary
+                        refetchRounds
                       )
                     }
                   >
                     {t("general.actions.add.title")}
                   </Button>
                 </div>
-              </Show>
-              <div class="grid sm:grid-cols-2 gap-2">
-                <Select
-                  size="sm"
-                  placeholder={t("tournament.pool.chooseRound")}
-                  value={chartRound() ? [chartRound()] : []}
-                  onValueChange={(e) => {
-                    setChartRound(e.value[0] ?? "");
-                    setChartTag("");
-                  }}
-                  items={(rounds() ?? []).map((r) => ({ label: r.name, value: String(r.id) }))}
-                />
-                <Select
-                  size="sm"
-                  placeholder={t("tournament.pool.chooseTag")}
-                  disabled={!chartRound()}
-                  value={chartTag() ? [chartTag()] : []}
-                  onValueChange={(e) => setChartTag(e.value[0] ?? "")}
-                  items={(chartTags()?.filter((tag) => tag.round_id === Number(chartRound())) ?? []).map((tag) => ({
-                    label: tag.name,
-                    value: String(tag.id),
-                  }))}
-                />
-                <Input
-                  size="sm"
-                  noLabel
-                  placeholder={t("tournament.pool.chartTitle")}
-                  value={chartTitle()}
-                  onInput={(event) => setChartTitle(event.currentTarget.value)}
-                />
-                <Input
-                  size="sm"
-                  noLabel
-                  placeholder={t("tournament.pool.difficulty")}
-                  value={chartDifficulty()}
-                  onInput={(event) => setChartDifficulty(event.currentTarget.value)}
-                />
-                <Input
-                  size="sm"
-                  noLabel
-                  placeholder={t("tournament.charts.charter")}
-                  value={chartCharter()}
-                  onInput={(event) => setChartCharter(event.currentTarget.value)}
-                />
-                <Input
-                  size="sm"
-                  noLabel
-                  placeholder={t("tournament.charts.artist")}
-                  value={chartArtist()}
-                  onInput={(event) => setChartArtist(event.currentTarget.value)}
-                />
-                <Input
-                  size="sm"
-                  noLabel
-                  type="number"
-                  step="0.1"
-                  placeholder={t("tournament.charts.constant")}
-                  value={chartLevel()}
-                  onInput={(event) => setChartLevel(event.currentTarget.value)}
-                />
-                <Input
-                  size="sm"
-                  noLabel
-                  type="number"
-                  step="0.01"
-                  min="0"
-                  placeholder={t("tournament.charts.weight")}
-                  value={chartWeight()}
-                  onInput={(event) => setChartWeight(event.currentTarget.value)}
-                />
-                <label class="btn btn-sm cursor-pointer">
-                  <span class="icon-[fluent--image-add-20-regular] w-4 h-4" />
-                  <span class="max-w-32 truncate">{chartCover()?.name || t("tournament.fields.cover")}</span>
-                  <input
-                    class="hidden"
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => setChartCover(e.currentTarget.files?.[0])}
-                  />
-                </label>
-                <Button
-                  class="sm:col-span-2"
-                  size="sm"
-                  level="primary"
-                  disabled={!chartRound() || !chartTag() || !chartTitle()}
-                  onClick={() =>
-                    run(
-                      async () => {
-                        let cover: string | undefined;
-                        if (chartCover()) {
-                          cover = (await uploadMedia(chartCover()!)).hash;
-                        }
-                        await createChart(id(), {
-                          round_id: Number(chartRound()),
-                          tag_id: Number(chartTag()),
-                          title: chartTitle(),
-                          artist: chartArtist() || "",
-                          charter: chartCharter() || "",
-                          difficulty: chartDifficulty(),
-                          level_constant: Number(chartLevel()) || 0,
-                          cover,
-                          order_index: charts()?.filter((item) => item.tag_id === Number(chartTag())).length ?? 0,
-                          weight_millionths: Math.round((Number(chartWeight()) || 1) * 1_000_000),
-                          metadata: {},
-                        });
-                      },
-                      () => {
-                        refetchCharts();
-                        setChartTitle("");
-                        setChartDifficulty("");
-                        setChartArtist("");
-                        setChartCharter("");
-                        setChartLevel("0");
-                        setChartWeight("1.0");
-                        setChartCover(undefined);
-                      }
-                    )
-                  }
-                >
-                  {t("general.actions.add.title")}
-                </Button>
-              </div>
-              <For
-                each={tournamentChartLibrary()?.filter(
-                  (item) => !chartTag() || item.link.tag_id === Number(chartTag())
-                )}
-              >
-                {(item) => (
-                  <div class="group p-3 border border-primary/20 hover:border-primary/40 rounded-lg transition-colors bg-primary/[0.03]">
-                    <div class="flex items-center gap-3 mb-2">
-                      <span class="font-mono text-xs text-primary font-bold shrink-0">{item.chart.difficulty}</span>
-                      <strong class="flex-1 truncate">{item.chart.title}</strong>
-                      <span class="text-xs opacity-50">
-                        {chartTags()?.find((tag) => tag.id === item.link.tag_id)?.name}
-                      </span>
-                      <Button
-                        square
-                        size="sm"
-                        ghost
-                        level="error"
-                        title={t("general.actions.delete.title")}
-                        onClick={() =>
-                          run(
-                            async () => await removeTournamentChartLibrary(id(), item.link.id),
-                            refetchTournamentChartLibrary
-                          )
-                        }
-                      >
-                        <span class="icon-[fluent--link-dismiss-20-regular] w-4 h-4" />
-                      </Button>
+                <For each={rounds()}>
+                  {(round) => (
+                    <div class="p-3 border border-layer-content/10 hover:border-layer-content/20 rounded-lg space-y-2 transition-colors bg-layer-content/[0.02]">
+                      <div class="flex items-center gap-3">
+                        <span class="font-mono text-primary text-sm font-bold w-6">{round.order_index}</span>
+                        <strong class="flex-1">{round.name}</strong>
+                        <Button
+                          square
+                          size="sm"
+                          ghost
+                          level="error"
+                          title={t("general.actions.delete.title")}
+                          onClick={() =>
+                            askConfirm(`删除赛段 "${round.name}"？`, async () => {
+                              await deleteRound(id(), round.id);
+                              await refetchRounds();
+                            })
+                          }
+                        >
+                          <span class="icon-[fluent--delete-20-regular] w-4 h-4" />
+                        </Button>
+                      </div>
+                      <div class="flex flex-wrap gap-2 pl-6">
+                        <For
+                          each={chartTags()?.filter((tag) => tag.round_id === round.id)}
+                          fallback={<span class="text-xs opacity-50">{t("tournament.pool.noTags")}</span>}
+                        >
+                          {(tag) => (
+                            <button
+                              type="button"
+                              class="inline-flex items-center gap-1 text-xs pl-2 pr-1 py-1 bg-layer-content/10 hover:bg-error/20 rounded transition-colors cursor-pointer group/tag"
+                              title={t("general.actions.delete.title")}
+                              onClick={() =>
+                                askConfirm(`删除标签 "${tag.name}"？`, async () => {
+                                  await deleteChartTag(id(), tag.id);
+                                  await refetchChartTags();
+                                })
+                              }
+                            >
+                              <span class="icon-[fluent--tag-20-regular] w-3.5 h-3.5" />
+                              {tag.name}
+                              <span class="icon-[fluent--dismiss-12-regular] w-3 h-3 opacity-0 group-hover/tag:opacity-50" />
+                            </button>
+                          )}
+                        </For>
+                      </div>
                     </div>
-                    <div class="flex gap-2 items-end text-xs">
-                      <Input
+                  )}
+                </For>
+                <div class="border-t border-layer-content/15 pt-4 space-y-2">
+                  <h3 class="text-sm font-bold">{t("tournament.pool.tags")}</h3>
+                  <div class="grid sm:grid-cols-[1fr_1fr_auto] gap-2">
+                    <Select
+                      size="sm"
+                      placeholder={t("tournament.pool.chooseRound")}
+                      value={tagRound() ? [tagRound()] : []}
+                      onValueChange={(e) => setTagRound(e.value[0] ?? "")}
+                      items={(rounds() ?? []).map((r) => ({ label: r.name, value: String(r.id) }))}
+                    />
+                    <Input
+                      size="sm"
+                      noLabel
+                      placeholder={t("tournament.pool.tagName")}
+                      value={tagName()}
+                      onInput={(event) => setTagName(event.currentTarget.value)}
+                    />
+                    <Button
+                      size="sm"
+                      level="primary"
+                      disabled={!tagRound() || !tagName().trim()}
+                      onClick={() =>
+                        run(async () => {
+                          await createChartTag(id(), {
+                            round_id: Number(tagRound()),
+                            name: tagName().trim(),
+                            order_index: chartTags()?.filter((tag) => tag.round_id === Number(tagRound())).length ?? 0,
+                          });
+                          setTagName("");
+                        }, refetchChartTags)
+                      }
+                    >
+                      {t("general.actions.add.title")}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </Show>
+            <Show when={tab() === "charts"}>
+              <div class="space-y-4 lg:col-span-2">
+                <div class="flex items-center gap-2">
+                  <h2 class="font-bold">{t("tournament.pool.charts")}</h2>
+                  <span class="flex-1" />
+                  <Button size="sm" ghost onClick={() => setShowLibraryAdd(!showLibraryAdd())}>
+                    <span class="icon-[fluent--add-20-regular] w-4 h-4" />
+                    {t("general.actions.add.title")}
+                    <span
+                      class={`${showLibraryAdd() ? "icon-[fluent--chevron-up-20-regular]" : "icon-[fluent--chevron-down-20-regular]"} w-4 h-4`}
+                    />
+                  </Button>
+                </div>
+                <Show when={showLibraryAdd()}>
+                  <div class="border border-primary/25 rounded-lg p-4 space-y-4 bg-primary/[0.03]">
+                    <div class="flex gap-2 flex-wrap">
+                      <Select
                         size="sm"
-                        title="order"
-                        type="number"
-                        value={String(item.link.order_index)}
-                        onChange={(e) =>
-                          run(
-                            async () =>
-                              await updateTournamentChartLibrary(id(), item.link.id, {
-                                ...item.link,
-                                order_index: Number(e.currentTarget.value),
-                              }),
-                            refetchTournamentChartLibrary
-                          )
+                        class="min-w-40"
+                        placeholder={t("tournament.pool.chooseRound")}
+                        value={libraryRound() ? [libraryRound()] : []}
+                        onValueChange={(e) => {
+                          setLibraryRound(e.value[0] ?? "");
+                          setLibraryTag("");
+                        }}
+                        items={(rounds() ?? []).map((r) => ({ label: r.name, value: String(r.id) }))}
+                      />
+                      <Select
+                        size="sm"
+                        class="min-w-40"
+                        placeholder={t("tournament.pool.chooseTag")}
+                        disabled={!libraryRound()}
+                        value={libraryTag() ? [libraryTag()] : []}
+                        onValueChange={(e) => setLibraryTag(e.value[0] ?? "")}
+                        items={(chartTags()?.filter((tag) => tag.round_id === Number(libraryRound())) ?? []).map(
+                          (tag) => ({
+                            label: tag.name,
+                            value: String(tag.id),
+                          })
+                        )}
+                      />
+                    </div>
+                    <Select
+                      size="sm"
+                      label={t("tournament.charts.visibility")}
+                      value={libraryVisibility() ? [libraryVisibility()!] : []}
+                      onValueChange={(e) => setLibraryVisibility(e.value[0] as ChartVisibility)}
+                      items={[
+                        { label: t("tournament.chartVisibility.public"), value: "public" },
+                        { label: t("tournament.chartVisibility.after_archive"), value: "after_archive" },
+                        { label: t("tournament.chartVisibility.private"), value: "private" },
+                      ]}
+                    />
+                    <Select
+                      size="sm"
+                      label={t("tournament.charts.source")}
+                      value={[chartImportMethod()]}
+                      onValueChange={(e) => {
+                        const value = e.value[0] as ChartImportMethod;
+                        setChartImportMethod(value);
+                        if (value === "custom") {
+                          setChartSource("personal");
+                          resetPersonalForm();
                         }
+                        setMetadataLocked(value !== "custom");
+                        setPhiraDialogOpen(value === "phira");
+                      }}
+                      items={[
+                        { label: t("tournament.charts.customImport"), value: "custom" },
+                        { label: t("tournament.charts.libraryImport"), value: "library" },
+                        { label: t("tournament.charts.phiraImport"), value: "phira" },
+                      ]}
+                    />
+                    <Show when={chartImportMethod() === "custom"}>
+                      <Select
+                        size="sm"
+                        label={t("tournament.charts.source")}
+                        value={["personal"]}
+                        disabled
+                        items={[{ label: t("tournament.charts.personalUpload"), value: "personal" }]}
+                      />
+                    </Show>
+                    <Show when={chartImportMethod() === "library"}>
+                      <Select
+                        size="sm"
+                        label={t("tournament.charts.source")}
+                        value={[chartSource()]}
+                        onValueChange={(e) => setChartSource(e.value[0] as ChartSourceType)}
+                        items={[
+                          { label: t("tournament.charts.personalUpload"), value: "personal" },
+                          { label: t("tournament.charts.phigrosSource"), value: "phigros" },
+                          { label: t("tournament.charts.phiraSource"), value: "phira" },
+                        ]}
+                      />
+                    </Show>
+                    <div class="grid sm:grid-cols-[1fr_auto] gap-2">
+                      <Select
+                        size="sm"
+                        placeholder={t("tournament.charts.select")}
+                        value={librarySelection() ? [librarySelection()] : []}
+                        disabled={chartImportMethod() !== "library"}
+                        onValueChange={(e) => selectLibraryChart(e.value[0] ?? "")}
+                        items={(chartLibrary() ?? [])
+                          .filter((chart) => chart.source_type === chartSource())
+                          .map((chart) => ({
+                            label: `${chart.title} · ${chart.difficulty}`,
+                            value: String(chart.id),
+                          }))}
                       />
                       <Input
                         size="sm"
-                        title={t("tournament.charts.weight")}
                         type="number"
                         step="0.01"
                         min="0"
-                        value={(item.link.weight_millionths / 1_000_000).toFixed(2)}
-                        onChange={(e) =>
-                          run(
-                            async () =>
-                              await updateTournamentChartLibrary(id(), item.link.id, {
-                                ...item.link,
-                                weight_millionths: Math.round(Number(e.currentTarget.value) * 1_000_000),
-                              }),
-                            refetchTournamentChartLibrary
-                          )
-                        }
+                        title={t("tournament.charts.weight")}
+                        value={libraryWeight()}
+                        onInput={(e) => setLibraryWeight(e.currentTarget.value)}
                       />
-                      <span class="opacity-50 truncate">
-                        {item.chart.artist} · {item.chart.charter}
-                      </span>
-                      <span class="font-mono opacity-50">{item.chart.level_constant.toFixed(1)}</span>
                     </div>
+                    <Dialog
+                      open={phiraDialogOpen()}
+                      onOpenChange={(event) => setPhiraDialogOpen(event.open)}
+                      btnContent=""
+                      class="hidden"
+                      size="sm"
+                    >
+                      <div class="min-w-72 space-y-4">
+                        <Input
+                          title={t("tournament.charts.phiraId")}
+                          type="number"
+                          value={phiraId() === "-" ? "" : phiraId()}
+                          onInput={(e) => setPhiraId(e.currentTarget.value)}
+                        />
+                        <Button
+                          level="primary"
+                          class="w-full"
+                          disabled={!phiraId() || phiraId() === "-"}
+                          onClick={() =>
+                            run(async () => {
+                              const chart = await importPhiraChart(Number(phiraId()));
+                              setLibrarySelection(String(chart.id));
+                              setLibraryTitle(chart.title);
+                              setLibraryArtist(chart.artist);
+                              setLibraryCharter(chart.charter);
+                              setLibraryDifficulty(chart.difficulty);
+                              setLibraryLevel(String(chart.level_constant));
+                              setLibraryCover(chart.cover ?? "");
+                              setChartDescription("");
+                              setMetadataLocked(true);
+                              setPhiraId("");
+                              setPhiraDialogOpen(false);
+                              setChartImportMethod("library");
+                              setChartSource("phira");
+                            })
+                          }
+                        >
+                          {t("general.actions.import.title")}
+                        </Button>
+                      </div>
+                    </Dialog>
+                    <div class="border-t border-layer-content/10 pt-4 space-y-2">
+                      <div class="text-sm font-bold">{t("tournament.pool.chartTitle")}</div>
+                      <div class="grid sm:grid-cols-2 gap-2">
+                        <Input
+                          size="sm"
+                          noLabel
+                          placeholder={t("tournament.pool.chartTitle")}
+                          value={libraryTitle()}
+                          onInput={(e) => setLibraryTitle(e.currentTarget.value)}
+                          disabled={metadataLocked()}
+                        />
+                        <Input
+                          size="sm"
+                          noLabel
+                          placeholder={t("tournament.charts.artist")}
+                          value={libraryArtist()}
+                          onInput={(e) => setLibraryArtist(e.currentTarget.value)}
+                          disabled={metadataLocked()}
+                        />
+                        <Input
+                          size="sm"
+                          noLabel
+                          placeholder={t("tournament.charts.charter")}
+                          value={libraryCharter()}
+                          onInput={(e) => setLibraryCharter(e.currentTarget.value)}
+                          disabled={metadataLocked()}
+                        />
+                        <Input
+                          size="sm"
+                          noLabel
+                          placeholder={t("tournament.pool.difficulty")}
+                          value={libraryDifficulty()}
+                          onInput={(e) => setLibraryDifficulty(e.currentTarget.value)}
+                          disabled={metadataLocked()}
+                        />
+                        <Input
+                          size="sm"
+                          noLabel
+                          type="number"
+                          step="0.1"
+                          placeholder={t("tournament.charts.constant")}
+                          value={libraryLevel()}
+                          onInput={(e) => setLibraryLevel(e.currentTarget.value)}
+                          disabled={metadataLocked()}
+                        />
+                      </div>
+                      <div class="flex flex-col space-y-1">
+                        <span class="label">{t("tournament.charts.description")}</span>
+                        <textarea
+                          class="input input-md min-h-24 p-3"
+                          value={chartDescription()}
+                          onInput={(e) => setChartDescription(e.currentTarget.value)}
+                          disabled={false}
+                        />
+                      </div>
+                      <label class="btn btn-sm cursor-pointer w-fit">
+                        <span class="icon-[fluent--image-add-20-regular] w-4 h-4" />
+                        <span class="max-w-32 truncate">{chartCover()?.name || t("tournament.fields.cover")}</span>
+                        <input
+                          class="hidden"
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => setChartCover(e.currentTarget.files?.[0])}
+                          disabled={metadataLocked()}
+                        />
+                      </label>
+                      <Show when={metadataLocked() && libraryCover()}>
+                        <div class="text-xs opacity-60">
+                          {t("tournament.charts.cover")}: {libraryCover()}
+                        </div>
+                      </Show>
+                    </div>
+                    <Button
+                      level="primary"
+                      class="w-full"
+                      disabled={
+                        !libraryRound() ||
+                        !libraryTag() ||
+                        !libraryVisibility() ||
+                        (chartImportMethod() === "library" && !librarySelection()) ||
+                        (chartImportMethod() === "custom" && !libraryTitle().trim())
+                      }
+                      onClick={() =>
+                        run(async () => {
+                          let cover = libraryCover() || undefined;
+                          if (chartImportMethod() === "custom" && chartCover()) {
+                            cover = (await uploadMedia(chartCover()!)).hash;
+                          }
+                          await addTournamentChartLibrary(id(), {
+                            chart_library_id:
+                              chartImportMethod() === "library" ? Number(librarySelection()) : undefined,
+                            round_id: Number(libraryRound()),
+                            tag_id: Number(libraryTag()),
+                            visibility: libraryVisibility()!,
+                            order_index:
+                              tournamentChartLibrary()?.filter((item) => item.link.tag_id === Number(libraryTag()))
+                                .length ?? 0,
+                            weight_millionths: Math.round((Number(libraryWeight()) || 1) * 1_000_000),
+                            description: chartDescription().trim() || undefined,
+                            title: chartImportMethod() === "custom" ? libraryTitle().trim() : undefined,
+                            artist: chartImportMethod() === "custom" ? libraryArtist().trim() : undefined,
+                            charter: chartImportMethod() === "custom" ? libraryCharter().trim() : undefined,
+                            difficulty: chartImportMethod() === "custom" ? libraryDifficulty().trim() : undefined,
+                            level_constant: chartImportMethod() === "custom" ? Number(libraryLevel()) || 0 : undefined,
+                            cover: chartImportMethod() === "custom" ? cover : undefined,
+                            metadata: {},
+                          });
+                          resetPersonalForm();
+                          setChartCover(undefined);
+                          setLibraryVisibility(undefined);
+                        }, refetchTournamentChartLibrary)
+                      }
+                    >
+                      {t("general.actions.add.title")}
+                    </Button>
                   </div>
-                )}
-              </For>
-              <div class="border-t border-layer-content/15 pt-4 space-y-3">
-                <h3 class="text-sm font-bold">{t("tournament.pool.charts")}</h3>
-                <For each={charts()}>
-                  {(chart) => (
-                    <div class="group p-3 border border-layer-content/10 hover:border-layer-content/20 rounded-lg transition-colors bg-layer-content/[0.02]">
-                      <div class="flex items-center gap-3 mb-1.5">
-                        <span class="font-mono text-xs text-primary font-bold shrink-0 min-w-10">
-                          {chart.difficulty}
-                        </span>
-                        <strong class="flex-1 truncate">{chart.title}</strong>
-                        <span class="text-xs opacity-50 px-2 py-0.5 rounded bg-layer-content/10 shrink-0">
-                          {chartTags()?.find((tag) => tag.id === chart.tag_id)?.name}
+                </Show>
+                <For each={tournamentChartLibrary()}>
+                  {(item) => (
+                    <div class="group p-3 border border-primary/20 hover:border-primary/40 rounded-lg transition-colors bg-primary/[0.03]">
+                      <div class="flex items-center gap-3 mb-2">
+                        <span class="font-mono text-xs text-primary font-bold shrink-0">{item.chart.difficulty}</span>
+                        <strong class="flex-1 truncate">{item.chart.title}</strong>
+                        <span class="text-xs opacity-50">
+                          {chartTags()?.find((tag) => tag.id === item.link.tag_id)?.name}
                         </span>
                         <Button
                           square
@@ -943,30 +871,103 @@ export default function () {
                           level="error"
                           title={t("general.actions.delete.title")}
                           onClick={() =>
-                            askConfirm(`删除谱面 "${chart.title}"？`, async () => {
-                              await deleteChart(id(), chart.id);
-                              await refetchCharts();
-                            })
+                            run(
+                              async () => await removeTournamentChartLibrary(id(), item.link.id),
+                              refetchTournamentChartLibrary
+                            )
                           }
                         >
-                          <span class="icon-[fluent--delete-20-regular] w-4 h-4" />
+                          <span class="icon-[fluent--link-dismiss-20-regular] w-4 h-4" />
                         </Button>
                       </div>
-                      <div class="flex items-center gap-3 text-xs opacity-40 pl-10">
-                        <Show when={chart.artist}>
-                          <span>{chart.artist}</span>
-                        </Show>
-                        <Show when={chart.charter}>
-                          <span>{chart.charter}</span>
-                        </Show>
-                        <span class="font-mono">{chart.level_constant.toFixed(1)}</span>
-                        <span class="font-mono opacity-60">×{(chart.weight_millionths / 1_000_000).toFixed(2)}</span>
+                      <div class="flex gap-2 items-end text-xs">
+                        <Input
+                          size="sm"
+                          title="order"
+                          type="number"
+                          value={String(item.link.order_index)}
+                          onChange={(e) =>
+                            run(
+                              async () =>
+                                await updateTournamentChartLibrary(id(), item.link.id, {
+                                  ...item.link,
+                                  order_index: Number(e.currentTarget.value),
+                                }),
+                              refetchTournamentChartLibrary
+                            )
+                          }
+                        />
+                        <Input
+                          size="sm"
+                          title={t("tournament.charts.weight")}
+                          type="number"
+                          step="0.01"
+                          min="0"
+                          value={(item.link.weight_millionths / 1_000_000).toFixed(2)}
+                          onChange={(e) =>
+                            run(
+                              async () =>
+                                await updateTournamentChartLibrary(id(), item.link.id, {
+                                  ...item.link,
+                                  weight_millionths: Math.round(Number(e.currentTarget.value) * 1_000_000),
+                                }),
+                              refetchTournamentChartLibrary
+                            )
+                          }
+                        />
+                        <span class="opacity-50 truncate">
+                          {item.chart.artist || "--"} · {item.chart.charter || "--"}
+                        </span>
+                        <span class="font-mono opacity-50">{item.chart.level_constant?.toFixed(1) ?? "0.0"}</span>
                       </div>
                     </div>
                   )}
                 </For>
+                <div class="border-t border-layer-content/15 pt-4 space-y-3">
+                  <h3 class="text-sm font-bold">{t("tournament.pool.charts")}</h3>
+                  <For each={charts()}>
+                    {(chart) => (
+                      <div class="group p-3 border border-layer-content/10 hover:border-layer-content/20 rounded-lg transition-colors bg-layer-content/[0.02]">
+                        <div class="flex items-center gap-3 mb-1.5">
+                          <span class="font-mono text-xs text-primary font-bold shrink-0 min-w-10">
+                            {chart.difficulty}
+                          </span>
+                          <strong class="flex-1 truncate">{chart.title}</strong>
+                          <span class="text-xs opacity-50 px-2 py-0.5 rounded bg-layer-content/10 shrink-0">
+                            {chartTags()?.find((tag) => tag.id === chart.tag_id)?.name}
+                          </span>
+                          <Button
+                            square
+                            size="sm"
+                            ghost
+                            level="error"
+                            title={t("general.actions.delete.title")}
+                            onClick={() =>
+                              askConfirm(`删除谱面 "${chart.title}"？`, async () => {
+                                await deleteChart(id(), chart.id);
+                                await refetchCharts();
+                              })
+                            }
+                          >
+                            <span class="icon-[fluent--delete-20-regular] w-4 h-4" />
+                          </Button>
+                        </div>
+                        <div class="flex items-center gap-3 text-xs opacity-40 pl-10">
+                          <Show when={chart.artist}>
+                            <span>{chart.artist}</span>
+                          </Show>
+                          <Show when={chart.charter}>
+                            <span>{chart.charter}</span>
+                          </Show>
+                          <span class="font-mono">{chart.level_constant.toFixed(1)}</span>
+                          <span class="font-mono opacity-60">×{(chart.weight_millionths / 1_000_000).toFixed(2)}</span>
+                        </div>
+                      </div>
+                    )}
+                  </For>
+                </div>
               </div>
-            </div>
+            </Show>
           </section>
         </Match>
         <Match when={tab() === "scripts"}>

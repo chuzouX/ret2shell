@@ -20,8 +20,9 @@ function checkEdition() {
       localStorage.getItem("account") !== null ||
       localStorage.getItem("platform") !== null);
   if (compact_edition && needReload) {
-    localStorage.clear();
-    localStorage.removeItem("theme");
+    ["theme", "account", "platform"].forEach((key) => {
+      localStorage.removeItem(key);
+    });
     localStorage.setItem("edition", compact_edition);
     localStorage.setItem("updated", "true");
     location.reload();
@@ -93,7 +94,7 @@ function BoundarySection(props: { error: Error; reset: () => void }) {
   );
 }
 
-render(() => {
+function App() {
   checkEdition();
   initTheme();
   postUpdated();
@@ -104,23 +105,30 @@ render(() => {
     }, 1000);
   });
   return (
-    <ErrorBoundary fallback={(error, reset) => <BoundarySection error={error} reset={reset} />}>
-      <QueryClientProvider client={inflyClient}>
-        <OverlayScrollbarsComponent
-          options={{
-            scrollbars: {
-              theme: `os-theme-${fullTheme()}`,
-              autoHide: "scroll",
-            },
-          }}
-          class="relative w-screen h-screen print:h-auto print:overflow-auto"
-          defer
-        >
-          <div class="flex flex-col min-h-full min-w-fit">
-            <Router explicitLinks>{routes}</Router>
-          </div>
-        </OverlayScrollbarsComponent>
-      </QueryClientProvider>
-    </ErrorBoundary>
+    <QueryClientProvider client={inflyClient}>
+      <OverlayScrollbarsComponent
+        options={{
+          scrollbars: {
+            theme: `os-theme-${fullTheme()}`,
+            autoHide: "scroll",
+          },
+        }}
+        class="relative w-screen h-screen print:h-auto print:overflow-auto"
+        defer
+      >
+        <div class="flex flex-col min-h-full min-w-fit">
+          <Router explicitLinks>{routes}</Router>
+        </div>
+      </OverlayScrollbarsComponent>
+    </QueryClientProvider>
   );
-}, document.getElementById("root") || document.body);
+}
+
+render(
+  () => (
+    <ErrorBoundary fallback={(error, reset) => <BoundarySection error={error} reset={reset} />}>
+      <App />
+    </ErrorBoundary>
+  ),
+  document.getElementById("root") || document.body
+);

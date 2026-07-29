@@ -1028,6 +1028,11 @@
       "frozen": "Frozen",
       "after_end": "After finish"
     },
+    "chartVisibility": {
+      "public": "公開",
+      "after_archive": "封存後公開",
+      "private": "不公開"
+    },
     "nav": {
       "overview": "Overview",
       "charts": "譜面庫",
@@ -1068,15 +1073,26 @@
       "search": "搜尋譜面或標籤",
       "select": "選擇譜面",
       "selectHint": "從左側階段與標籤樹中選擇一張譜面。",
+      "artist": "曲師",
       "charter": "譜師",
       "constant": "譜面定數",
       "weight": "計分權重",
+      "customImport": "自訂匯入",
+      "customSource": "自訂譜面",
+      "phigrosSource": "Phigros 來源",
       "allTournaments": "全部賽事",
       "allSources": "全部來源",
       "allDifficulties": "全部難度",
       "localSource": "本地譜面庫",
       "phiraSource": "Phira",
-      "exclusiveSource": "賽事專屬"
+      "source": "來源",
+      "visibility": "譜面可見性",
+      "personalUpload": "個人上傳",
+      "libraryImport": "譜面庫導入",
+      "phiraImport": "Phira 導入",
+      "phiraId": "Phira 譜面 ID",
+      "description": "簡介（Markdown）",
+      "cover": "封面"
     },
     "teams": {
       "title": "Teams",
@@ -1125,7 +1141,8 @@
       "subtitle": "Configure operations, review results, and control publishing.",
       "settings": "Settings",
       "staff": "Staff",
-      "pool": "Chart pool",
+      "rounds": "賽段與標籤",
+      "charts": "譜面",
       "scripts": "Scoring",
       "review": "Review",
       "import": "Import",

@@ -4,6 +4,8 @@ export type TournamentLifecycle = "draft" | "registration" | "running" | "review
 export type CompetitionMode = "individual" | "team" | "both";
 export type EvidencePolicy = "required" | "optional" | "disabled";
 export type LeaderboardVisibility = "live" | "frozen" | "after_end";
+export type ChartVisibility = "public" | "after_archive" | "private";
+export type ChartSourceType = "personal" | "phigros" | "phira";
 
 export interface Tournament {
   id: number;
@@ -53,6 +55,7 @@ export interface TournamentChart {
   difficulty: string;
   level_constant: number;
   cover?: string;
+  description?: string;
   order_index: number;
   weight_millionths: number;
   metadata: Record<string, unknown>;
@@ -64,21 +67,31 @@ export interface ChartLibrary {
   charter: string;
   difficulty: string;
   level_constant: number;
+  weight_millionths?: number;
   cover?: string;
   metadata: Record<string, unknown>;
   source?: string;
-  source_type?: string;
+  source_type?: ChartSourceType | string;
   tournaments?: string;
 }
 export interface TournamentChartLibrary {
   link: {
     id: number;
     tournament_id: number;
-    chart_library_id: number;
+    chart_library_id: number | null;
+    visibility: ChartVisibility;
     round_id: number;
     tag_id: number;
     order_index: number;
     weight_millionths: number;
+    description?: string;
+    title?: string;
+    artist?: string;
+    charter?: string;
+    difficulty?: string;
+    level_constant?: number;
+    cover?: string;
+    metadata?: Record<string, unknown>;
   };
   chart: ChartLibrary;
 }

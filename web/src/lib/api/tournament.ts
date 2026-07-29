@@ -1,6 +1,7 @@
 import type {
   ChartLibrary,
   ChartTag,
+  ChartVisibility,
   LeaderboardSnapshot,
   Registration,
   ScoringScript,
@@ -19,7 +20,8 @@ const root = `${api_root}/tournaments`;
 
 export const getTournaments = async () => await api.get(root).json<Tournament[]>();
 export const getTournament = async (id: number) => await api.get(`${root}/${id}`).json<Tournament>();
-export const createTournament = async (input: Partial<Tournament> & Pick<Tournament, "name">) =>
+type CreateTournamentInput = Partial<Tournament> & Pick<Tournament, "name">;
+export const createTournament = async (input: CreateTournamentInput) =>
   await api.post(root, { json: input }).json<Tournament>();
 export const updateTournament = async (id: number, input: Partial<Tournament>) =>
   await api.patch(`${root}/${id}`, { json: input }).json<Tournament>();
@@ -47,19 +49,53 @@ export const createChart = async (id: number, input: Omit<TournamentChart, "id" 
   await api.post(`${root}/${id}/charts`, { json: input }).json<TournamentChart>();
 export const deleteChart = async (id: number, chart: number) =>
   await safeJson(api.delete(`${root}/${id}/charts/${chart}`).json<null>());
-export const getChartLibrary = async () => await api.get(`${api_root}/charts/library`).json<ChartLibrary[]>();
-export const createLibraryChart = async (input: Omit<ChartLibrary, "id">) =>
+type ChartLibraryListItem = {
+  chart: ChartLibrary;
+  source: string;
+  source_type: string;
+  tournaments: string;
+};
+
+export const getChartLibrary = async () => {
+  const items = await api.get(`${api_root}/charts/library`).json<ChartLibraryListItem[]>();
+  return items.map(({ chart, source, source_type, tournaments }) => ({
+    ...chart,
+    source,
+    source_type,
+    tournaments,
+  }));
+};
+export interface ChartLibraryInput {
+  source_type?: "personal" | "phigros" | "phira";
+  title: string;
+  artist: string;
+  charter: string;
+  difficulty: string;
+  level_constant: number;
+  cover?: string;
+  metadata: Record<string, unknown>;
+}
+export const createLibraryChart = async (input: ChartLibraryInput) =>
   await api.post(`${api_root}/charts/library`, { json: input }).json<ChartLibrary>();
 export const importPhiraChart = async (external_id: number) =>
   await api.post(`${api_root}/charts/library/import/phira`, { json: { external_id } }).json<ChartLibrary>();
 export const getTournamentChartLibrary = async (id: number) =>
   await api.get(`${root}/${id}/chart-library`).json<TournamentChartLibrary[]>();
 export interface TournamentChartLibraryInput {
-  chart_library_id: number;
+  chart_library_id?: number | null;
   round_id: number;
   tag_id: number;
   order_index: number;
   weight_millionths?: number;
+  description?: string;
+  title?: string;
+  artist?: string;
+  charter?: string;
+  difficulty?: string;
+  level_constant?: number;
+  cover?: string;
+  metadata?: Record<string, unknown>;
+  visibility: ChartVisibility;
 }
 export const addTournamentChartLibrary = async (id: number, input: TournamentChartLibraryInput) =>
   await api.post(`${root}/${id}/chart-library`, { json: input }).json<unknown>();

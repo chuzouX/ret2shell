@@ -16,3 +16,7 @@ pub mod m_20260727_000002_create_chart_tags;
 pub mod m_20260728_000001_add_chart_review;
 pub mod m_20260728_000002_create_chart_library;
 pub mod m_20260728_000003_repair_chart_library;
+pub mod m_20260729_000001_expand_chart_library;
+pub mod m_20260729_000002_expand_tournament_chart_library;
+pub mod m_20260729_000004_move_chart_visibility;
+pub mod m_20260729_000005_remove_exclusive_chart_source;

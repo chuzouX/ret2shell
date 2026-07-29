@@ -9,7 +9,6 @@ pub struct Model {
   pub id: i64,
   pub source_id: i64,
   pub external_id: Option<String>,
-  pub exclusive_tournament_id: Option<i64>,
   pub created_by: i64,
   pub title: String,
   pub artist: String,

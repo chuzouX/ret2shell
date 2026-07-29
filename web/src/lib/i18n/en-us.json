@@ -1034,6 +1034,11 @@
       "frozen": "Frozen",
       "after_end": "After finish"
     },
+    "chartVisibility": {
+      "public": "Public",
+      "after_archive": "Public after archive",
+      "private": "Private"
+    },
     "nav": {
       "overview": "Overview",
       "charts": "Charts",
@@ -1078,12 +1083,22 @@
       "charter": "Charter",
       "constant": "Level constant",
       "weight": "Scoring weight",
+      "customImport": "Custom import",
+      "customSource": "Custom chart",
+      "phigrosSource": "Phigros source",
       "allTournaments": "All tournaments",
       "allSources": "All sources",
       "allDifficulties": "All difficulties",
       "localSource": "Local library",
       "phiraSource": "Phira",
-      "exclusiveSource": "Tournament-only"
+      "source": "Source",
+      "visibility": "Chart visibility",
+      "personalUpload": "Personal upload",
+      "libraryImport": "Chart library import",
+      "phiraImport": "Phira import",
+      "phiraId": "Phira chart ID",
+      "description": "Description (Markdown)",
+      "cover": "Cover"
     },
     "teams": {
       "title": "Teams",
@@ -1132,7 +1147,8 @@
       "subtitle": "Configure operations, review results, and control publishing.",
       "settings": "Settings",
       "staff": "Staff",
-      "pool": "Chart pool",
+      "rounds": "Rounds and tags",
+      "charts": "Charts",
       "scripts": "Scoring",
       "review": "Review",
       "import": "Import",

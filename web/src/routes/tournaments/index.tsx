@@ -333,7 +333,12 @@ export default function () {
                       <Button ghost onClick={() => setSearchParams({ create: undefined })}>
                         {t("general.actions.cancel.title")}
                       </Button>
-                      <Button level="primary" loading={creating()} disabled={!name().trim()} onClick={create}>
+                      <Button
+                        level="primary"
+                        loading={creating()}
+                        disabled={!name().trim()}
+                        onClick={create}
+                      >
                         <span class="icon-[fluent--add-20-regular] w-5 h-5" />
                         <span>{t("tournament.actions.create")}</span>
                       </Button>

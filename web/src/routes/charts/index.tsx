@@ -24,9 +24,9 @@ export default function () {
       .filter((tournament) => tournament.lifecycle === "archived")
       .sort((left, right) => left.name.localeCompare(right.name));
     const sources = [
-      { label: t("tournament.charts.localSource"), value: "local" },
+      { label: t("tournament.charts.localSource"), value: "personal" },
+      { label: t("tournament.charts.phigrosSource"), value: "phigros" },
       { label: t("tournament.charts.phiraSource"), value: "phira" },
-      { label: t("tournament.charts.exclusiveSource"), value: "exclusive" },
     ];
     const difficulties = [...new Set(charts.map((chart) => chart.difficulty).filter(Boolean))].sort();
     return { archivedTournaments, sources, difficulties };
@@ -42,6 +42,18 @@ export default function () {
     );
   });
   const selectedChart = createMemo(() => chartLibrary()?.find((chart) => chart.id === selectedId()));
+  const sourceLabel = (sourceType?: string) => {
+    switch (sourceType) {
+      case "personal":
+        return t("tournament.charts.localSource");
+      case "phira":
+        return t("tournament.charts.phiraSource");
+      case "phigros":
+        return t("tournament.charts.phigrosSource");
+      default:
+        return sourceType || t("tournament.charts.source");
+    }
+  };
 
   return (
     <>
@@ -107,7 +119,12 @@ export default function () {
                       classList={{ "border-primary": selectedId() === chart.id }}
                       onClick={() => setSearchParams({ chart: chart.id })}
                     >
-                      <Picture class="aspect-video w-full" src={mediaPath(chart.cover)} alt={chart.title} />
+                      <div class="relative">
+                        <Picture class="aspect-video w-full" src={mediaPath(chart.cover)} alt={chart.title} />
+                        <span class="absolute top-2 right-2 rounded bg-black/65 px-2 py-1 text-xs text-white">
+                          {sourceLabel(chart.source_type)}
+                        </span>
+                      </div>
                       <div class="p-4">
                         <h2 class="font-bold truncate">{chart.title}</h2>
                         <p class="text-sm opacity-60 truncate mt-1">{chart.artist || "--"}</p>

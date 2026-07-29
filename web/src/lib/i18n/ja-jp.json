@@ -1028,6 +1028,11 @@
       "frozen": "Frozen",
       "after_end": "After finish"
     },
+    "chartVisibility": {
+      "public": "公開",
+      "after_archive": "アーカイブ後に公開",
+      "private": "非公開"
+    },
     "nav": {
       "overview": "Overview",
       "charts": "譜面ライブラリ",
@@ -1068,15 +1073,26 @@
       "search": "譜面またはタグを検索",
       "select": "譜面を選択",
       "selectHint": "ラウンドとタグのツリーから譜面を選択してください。",
+      "artist": "アーティスト",
       "charter": "譜面制作者",
       "constant": "譜面定数",
       "weight": "スコア重み",
+      "customImport": "カスタムインポート",
+      "customSource": "カスタム譜面",
+      "phigrosSource": "Phigros ソース",
       "allTournaments": "すべての大会",
       "allSources": "すべてのソース",
       "allDifficulties": "すべての難易度",
       "localSource": "ローカルライブラリ",
       "phiraSource": "Phira",
-      "exclusiveSource": "大会専用"
+      "source": "ソース",
+      "visibility": "譜面の公開範囲",
+      "personalUpload": "個人アップロード",
+      "libraryImport": "譜面ライブラリからインポート",
+      "phiraImport": "Phiraからインポート",
+      "phiraId": "Phira譜面ID",
+      "description": "説明（Markdown）",
+      "cover": "カバー"
     },
     "teams": {
       "title": "Teams",
@@ -1125,7 +1141,8 @@
       "subtitle": "Configure operations, review results, and control publishing.",
       "settings": "Settings",
       "staff": "Staff",
-      "pool": "Chart pool",
+      "rounds": "ラウンドとタグ",
+      "charts": "譜面",
       "scripts": "Scoring",
       "review": "Review",
       "import": "Import",

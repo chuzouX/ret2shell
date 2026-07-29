@@ -43,7 +43,7 @@ function GlobalNav(props: { canAdmin: boolean }) {
 
 function TournamentNav(props: { tournamentId: number; tournament?: Tournament; canManage: boolean }) {
   const links = () => {
-    const items: Array<[string, string, string, string]> = [
+    const items: Array<[string, string, string]> = [
       ["", "icon-[fluent--home-20-regular]", "tournament.nav.overview"],
       ["/charts", "icon-[fluent--music-note-2-20-regular]", "tournament.nav.charts"],
       ["/results", "icon-[fluent--document-checkmark-20-regular]", "tournament.nav.results"],
@@ -128,7 +128,7 @@ export default function TitleBar() {
               <TournamentNav
                 tournamentId={tournamentId()!}
                 tournament={tournament()}
-                canManage={canManageTournament()}
+                canManage={!!canManageTournament()}
               />
             </Show>
           </nav>

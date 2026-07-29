@@ -24,6 +24,7 @@ CREATE TABLE tournament_chart_library (
   id BIGSERIAL PRIMARY KEY,
   tournament_id BIGINT NOT NULL REFERENCES tournament(id) ON DELETE CASCADE,
   chart_library_id BIGINT NOT NULL REFERENCES chart_library(id) ON DELETE RESTRICT,
+  visibility VARCHAR(16) NOT NULL DEFAULT 'private' CHECK (visibility IN ('public', 'after_archive', 'private')),
   round_id BIGINT NOT NULL REFERENCES tournament_round(id) ON DELETE CASCADE,
   tag_id BIGINT NOT NULL REFERENCES chart_tag(id) ON DELETE RESTRICT,
   order_index INTEGER NOT NULL DEFAULT 0,

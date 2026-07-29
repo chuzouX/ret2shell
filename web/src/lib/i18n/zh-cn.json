@@ -1034,6 +1034,11 @@
       "frozen": "冻结",
       "after_end": "赛后公开"
     },
+    "chartVisibility": {
+      "public": "公开",
+      "after_archive": "归档后公开",
+      "private": "不公开"
+    },
     "nav": {
       "overview": "概览",
       "charts": "谱面",
@@ -1078,12 +1083,22 @@
       "charter": "谱师",
       "constant": "谱面定数",
       "weight": "计分权重",
+      "customImport": "自定义导入",
+      "customSource": "自定义谱面",
+      "phigrosSource": "Phigros 来源",
       "allTournaments": "全部赛事",
       "allSources": "全部来源",
       "allDifficulties": "全部难度",
       "localSource": "本地谱面库",
       "phiraSource": "Phira",
-      "exclusiveSource": "赛事专属"
+      "source": "来源",
+      "visibility": "谱面可见性",
+      "personalUpload": "个人上传",
+      "libraryImport": "谱面库导入",
+      "phiraImport": "Phira 导入",
+      "phiraId": "Phira 谱面 ID",
+      "description": "简介（Markdown）",
+      "cover": "封面"
     },
     "teams": {
       "title": "队伍",
@@ -1132,7 +1147,8 @@
       "subtitle": "配置赛事运营、审核成绩并控制发布。",
       "settings": "设置",
       "staff": "工作人员",
-      "pool": "谱面池",
+      "rounds": "赛段与标签",
+      "charts": "谱面",
       "scripts": "计分",
       "review": "审核",
       "import": "导入",
