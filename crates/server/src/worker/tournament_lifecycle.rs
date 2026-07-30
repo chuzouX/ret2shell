@@ -1,5 +1,8 @@
 use chrono::Utc;
-use r2s_database::tournament::{self, Lifecycle, LifecycleScheduleMode};
+use r2s_database::{
+  tournament::{self, Lifecycle, LifecycleScheduleMode},
+  tournament_round::{self, EndMode},
+};
 use r2s_migrator::Database;
 use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
 use tokio::time::{Duration, interval};
@@ -58,6 +61,42 @@ async fn advance_due(db: &Database) -> Result<(), sea_orm::DbErr> {
       );
       lifecycle = next;
     }
+    if current.lifecycle == Lifecycle::Running {
+      finish_due_rounds(db, &current, now).await?;
+    }
+  }
+  Ok(())
+}
+
+async fn finish_due_rounds(
+  db: &Database, tournament: &tournament::Model, now: chrono::DateTime<Utc>,
+) -> Result<(), sea_orm::DbErr> {
+  let rounds = tournament_round::Entity::find()
+    .filter(tournament_round::Column::TournamentId.eq(tournament.id))
+    .filter(tournament_round::Column::EndedAt.is_null())
+    .all(&db.conn)
+    .await?;
+  for round in rounds {
+    let should_end = (round.end_mode == EndMode::AtTime
+      && round.release_at.is_some_and(|at| at <= now))
+      || (round.end_mode == EndMode::OnNextRound
+        && round.started_at.is_some()
+        && tournament.current_round_id.is_some_and(|id| id != round.id));
+    if !should_end {
+      continue;
+    }
+    tournament_round::Entity::update_many()
+      .col_expr(tournament_round::Column::EndedAt, now.into())
+      .col_expr(tournament_round::Column::ReleaseVersion, (1i64).into())
+      .filter(tournament_round::Column::Id.eq(round.id))
+      .filter(tournament_round::Column::EndedAt.is_null())
+      .exec(&db.conn)
+      .await?;
+    info!(
+      tournament_id = tournament.id,
+      round_id = round.id,
+      "tournament round ended"
+    );
   }
   Ok(())
 }

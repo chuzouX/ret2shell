@@ -2,6 +2,9 @@ import type { DateTime } from "luxon";
 
 export type TournamentLifecycle = "draft" | "registration" | "running" | "review" | "finished" | "archived";
 export type LifecycleScheduleMode = "manual" | "scheduled";
+export type RoundReleaseAudience = "public" | "participants" | "staff";
+export type RoundReleaseTiming = "immediate" | "on_enter" | "on_end";
+export type RoundEndMode = "on_next_round" | "at_time" | "manual";
 export type CompetitionMode = "individual" | "team" | "both";
 export type EvidencePolicy = "required" | "optional" | "disabled";
 export type LeaderboardVisibility = "live" | "frozen" | "after_end";
@@ -34,6 +37,8 @@ export interface Tournament {
   finished_schedule: LifecycleScheduleMode;
   finished_at?: DateTime;
   organizer_can_edit_archived: boolean;
+  current_round_id?: number;
+  round_control_mode: "manual_assisted";
   created_at: DateTime;
   updated_at: DateTime;
 }
@@ -46,6 +51,23 @@ export interface TournamentRound {
   order_index: number;
   start_at?: DateTime;
   end_at?: DateTime;
+  release_audience: RoundReleaseAudience[];
+  release_timing: RoundReleaseTiming;
+  end_mode: RoundEndMode;
+  release_at?: DateTime;
+  started_at?: DateTime;
+  ended_at?: DateTime;
+  released_at?: DateTime;
+  manually_released: boolean;
+  manually_ended: boolean;
+  release_version: number;
+}
+
+export interface TournamentRoundConflict {
+  current_round?: number;
+  suggested_round: number;
+  reason: string;
+  affected_charts: number;
 }
 export interface ChartTag {
   id: number;

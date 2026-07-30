@@ -9,6 +9,7 @@ pub(crate) mod access;
 mod communication;
 mod core;
 mod results;
+pub(crate) mod round_visibility;
 pub(crate) mod scoring;
 
 pub fn router(_state: &GlobalState) -> Router<GlobalState> {
@@ -36,6 +37,19 @@ pub fn router(_state: &GlobalState) -> Router<GlobalState> {
       "/{tournament}/rounds/{round}",
       patch(core::update_round).delete(core::delete_round),
     )
+    .route(
+      "/{tournament}/rounds/{round}/enter",
+      post(core::enter_round),
+    )
+    .route(
+      "/{tournament}/rounds/{round}/release",
+      post(core::release_round),
+    )
+    .route(
+      "/{tournament}/rounds/{round}/withdraw-release",
+      post(core::withdraw_round_release),
+    )
+    .route("/{tournament}/rounds/{round}/end", post(core::end_round))
     .route(
       "/{tournament}/charts",
       get(core::list_charts).post(core::create_chart),

@@ -22,3 +22,4 @@ pub mod m_20260729_000004_move_chart_visibility;
 pub mod m_20260729_000005_remove_exclusive_chart_source;
 pub mod m_20260729_000006_add_phira_config;
 pub mod m_20260729_000007_add_tournament_lifecycle_schedule;
+pub mod m_20260730_000008_add_round_release_control;

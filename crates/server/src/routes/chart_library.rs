@@ -14,7 +14,7 @@ use sea_orm::{
 use serde::Deserialize;
 use serde_json::{Value, json};
 
-use super::tournament::access;
+use super::tournament::{access, round_visibility};
 use crate::{middleware::auth::Token, traits::ResponseError};
 
 #[derive(Deserialize)]
@@ -341,9 +341,14 @@ async fn ensure_link_target(
 }
 
 pub async fn list_links(
-  State(db): State<Database>, Path(tournament_id): Path<i64>,
+  State(db): State<Database>, Extension(token): Extension<Token>, Path(tournament_id): Path<i64>,
 ) -> Result<impl IntoResponse, ResponseError> {
-  access::tournament(&db, tournament_id).await?;
+  let tournament = access::tournament(&db, tournament_id).await?;
+  let audience = round_visibility::audience(&db, tournament_id, &token).await?;
+  let rounds = r2s_database::tournament_round::Entity::find()
+    .filter(r2s_database::tournament_round::Column::TournamentId.eq(tournament_id))
+    .all(&db.conn)
+    .await?;
   let links = tournament_chart_library::Entity::find()
     .filter(tournament_chart_library::Column::TournamentId.eq(tournament_id))
     .order_by_asc(tournament_chart_library::Column::RoundId)
@@ -352,6 +357,14 @@ pub async fn list_links(
     .await?;
   let mut response = Vec::with_capacity(links.len());
   for link in links {
+    let Some(round) = rounds.iter().find(|round| round.id == link.round_id) else {
+      continue;
+    };
+    if audience != round_visibility::Audience::Staff
+      && !round_visibility::is_visible(round, audience, tournament.current_round_id)
+    {
+      continue;
+    }
     let chart = match link.chart_library_id {
       Some(chart_library_id) => {
         let chart = chart_library::Entity::find_by_id(chart_library_id)
@@ -362,23 +375,37 @@ pub async fn list_links(
           .one(&db.conn)
           .await?
           .ok_or_else(|| ResponseError::NotFound("chart source not found".to_owned()))?;
-        json!({
-          "id": chart.id,
-          "source_id": chart.source_id,
-          "source": source.name,
-          "source_type": source.source_type,
-          "external_id": chart.external_id,
-          "created_by": chart.created_by,
-          "title": chart.title,
-          "artist": chart.artist,
-          "charter": chart.charter,
-          "difficulty": chart.difficulty,
-          "level_constant": chart.level_constant,
-          "cover": chart.cover,
-          "metadata": chart.metadata,
-          "created_at": chart.created_at,
-          "updated_at": chart.updated_at,
-        })
+        if audience == round_visibility::Audience::Staff {
+          json!({
+            "id": chart.id,
+            "source_id": chart.source_id,
+            "source": source.name,
+            "source_type": source.source_type,
+            "external_id": chart.external_id,
+            "created_by": chart.created_by,
+            "title": chart.title,
+            "artist": chart.artist,
+            "charter": chart.charter,
+            "difficulty": chart.difficulty,
+            "level_constant": chart.level_constant,
+            "cover": chart.cover,
+            "metadata": chart.metadata,
+            "created_at": chart.created_at,
+            "updated_at": chart.updated_at,
+          })
+        } else {
+          json!({
+            "id": chart.id,
+            "source": source.name,
+            "source_type": source.source_type,
+            "title": chart.title,
+            "artist": chart.artist,
+            "charter": chart.charter,
+            "difficulty": chart.difficulty,
+            "level_constant": chart.level_constant,
+            "cover": chart.cover,
+          })
+        }
       }
       None => json!({
         "id": link.id,
@@ -388,9 +415,26 @@ pub async fn list_links(
         "difficulty": link.difficulty,
         "level_constant": link.level_constant,
         "cover": link.cover,
-        "metadata": link.metadata,
+        "metadata": if audience == round_visibility::Audience::Staff { Some(link.metadata.clone()) } else { None::<serde_json::Value> },
         "description": link.description,
       }),
+    };
+    let link = if audience == round_visibility::Audience::Staff {
+      json!(link)
+    } else {
+      json!({
+        "id": link.id,
+        "tournament_id": link.tournament_id,
+        "round_id": link.round_id,
+        "tag_id": link.tag_id,
+        "title": link.title,
+        "artist": link.artist,
+        "charter": link.charter,
+        "difficulty": link.difficulty,
+        "level_constant": link.level_constant,
+        "cover": link.cover,
+        "description": link.description,
+      })
     };
     response.push(json!({"link": link, "chart": chart}));
   }

@@ -19,12 +19,16 @@ use r2s_database::{
 use r2s_migrator::Database;
 use sea_orm::{
   ActiveModelTrait, ActiveValue::Set, ColumnTrait, EntityTrait, IntoActiveModel, PaginatorTrait,
-  QueryFilter, QueryOrder, TransactionTrait,
+  QueryFilter, QueryOrder, TransactionTrait, TryIntoModel,
 };
 use serde::Deserialize;
 use serde_json::{Value, json};
 
-use super::{access, scoring};
+use super::{
+  access,
+  round_visibility::{self, Audience},
+  scoring,
+};
 use crate::{middleware::auth::Token, traits::ResponseError};
 
 #[derive(Deserialize)]
@@ -104,6 +108,8 @@ pub async fn create(
     finished_schedule: Set(LifecycleScheduleMode::Manual),
     finished_at: Set(None),
     organizer_can_edit_archived: Set(false),
+    current_round_id: Set(None),
+    round_control_mode: Set(tournament::RoundControlMode::ManualAssisted),
     created_at: Set(now),
     updated_at: Set(now),
   }
@@ -465,18 +471,37 @@ pub struct RoundInput {
   order_index: i32,
   start_at: Option<DateTime<Utc>>,
   end_at: Option<DateTime<Utc>>,
+  #[serde(default = "default_release_audience")]
+  release_audience: serde_json::Value,
+  #[serde(default)]
+  release_timing: tournament_round::ReleaseTiming,
+  #[serde(default)]
+  end_mode: tournament_round::EndMode,
+  release_at: Option<DateTime<Utc>>,
+}
+
+fn default_release_audience() -> serde_json::Value {
+  serde_json::json!(["staff"])
 }
 
 pub async fn list_rounds(
-  State(db): State<Database>, Path(tournament_id): Path<i64>,
+  State(db): State<Database>, Extension(token): Extension<Token>, Path(tournament_id): Path<i64>,
 ) -> Result<impl IntoResponse, ResponseError> {
-  access::tournament(&db, tournament_id).await?;
+  let tournament = access::tournament(&db, tournament_id).await?;
+  let audience = round_visibility::audience(&db, tournament_id, &token).await?;
+  let rows = tournament_round::Entity::find()
+    .filter(tournament_round::Column::TournamentId.eq(tournament_id))
+    .order_by_asc(tournament_round::Column::OrderIndex)
+    .all(&db.conn)
+    .await?;
   Ok(Json(
-    tournament_round::Entity::find()
-      .filter(tournament_round::Column::TournamentId.eq(tournament_id))
-      .order_by_asc(tournament_round::Column::OrderIndex)
-      .all(&db.conn)
-      .await?,
+    rows
+      .into_iter()
+      .filter(|row| {
+        audience == Audience::Staff
+          || round_visibility::is_visible(row, audience, tournament.current_round_id)
+      })
+      .collect::<Vec<_>>(),
   ))
 }
 
@@ -485,6 +510,13 @@ pub async fn create_round(
   Json(input): Json<RoundInput>,
 ) -> Result<impl IntoResponse, ResponseError> {
   access::require_organizer(&db, tournament_id, &token).await?;
+  round_visibility::validate_audience(&input.release_audience)?;
+  round_visibility::validate_schedule_values(
+    input.start_at,
+    input.end_at,
+    input.release_at,
+    input.end_mode,
+  )?;
   Ok(Json(
     tournament_round::ActiveModel {
       id: Default::default(),
@@ -494,6 +526,16 @@ pub async fn create_round(
       order_index: Set(input.order_index),
       start_at: Set(input.start_at),
       end_at: Set(input.end_at),
+      release_audience: Set(input.release_audience),
+      release_timing: Set(input.release_timing),
+      end_mode: Set(input.end_mode),
+      release_at: Set(input.release_at),
+      started_at: Set(None),
+      ended_at: Set(None),
+      released_at: Set(None),
+      manually_released: Set(false),
+      manually_ended: Set(false),
+      release_version: Set(0),
     }
     .insert(&db.conn)
     .await?,
@@ -516,6 +558,142 @@ pub async fn update_round(
   row.order_index = Set(input.order_index);
   row.start_at = Set(input.start_at);
   row.end_at = Set(input.end_at);
+  round_visibility::validate_audience(&input.release_audience)?;
+  row.release_audience = Set(input.release_audience);
+  row.release_timing = Set(input.release_timing);
+  row.end_mode = Set(input.end_mode);
+  row.release_at = Set(input.release_at);
+  let preview = row
+    .clone()
+    .try_into_model()
+    .map_err(|_| ResponseError::BadRequest("invalid round release configuration".to_owned()))?;
+  round_visibility::validate_schedule(&preview)?;
+  Ok(Json(row.update(&db.conn).await?))
+}
+
+#[derive(Deserialize, Default)]
+pub struct RoundActionInput {
+  #[serde(default)]
+  force: bool,
+}
+
+async fn round_for_tournament(
+  db: &Database, tournament_id: i64, round_id: i64,
+) -> Result<tournament_round::Model, ResponseError> {
+  tournament_round::Entity::find_by_id(round_id)
+    .one(&db.conn)
+    .await?
+    .filter(|row| row.tournament_id == tournament_id)
+    .ok_or_else(|| ResponseError::NotFound("round not found".to_owned()))
+}
+
+pub async fn enter_round(
+  State(db): State<Database>, Extension(token): Extension<Token>,
+  Path((tournament_id, round_id)): Path<(i64, i64)>, Json(input): Json<RoundActionInput>,
+) -> Result<impl IntoResponse, ResponseError> {
+  let tournament = access::tournament(&db, tournament_id).await?;
+  access::require_organizer(&db, tournament_id, &token).await?;
+  if tournament.lifecycle != Lifecycle::Running {
+    return Err(ResponseError::Conflict(
+      "rounds can only be entered while tournament is running".to_owned(),
+    ));
+  }
+  let round = round_for_tournament(&db, tournament_id, round_id).await?;
+  if round.ended_at.is_some() {
+    return Err(ResponseError::Conflict(
+      "ended round cannot be entered".to_owned(),
+    ));
+  }
+  if !input.force && round.start_at.is_some_and(|at| at > Utc::now()) {
+    return Err(ResponseError::Conflict(format!(
+      "round is scheduled for {}",
+      round.start_at.unwrap()
+    )));
+  }
+  let now = Utc::now();
+  let current = tournament.current_round_id;
+  let txn = db.conn.begin().await?;
+  if let Some(current_id) = current.filter(|id| *id != round_id) {
+    tournament_round::Entity::update_many()
+      .col_expr(tournament_round::Column::EndedAt, now.into())
+      .col_expr(tournament_round::Column::ReleaseVersion, (1i64).into())
+      .filter(tournament_round::Column::Id.eq(current_id))
+      .filter(tournament_round::Column::EndedAt.is_null())
+      .exec(&txn)
+      .await?;
+  }
+  tournament_round::Entity::update_many()
+    .col_expr(tournament_round::Column::StartedAt, now.into())
+    .col_expr(tournament_round::Column::ReleaseVersion, (1i64).into())
+    .filter(tournament_round::Column::Id.eq(round_id))
+    .filter(tournament_round::Column::EndedAt.is_null())
+    .exec(&txn)
+    .await?;
+  let mut tournament_row = tournament.into_active_model();
+  tournament_row.current_round_id = Set(Some(round_id));
+  tournament_row.updated_at = Set(now);
+  tournament_row.update(&txn).await?;
+  txn.commit().await?;
+  Ok(Json(
+    round_for_tournament(&db, tournament_id, round_id).await?,
+  ))
+}
+
+pub async fn release_round(
+  State(db): State<Database>, Extension(token): Extension<Token>,
+  Path((tournament_id, round_id)): Path<(i64, i64)>, Json(_input): Json<RoundActionInput>,
+) -> Result<impl IntoResponse, ResponseError> {
+  access::require_organizer(&db, tournament_id, &token).await?;
+  let round = round_for_tournament(&db, tournament_id, round_id).await?;
+  let mut row = round.into_active_model();
+  row.manually_released = Set(true);
+  row.released_at = Set(Some(Utc::now()));
+  row.release_version = Set(row.release_version.clone().unwrap() + 1);
+  Ok(Json(row.update(&db.conn).await?))
+}
+
+pub async fn withdraw_round_release(
+  State(db): State<Database>, Extension(token): Extension<Token>,
+  Path((tournament_id, round_id)): Path<(i64, i64)>, Json(_input): Json<RoundActionInput>,
+) -> Result<impl IntoResponse, ResponseError> {
+  access::require_organizer(&db, tournament_id, &token).await?;
+  let round = round_for_tournament(&db, tournament_id, round_id).await?;
+  if round.started_at.is_some() || round.ended_at.is_some() || !round.manually_released {
+    return Err(ResponseError::Conflict(
+      "round release cannot be withdrawn after entering the round".to_owned(),
+    ));
+  }
+  let mut row = round.into_active_model();
+  row.manually_released = Set(false);
+  row.released_at = Set(None);
+  row.release_version = Set(row.release_version.clone().unwrap() + 1);
+  Ok(Json(row.update(&db.conn).await?))
+}
+
+pub async fn end_round(
+  State(db): State<Database>, Extension(token): Extension<Token>,
+  Path((tournament_id, round_id)): Path<(i64, i64)>, Json(_input): Json<RoundActionInput>,
+) -> Result<impl IntoResponse, ResponseError> {
+  access::require_organizer(&db, tournament_id, &token).await?;
+  let tournament = access::tournament(&db, tournament_id).await?;
+  if tournament.lifecycle != Lifecycle::Running {
+    return Err(ResponseError::Conflict(
+      "rounds can only be ended while tournament is running".to_owned(),
+    ));
+  }
+  let round = round_for_tournament(&db, tournament_id, round_id).await?;
+  if tournament.current_round_id != Some(round_id)
+    || round.started_at.is_none()
+    || round.ended_at.is_some()
+  {
+    return Err(ResponseError::Conflict(
+      "only the current active round can be ended".to_owned(),
+    ));
+  }
+  let mut row = round.into_active_model();
+  row.ended_at = Set(Some(Utc::now()));
+  row.manually_ended = Set(true);
+  row.release_version = Set(row.release_version.clone().unwrap() + 1);
   Ok(Json(row.update(&db.conn).await?))
 }
 

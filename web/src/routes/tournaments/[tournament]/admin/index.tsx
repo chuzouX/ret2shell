@@ -12,6 +12,8 @@ import {
   deleteChartTag,
   deleteRound,
   deleteTournament,
+  endRound,
+  enterRound,
   getChartLibrary,
   getCharts,
   getChartTags,
@@ -29,6 +31,8 @@ import {
   recomputeLeaderboard,
   removeStaff,
   removeTournamentChartLibrary,
+  releaseRound,
+  withdrawRoundRelease,
   reviewResult,
   updateTournament,
   updateTournamentChartLibrary,
@@ -40,6 +44,9 @@ import type {
   CompetitionMode,
   EvidencePolicy,
   LifecycleScheduleMode,
+  RoundEndMode,
+  RoundReleaseAudience,
+  RoundReleaseTiming,
   TournamentLifecycle,
 } from "@models/tournament";
 import { accountStore } from "@storage/account";
@@ -79,6 +86,10 @@ export default function () {
   const [staffRole, setStaffRole] = createSignal<"organizer" | "judge">("judge");
   const [roundName, setRoundName] = createSignal("");
   const [roundOrder, setRoundOrder] = createSignal("0");
+  const [roundReleaseTiming, setRoundReleaseTiming] = createSignal<RoundReleaseTiming>("on_enter");
+  const [roundEndMode, setRoundEndMode] = createSignal<RoundEndMode>("on_next_round");
+  const [roundAudience, setRoundAudience] = createSignal<RoundReleaseAudience[]>(["staff"]);
+  const [roundReleaseAt, setRoundReleaseAt] = createSignal("");
   const [tagRound, setTagRound] = createSignal("");
   const [tagName, setTagName] = createSignal("");
   const [libraryRound, setLibraryRound] = createSignal("");
@@ -332,7 +343,7 @@ export default function () {
   const tabs: Array<[Tab, string, string]> = [
     ["settings", "icon-[fluent--options-20-regular]", "tournament.admin.settings"],
     ["staff", "icon-[fluent--people-settings-20-regular]", "tournament.admin.staff"],
-    ["rounds", "icon-[fluent--layers-20-regular]", "tournament.admin.rounds"],
+    ["rounds", "icon-[fluent--calendar-agenda-20-regular]", "tournament.admin.rounds"],
     ["charts", "icon-[fluent--music-note-2-20-regular]", "tournament.admin.charts"],
     ["scripts", "icon-[fluent--code-20-regular]", "tournament.admin.scripts"],
     ["review", "icon-[fluent--clipboard-checkmark-20-regular]", "tournament.admin.review"],
@@ -377,6 +388,56 @@ export default function () {
                     value={editBrief()}
                     onInput={(e) => setEditBrief(e.currentTarget.value)}
                   />
+                  <Select
+                    label={t("tournament.admin.releaseTiming")}
+                    value={[roundReleaseTiming()]}
+                    items={[
+                      { label: t("tournament.admin.releaseTimingOptions.immediate"), value: "immediate" },
+                      { label: t("tournament.admin.releaseTimingOptions.onEnter"), value: "on_enter" },
+                      { label: t("tournament.admin.releaseTimingOptions.onEnd"), value: "on_end" },
+                    ]}
+                    onValueChange={(event) => setRoundReleaseTiming(event.value[0] as RoundReleaseTiming)}
+                  />
+                  <Select
+                    label={t("tournament.admin.roundEndMode")}
+                    value={[roundEndMode()]}
+                    items={[
+                      { label: t("tournament.admin.roundEndOptions.onNextRound"), value: "on_next_round" },
+                      { label: t("tournament.admin.roundEndOptions.atTime"), value: "at_time" },
+                      { label: t("tournament.admin.roundEndOptions.manual"), value: "manual" },
+                    ]}
+                    onValueChange={(event) => setRoundEndMode(event.value[0] as RoundEndMode)}
+                  />
+                  <Show when={roundEndMode() === "at_time"}>
+                    <Input
+                      title={t("tournament.admin.roundEndAt")}
+                      type="datetime-local"
+                      value={roundReleaseAt()}
+                      onInput={(event) => setRoundReleaseAt(event.currentTarget.value)}
+                    />
+                  </Show>
+                  <div class="sm:col-span-2 border border-layer-content/15 rounded-lg p-3 space-y-2">
+                    <div class="label">{t("tournament.admin.releaseAudience")}</div>
+                    <div class="flex flex-wrap gap-3 text-sm">
+                      {(["public", "participants", "staff"] as const).map((audience) => (
+                        <label class="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            checked={roundAudience().includes(audience)}
+                            onChange={(event) => {
+                              const values = roundAudience();
+                              setRoundAudience(
+                                event.currentTarget.checked
+                                  ? [...values, audience]
+                                  : values.filter((value) => value !== audience)
+                              );
+                            }}
+                          />
+                          {t(`tournament.admin.releaseAudienceOptions.${audience}`)}
+                        </label>
+                      ))}
+                    </div>
+                  </div>
                 </div>
                 <div class="flex flex-col space-y-1">
                   <span class="label">{t("tournament.fields.description")}</span>
@@ -663,9 +724,50 @@ export default function () {
         <Match when={tab() === "rounds" || tab() === "charts"}>
           <section class="grid lg:grid-cols-[minmax(260px,0.8fr)_minmax(0,1.6fr)] gap-6 items-start">
             <Show when={tab() === "rounds"}>
-              <div class="space-y-4">
-                <h2 class="font-bold">{t("tournament.pool.rounds")}</h2>
-                <div class="flex gap-2 items-end">
+              <div class="space-y-4 lg:col-span-1">
+                <h2 class="flex items-center gap-2 font-bold">
+                  <span class="icon-[fluent--calendar-agenda-20-regular] w-5 h-5 text-primary" />
+                  {t("tournament.pool.rounds")}
+                </h2>
+                <div class="border border-primary/25 rounded-lg p-4 space-y-3">
+                  <div class="flex items-center gap-2">
+                    <span class="icon-[fluent--play-circle-20-regular] w-5 h-5 text-primary" />
+                    <strong>{t("tournament.admin.currentRound")}</strong>
+                  </div>
+                  <Select
+                    label={t("tournament.admin.currentRound")}
+                    value={[String(tournament()?.current_round_id ?? "") ]}
+                    disabled={tournament()?.lifecycle !== "running"}
+                    items={(rounds() ?? []).map((round) => ({
+                      label: `${round.order_index}. ${round.name}`,
+                      value: String(round.id),
+                    }))}
+                    onValueChange={(event) => {
+                      const roundId = Number(event.value[0]);
+                      if (!roundId) return;
+                      const round = rounds()?.find((item) => item.id === roundId);
+                      if (!round) return;
+                      askConfirm(
+                        `${t("tournament.admin.enterRound")}：${round.name}`,
+                        async () => {
+                          await enterRound(id(), round.id, true);
+                          await refetchTournament();
+                          await refetchRounds();
+                        },
+                        t("tournament.admin.confirm")
+                      );
+                    }}
+                  />
+                  <Show when={tournament()?.lifecycle !== "running"}>
+                    <p class="text-xs opacity-60">{t("tournament.admin.roundOnlyRunning")}</p>
+                  </Show>
+                </div>
+                <div class="border border-layer-content/15 rounded-lg p-4 space-y-3">
+                  <div class="flex items-center gap-2">
+                    <span class="icon-[fluent--add-circle-20-regular] w-5 h-5 text-primary" />
+                    <strong class="text-sm">{t("tournament.pool.addRound")}</strong>
+                  </div>
+                  <div class="grid sm:grid-cols-[minmax(0,1fr)_5rem_auto] gap-2 items-end">
                   <Input
                     size="sm"
                     noLabel
@@ -694,20 +796,30 @@ export default function () {
                             order_index: Number(roundOrder()),
                             start_at: undefined,
                             end_at: undefined,
+                            release_audience: roundAudience(),
+                            release_timing: roundReleaseTiming(),
+                            end_mode: roundEndMode(),
+                            release_at: roundReleaseAt() ? DateTime.fromISO(roundReleaseAt()).toUTC() : null,
                           }),
                         refetchRounds
                       )
                     }
                   >
+                    <span class="icon-[fluent--add-20-regular] w-4 h-4" />
                     {t("general.actions.add.title")}
                   </Button>
+                  </div>
                 </div>
-                <For each={rounds()}>
+                <For each={rounds()} fallback={<div class="border border-dashed border-layer-content/20 rounded-lg p-8 text-center opacity-60"><span class="icon-[fluent--calendar-agenda-20-regular] w-8 h-8 mx-auto mb-2 block" /><p>{t("tournament.pool.emptyRounds")}</p></div>}>
                   {(round) => (
-                    <div class="p-3 border border-layer-content/10 hover:border-layer-content/20 rounded-lg space-y-2 transition-colors bg-layer-content/[0.02]">
+                    <div class="p-4 border border-layer-content/10 hover:border-layer-content/20 rounded-lg space-y-3 transition-colors bg-layer-content/[0.02]" classList={{ "border-primary/40 bg-primary/[0.04]": tournament()?.current_round_id === round.id }}>
                       <div class="flex items-center gap-3">
+                        <span class="icon-[fluent--calendar-agenda-20-regular] w-5 h-5 text-primary" />
                         <span class="font-mono text-primary text-sm font-bold w-6">{round.order_index}</span>
                         <strong class="flex-1">{round.name}</strong>
+                        <Show when={tournament()?.current_round_id === round.id}>
+                          <span class="text-xs text-primary font-bold">{t("tournament.admin.currentRound")}</span>
+                        </Show>
                         <Button
                           square
                           size="sm"
@@ -723,8 +835,35 @@ export default function () {
                         >
                           <span class="icon-[fluent--delete-20-regular] w-4 h-4" />
                         </Button>
+                        <Show when={tournament()?.lifecycle === "running" && tournament()?.current_round_id !== round.id}>
+                          <Button
+                            size="sm"
+                            ghost
+                            title={t("tournament.admin.enterRound")}
+                            onClick={() =>
+                              askConfirm(
+                                `${t("tournament.admin.enterRound")}：${round.name}`,
+                                async () => {
+                                  await enterRound(id(), round.id, true);
+                                  await refetchTournament();
+                                  await refetchRounds();
+                                },
+                                t("tournament.admin.confirm")
+                              )
+                            }
+                          >
+                            <span class="icon-[fluent--play-20-regular] w-4 h-4" />
+                            {t("tournament.admin.enterRound")}
+                          </Button>
+                        </Show>
                       </div>
-                      <div class="flex flex-wrap gap-2 pl-6">
+                      <div class="border-t border-layer-content/10 pt-3 space-y-2">
+                        <div class="flex items-center gap-2 text-xs font-bold opacity-70">
+                          <span class="icon-[fluent--tag-20-regular] w-4 h-4" />
+                          {t("tournament.pool.tags")}
+                          <span class="font-normal opacity-60">{chartTags()?.filter((tag) => tag.round_id === round.id).length ?? 0}</span>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
                         <For
                           each={chartTags()?.filter((tag) => tag.round_id === round.id)}
                           fallback={<span class="text-xs opacity-50">{t("tournament.pool.noTags")}</span>}
@@ -747,15 +886,57 @@ export default function () {
                             </button>
                           )}
                         </For>
+                        </div>
+                      </div>
+                      <div class="flex flex-wrap items-center gap-2 text-xs">
+                        <span class="inline-flex items-center gap-1 px-2 py-1 rounded bg-layer-content/10 opacity-70">
+                          <span class="icon-[fluent--megaphone-loud-20-regular] w-3.5 h-3.5" />
+                          {t(`tournament.admin.releaseTimingOptions.${round.release_timing === "on_enter" ? "onEnter" : round.release_timing === "on_end" ? "onEnd" : "immediate"}`)}
+                        </span>
+                        <Show when={round.manually_released}>
+                          <span class="text-primary">{t("tournament.admin.manuallyReleased")}</span>
+                        </Show>
+                        <Show when={round.ended_at}>
+                          <span class="text-success">{t("tournament.admin.roundEnded")}</span>
+                        </Show>
+                        <Show when={tournament()?.lifecycle === "running" && tournament()?.current_round_id === round.id}>
+                          <Button size="sm" ghost onClick={() => run(async () => await endRound(id(), round.id), refetchRounds)}>
+                            <span class="icon-[fluent--stop-20-regular] w-4 h-4" />
+                            {t("tournament.admin.endRound")}
+                          </Button>
+                        </Show>
+                        <Show when={!round.started_at && !round.ended_at && !round.manually_released}>
+                          <Button size="sm" ghost onClick={() => run(async () => await releaseRound(id(), round.id), refetchRounds)}>
+                            <span class="icon-[fluent--megaphone-loud-20-regular] w-4 h-4" />
+                            {t("tournament.admin.releaseRound")}
+                          </Button>
+                        </Show>
+                        <Show when={round.manually_released && !round.started_at && !round.ended_at}>
+                          <Button size="sm" ghost onClick={() => run(async () => await withdrawRoundRelease(id(), round.id), refetchRounds)}>
+                            {t("tournament.admin.withdrawRelease")}
+                          </Button>
+                        </Show>
                       </div>
                     </div>
                   )}
                 </For>
-                <div class="border-t border-layer-content/15 pt-4 space-y-2">
-                  <h3 class="text-sm font-bold">{t("tournament.pool.tags")}</h3>
-                  <div class="grid sm:grid-cols-[1fr_1fr_auto] gap-2">
+              </div>
+            </Show>
+            <Show when={tab() === "rounds"}>
+              <aside class="lg:col-span-1 lg:sticky lg:top-4 space-y-4">
+                <div class="border border-layer-content/15 rounded-lg p-4 space-y-4">
+                  <div>
+                    <h2 class="flex items-center gap-2 font-bold">
+                      <span class="icon-[fluent--tag-20-regular] w-5 h-5 text-primary" />
+                      {t("tournament.pool.tags")}
+                    </h2>
+                    <p class="text-xs opacity-60 mt-1">{t("tournament.admin.tagPanelDescription")}</p>
+                  </div>
+                  <div class="border border-primary/20 bg-primary/[0.03] rounded-lg p-3 space-y-3">
+                    <strong class="text-sm">{t("tournament.admin.addTag")}</strong>
                     <Select
                       size="sm"
+                      label={t("tournament.pool.chooseRound")}
                       placeholder={t("tournament.pool.chooseRound")}
                       value={tagRound() ? [tagRound()] : []}
                       onValueChange={(e) => setTagRound(e.value[0] ?? "")}
@@ -763,12 +944,13 @@ export default function () {
                     />
                     <Input
                       size="sm"
-                      noLabel
+                      title={t("tournament.pool.tagName")}
                       placeholder={t("tournament.pool.tagName")}
                       value={tagName()}
                       onInput={(event) => setTagName(event.currentTarget.value)}
                     />
                     <Button
+                      class="w-full"
                       size="sm"
                       level="primary"
                       disabled={!tagRound() || !tagName().trim()}
@@ -783,11 +965,55 @@ export default function () {
                         }, refetchChartTags)
                       }
                     >
+                      <span class="icon-[fluent--add-20-regular] w-4 h-4" />
                       {t("general.actions.add.title")}
                     </Button>
                   </div>
                 </div>
-              </div>
+                <div class="border border-layer-content/15 rounded-lg p-4 space-y-4">
+                  <div class="flex items-center justify-between">
+                    <strong class="text-sm">{t("tournament.admin.tagOverview")}</strong>
+                    <span class="text-xs opacity-50">{chartTags()?.length ?? 0}</span>
+                  </div>
+                  <For each={rounds()} fallback={<p class="text-sm opacity-50">{t("tournament.pool.emptyRounds")}</p>}>
+                    {(round) => {
+                      const items = () => chartTags()?.filter((tag) => tag.round_id === round.id) ?? [];
+                      return (
+                        <div class="space-y-2">
+                          <div class="flex items-center gap-2 text-xs font-bold opacity-70">
+                            <span class="icon-[fluent--calendar-agenda-20-regular] w-4 h-4" />
+                            {round.name}
+                            <span class="opacity-50">{items().length}</span>
+                          </div>
+                          <div class="flex flex-wrap gap-2 pl-6">
+                            <For each={items()} fallback={<span class="text-xs opacity-40">{t("tournament.pool.noTags")}</span>}>
+                              {(tag) => (
+                                <div class="inline-flex max-w-full items-center gap-1 rounded-md bg-layer-content/10 pl-2 pr-1 py-1 text-xs">
+                                  <span class="icon-[fluent--tag-20-regular] w-3.5 h-3.5 shrink-0" />
+                                  <span class="truncate">{tag.name}</span>
+                                  <button
+                                    type="button"
+                                    class="shrink-0 p-0.5 opacity-50 hover:opacity-100 hover:text-error"
+                                    aria-label={t("general.actions.delete.title")}
+                                    onClick={() =>
+                                      askConfirm(`删除标签 "${tag.name}"？`, async () => {
+                                        await deleteChartTag(id(), tag.id);
+                                        await refetchChartTags();
+                                      })
+                                    }
+                                  >
+                                    <span class="icon-[fluent--dismiss-12-regular] w-3 h-3" />
+                                  </button>
+                                </div>
+                              )}
+                            </For>
+                          </div>
+                        </div>
+                      );
+                    }}
+                  </For>
+                </div>
+              </aside>
             </Show>
             <Show when={tab() === "charts"}>
               <div class="space-y-4 lg:col-span-2">

@@ -57,6 +57,17 @@ pub enum LifecycleScheduleMode {
 )]
 #[sea_orm(rs_type = "String", db_type = "String(StringLen::N(16))")]
 #[serde(rename_all = "snake_case")]
+pub enum RoundControlMode {
+  #[default]
+  #[sea_orm(string_value = "manual_assisted")]
+  ManualAssisted,
+}
+
+#[derive(
+  Clone, Copy, Debug, Default, PartialEq, Eq, Serialize, Deserialize, EnumIter, DeriveActiveEnum,
+)]
+#[sea_orm(rs_type = "String", db_type = "String(StringLen::N(16))")]
+#[serde(rename_all = "snake_case")]
 pub enum CompetitionMode {
   #[default]
   #[sea_orm(string_value = "individual")]
@@ -131,6 +142,8 @@ pub struct Model {
   pub finished_schedule: LifecycleScheduleMode,
   pub finished_at: Option<DateTime<Utc>>,
   pub organizer_can_edit_archived: bool,
+  pub current_round_id: Option<i64>,
+  pub round_control_mode: RoundControlMode,
   #[serde(with = "ts_seconds")]
   pub created_at: DateTime<Utc>,
   #[serde(with = "ts_seconds")]

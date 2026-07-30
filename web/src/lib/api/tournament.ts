@@ -11,6 +11,7 @@ import type {
   TournamentChartLibrary,
   TournamentResult,
   TournamentRound,
+  TournamentRoundConflict,
   TournamentStaff,
   TournamentTeam,
 } from "@models/tournament";
@@ -44,10 +45,31 @@ export const removeStaff = async (id: number, user: number) =>
   await safeJson(api.delete(`${root}/${id}/staff/${user}`).json<null>());
 
 export const getRounds = async (id: number) => await api.get(`${root}/${id}/rounds`).json<TournamentRound[]>();
-export const createRound = async (id: number, input: Omit<TournamentRound, "id" | "tournament_id">) =>
+export const createRound = async (id: number, input: RoundInput) =>
   await api.post(`${root}/${id}/rounds`, { json: input }).json<TournamentRound>();
 export const deleteRound = async (id: number, round: number) =>
   await safeJson(api.delete(`${root}/${id}/rounds/${round}`).json<null>());
+export interface RoundInput {
+  name: string;
+  description?: string;
+  order_index: number;
+  start_at?: DateTime | null;
+  end_at?: DateTime | null;
+  release_audience: Array<"public" | "participants" | "staff">;
+  release_timing: "immediate" | "on_enter" | "on_end";
+  end_mode: "on_next_round" | "at_time" | "manual";
+  release_at?: DateTime | null;
+}
+export const updateRound = async (id: number, round: number, input: RoundInput) =>
+  await api.patch(`${root}/${id}/rounds/${round}`, { json: input }).json<TournamentRound>();
+export const enterRound = async (id: number, round: number, force = false) =>
+  await api.post(`${root}/${id}/rounds/${round}/enter`, { json: { force } }).json<TournamentRound | TournamentRoundConflict>();
+export const releaseRound = async (id: number, round: number) =>
+  await api.post(`${root}/${id}/rounds/${round}/release`, { json: {} }).json<TournamentRound>();
+export const withdrawRoundRelease = async (id: number, round: number) =>
+  await api.post(`${root}/${id}/rounds/${round}/withdraw-release`, { json: {} }).json<TournamentRound>();
+export const endRound = async (id: number, round: number) =>
+  await api.post(`${root}/${id}/rounds/${round}/end`, { json: {} }).json<TournamentRound>();
 export const getChartTags = async (id: number) => await api.get(`${root}/${id}/chart-tags`).json<ChartTag[]>();
 export const createChartTag = async (id: number, input: Omit<ChartTag, "id" | "tournament_id">) =>
   await api.post(`${root}/${id}/chart-tags`, { json: input }).json<ChartTag>();
