@@ -86,15 +86,20 @@ struct PhiraBindRequest {
 }
 
 async fn bind_phira_account(
-  State(db): State<Database>, Extension(token): Extension<Token>,
-  Json(body): Json<PhiraBindRequest>,
+  State(db): State<Database>, Extension(config): Extension<config::Model>,
+  Extension(token): Extension<Token>, Json(body): Json<PhiraBindRequest>,
 ) -> Result<impl IntoResponse, ResponseError> {
   validate_email(&body.email)?;
   if body.password.is_empty() {
     return Err(ResponseError::BadRequest("password is required".to_owned()));
   }
 
-  let identity = r2s_oauth::phira::authenticate(&body.email, &body.password).await?;
+  let identity = r2s_oauth::phira::authenticate(
+    config.phira.as_ref().map(|config| config.base_url.as_str()),
+    &body.email,
+    &body.password,
+  )
+  .await?;
   let auth_key = identity.id.to_string();
   let provider = "phira";
 

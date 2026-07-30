@@ -254,6 +254,9 @@
   },
   "platform": {
     "name": "Rhythm Arena",
+    "phira": {
+      "title": "Phira 服務器外聯設置"
+    },
     "subject": "基於返回地址構建世界",
     "cookiePolicy": "我們不使用任何 Cookie 來追蹤你。",
     "updated": "迴歸終端進行了一項非兼容更新，已重新加載此頁面應用更新。請注意你需要重新登錄。",
@@ -387,6 +390,10 @@
       "record": {
         "placeholder": "請輸入底部備案號",
         "label": "中國工信部 ICP 備案號"
+      },
+      "phiraBaseUrl": {
+        "placeholder": "例如 https://phira.5wyxi.com",
+        "label": "Phira 服務器地址"
       },
       "hideMaker": {
         "disabled": "此選項目前不可用",
@@ -1003,7 +1010,13 @@
       "evidence": "Screenshot policy",
       "teamSize": "Team size",
       "lifecycle": "Lifecycle",
-      "visibility": "Leaderboard visibility"
+      "visibility": "Leaderboard visibility",
+      "description": "賽事介紹",
+      "basicInfo": "基本資訊",
+      "save": "儲存",
+      "cover": "比賽海報",
+      "teamSizeMin": "最少人數",
+      "teamSizeMax": "最大人數"
     },
     "lifecycle": {
       "draft": "Draft",
@@ -1146,7 +1159,22 @@
       "scripts": "Scoring",
       "review": "Review",
       "import": "Import",
-      "advance": "Advance lifecycle",
+      "advance": "推進階段",
+      "confirm": "確認操作",
+      "advanceTo": "推進至 {{stage}}",
+      "lifecycleControl": "賽事生命週期",
+      "lifecycleControlDescription": "將階段推進與基本資訊儲存分開，降低誤操作風險。",
+      "lifecycleSettings": "設定階段計畫",
+      "lifecycleComplete": "賽事已完成全部生命週期階段",
+      "saveLifecycle": "儲存生命週期設定",
+      "scheduleMode": "階段進入方式",
+      "schedule": { "manual": "手動進入", "scheduled": "定時進入" },
+      "stageStart": "階段開啟時間",
+      "stageStartRequired": "定時階段必須填寫開啟時間",
+      "invalidStageStart": "階段開啟時間格式無效",
+      "stageStartBeforeCreation": "階段開啟時間不能早於賽事建立時間",
+      "stageStartOrder": "階段開啟時間必須按順序排列",
+      "organizerCanEditArchived": "允許組織者修改已歸檔賽事",
       "recompute": "Recompute",
       "userId": "User ID",
       "role": "Role",

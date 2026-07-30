@@ -25,6 +25,19 @@ export default function SideBar() {
           activeMatch="exact"
           class="w-full"
           ghost
+          href="/admin/phira"
+          justify="start"
+          disabled={!accountStore.permissions.includes(Permission.DevOps)}
+        >
+          <span class="shrink-0 icon-[fluent--cloud-20-regular] w-5 h-5" />
+          <span>{t("platform.phira.title")}</span>
+        </Link>
+      </li>
+      <li class="w-full">
+        <Link
+          activeMatch="exact"
+          class="w-full"
+          ghost
           href="/admin/logs"
           justify="start"
           disabled={

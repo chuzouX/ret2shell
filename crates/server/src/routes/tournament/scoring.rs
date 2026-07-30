@@ -531,7 +531,7 @@ fn should_publish(visibility: LeaderboardVisibility, lifecycle: Lifecycle) -> bo
   }
 }
 
-pub(super) async fn recompute_now(db: &Database, tournament_id: i64) -> Result<(), ResponseError> {
+pub(crate) async fn recompute_now(db: &Database, tournament_id: i64) -> Result<(), ResponseError> {
   let tournament = access::tournament(db, tournament_id).await?;
   let script = scoring_script_version::Entity::find()
     .filter(scoring_script_version::Column::TournamentId.eq(tournament_id))

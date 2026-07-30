@@ -215,8 +215,8 @@ pub async fn create(
 }
 
 pub async fn import_phira(
-  State(db): State<Database>, Extension(token): Extension<Token>,
-  Json(input): Json<PhiraImportInput>,
+  State(db): State<Database>, Extension(config): Extension<r2s_database::config::Model>,
+  Extension(token): Extension<Token>, Json(input): Json<PhiraImportInput>,
 ) -> Result<impl IntoResponse, ResponseError> {
   if token.id <= 0 {
     return Err(ResponseError::Unauthorized(
@@ -224,7 +224,11 @@ pub async fn import_phira(
     ));
   }
   let source_id = phira_source_id(&db).await?;
-  let chart = phira::get_chart(input.external_id).await?;
+  let chart = phira::get_chart(
+    config.phira.as_ref().map(|config| config.base_url.as_str()),
+    input.external_id,
+  )
+  .await?;
   let external_id = chart.id.to_string();
   if let Some(existing) = chart_library::Entity::find()
     .filter(chart_library::Column::SourceId.eq(source_id))

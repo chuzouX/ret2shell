@@ -20,3 +20,5 @@ pub mod m_20260729_000001_expand_chart_library;
 pub mod m_20260729_000002_expand_tournament_chart_library;
 pub mod m_20260729_000004_move_chart_visibility;
 pub mod m_20260729_000005_remove_exclusive_chart_source;
+pub mod m_20260729_000006_add_phira_config;
+pub mod m_20260729_000007_add_tournament_lifecycle_schedule;

@@ -49,6 +49,9 @@ export type MediaConfig = {
   anti_theft: boolean;
   limit: number;
 };
+export type PhiraConfig = {
+  base_url: string;
+};
 export type QueueConfig = {
   host: string;
   port: number;
@@ -83,6 +86,7 @@ export type Config = {
   email: EmailConfig;
   logging: LoggingConfig;
   media: MediaConfig;
+  phira?: PhiraConfig;
   queue: QueueConfig;
   server: ServerConfig;
 };

@@ -24,7 +24,15 @@ export default function () {
   const info = usePlatformInfo();
   const [form, { Form, Field }] = createForm<PlatformConfigForm>({
     initialValues: {
-      ...JSON.parse(JSON.stringify(config.data?.server || {})),
+      name: "",
+      footer_info: "",
+      footer_url: "",
+      subject_info: "",
+      subject_url: "",
+      record: "",
+      hide_maker: false,
+      highlight_banner: "",
+      phira_base_url: "",
     },
   });
   const mutation = useUpdatePlatformConfigMutation({
@@ -34,10 +42,11 @@ export default function () {
     },
   });
   async function onSubmit(result: PlatformConfigForm) {
+    if (!config.data) return;
     const mergedConfig = {
       ...config.data,
       server: {
-        ...config.data?.server,
+        ...config.data.server,
         name: result.name,
         footer_info: result.footer_info,
         footer_url: result.footer_url,

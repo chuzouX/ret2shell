@@ -9,7 +9,7 @@ pub(crate) mod access;
 mod communication;
 mod core;
 mod results;
-mod scoring;
+pub(crate) mod scoring;
 
 pub fn router(_state: &GlobalState) -> Router<GlobalState> {
   Router::new()

@@ -2,6 +2,7 @@ import type {
   ChartLibrary,
   ChartTag,
   ChartVisibility,
+  LifecycleScheduleMode,
   LeaderboardSnapshot,
   Registration,
   ScoringScript,
@@ -23,7 +24,17 @@ export const getTournament = async (id: number) => await api.get(`${root}/${id}`
 type CreateTournamentInput = Partial<Tournament> & Pick<Tournament, "name">;
 export const createTournament = async (input: CreateTournamentInput) =>
   await api.post(root, { json: input }).json<Tournament>();
-export const updateTournament = async (id: number, input: Partial<Tournament>) =>
+export type UpdateTournamentInput = Partial<Omit<Tournament, "registration_at" | "running_at" | "review_at" | "finished_at">> & {
+  registration_at?: DateTime | null;
+  running_at?: DateTime | null;
+  review_at?: DateTime | null;
+  finished_at?: DateTime | null;
+  registration_schedule?: LifecycleScheduleMode;
+  running_schedule?: LifecycleScheduleMode;
+  review_schedule?: LifecycleScheduleMode;
+  finished_schedule?: LifecycleScheduleMode;
+};
+export const updateTournament = async (id: number, input: UpdateTournamentInput) =>
   await api.patch(`${root}/${id}`, { json: input }).json<Tournament>();
 export const deleteTournament = async (id: number) => await safeJson(api.delete(`${root}/${id}`).json<null>());
 export const getStaff = async (id: number) => await api.get(`${root}/${id}/staff`).json<TournamentStaff[]>();

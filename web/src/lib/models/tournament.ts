@@ -1,6 +1,7 @@
 import type { DateTime } from "luxon";
 
 export type TournamentLifecycle = "draft" | "registration" | "running" | "review" | "finished" | "archived";
+export type LifecycleScheduleMode = "manual" | "scheduled";
 export type CompetitionMode = "individual" | "team" | "both";
 export type EvidencePolicy = "required" | "optional" | "disabled";
 export type LeaderboardVisibility = "live" | "frozen" | "after_end";
@@ -24,6 +25,15 @@ export interface Tournament {
   registration_end_at?: DateTime;
   start_at?: DateTime;
   end_at?: DateTime;
+  registration_schedule: LifecycleScheduleMode;
+  registration_at?: DateTime;
+  running_schedule: LifecycleScheduleMode;
+  running_at?: DateTime;
+  review_schedule: LifecycleScheduleMode;
+  review_at?: DateTime;
+  finished_schedule: LifecycleScheduleMode;
+  finished_at?: DateTime;
+  organizer_can_edit_archived: boolean;
   created_at: DateTime;
   updated_at: DateTime;
 }

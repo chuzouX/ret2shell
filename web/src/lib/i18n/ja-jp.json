@@ -254,6 +254,9 @@
   },
   "platform": {
     "name": "Rhythm Arena",
+    "phira": {
+      "title": "Phiraサーバー外部接続設定"
+    },
     "subject": "戻り先のアドレスに基づいて世界を構築します",
     "cookiePolicy": "私たちはあなたを追跡するためにどの Cookie も使用していません。",
     "updated": "端末に戻るには非互換の更新が行われました。このページは更新を適用するために再読み込みされました。再度ログインする必要がありますのでご注意ください。",
@@ -387,6 +390,10 @@
       "record": {
         "placeholder": "下部の登録番号を入力してください",
         "label": "中国工業情報技術省ICP登録番号"
+      },
+      "phiraBaseUrl": {
+        "placeholder": "例 https://phira.5wyxi.com",
+        "label": "Phira サーバー URL"
       },
       "hideMaker": {
         "disabled": "この項目は現在利用できません",
@@ -1003,7 +1010,13 @@
       "evidence": "Screenshot policy",
       "teamSize": "Team size",
       "lifecycle": "Lifecycle",
-      "visibility": "Leaderboard visibility"
+      "visibility": "Leaderboard visibility",
+      "description": "Description",
+      "basicInfo": "Basic Info",
+      "save": "Save",
+      "cover": "Cover image",
+      "teamSizeMin": "Min size",
+      "teamSizeMax": "Max size"
     },
     "lifecycle": {
       "draft": "Draft",
@@ -1147,6 +1160,21 @@
       "review": "Review",
       "import": "Import",
       "advance": "Advance lifecycle",
+      "confirm": "操作を確認",
+      "advanceTo": "{{stage}} へ進める",
+      "lifecycleControl": "大会ライフサイクル",
+      "lifecycleControlDescription": "基本情報の保存と段階変更を分離し、誤操作を防ぎます。",
+      "lifecycleSettings": "段階スケジュールを設定",
+      "lifecycleComplete": "大会のすべてのライフサイクル段階が完了しています",
+      "saveLifecycle": "ライフサイクル設定を保存",
+      "scheduleMode": "段階移行方式",
+      "schedule": { "manual": "手動", "scheduled": "スケジュール" },
+      "stageStart": "段階開始時刻",
+      "stageStartRequired": "スケジュール段階には開始時刻が必要です",
+      "invalidStageStart": "段階開始時刻が無効です",
+      "stageStartBeforeCreation": "段階開始時刻は大会作成時刻より前にできません",
+      "stageStartOrder": "段階開始時刻は時系列順である必要があります",
+      "organizerCanEditArchived": "主催者によるアーカイブ済み大会の編集を許可",
       "recompute": "Recompute",
       "userId": "User ID",
       "role": "Role",

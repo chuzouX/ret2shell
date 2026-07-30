@@ -254,6 +254,9 @@
   },
   "platform": {
     "name": "Rhythm Arena",
+    "phira": {
+      "title": "Phira服务器外联设置"
+    },
     "subject": "基于返回地址构建世界",
     "cookiePolicy": "我们不使用任何 Cookie 来追踪你。",
     "updated": "回归终端进行了一项非兼容更新，已重新加载此页面应用更新。请注意你需要重新登录。",
@@ -387,6 +390,10 @@
       "record": {
         "placeholder": "请输入底部备案号",
         "label": "中国工信部 ICP 备案号"
+      },
+      "phiraBaseUrl": {
+        "placeholder": "例如 https://phira.5wyxi.com",
+        "label": "Phira 服务器地址"
       },
       "hideMaker": {
         "disabled": "该选项当前不可用",
@@ -980,7 +987,7 @@
     "withOAuth": "使用认证服务"
   },
   "tournament": {
-    "title": "节奏赛事",
+    "title": "音游赛事",
     "listSubtitle": "创建、参与并运营音游赛事。",
     "past": "历史赛事",
     "pastSubtitle": "已结束或归档的赛事仍可在这里回顾。",
@@ -1153,6 +1160,24 @@
       "review": "审核",
       "import": "导入",
       "advance": "推进阶段",
+      "confirm": "确认操作",
+      "advanceTo": "推进至 {{stage}}",
+      "lifecycleControl": "赛事生命周期",
+      "lifecycleControlDescription": "将阶段推进与基本信息保存分开，降低误操作风险。",
+      "lifecycleSettings": "配置阶段计划",
+      "lifecycleComplete": "赛事已完成全部生命周期阶段",
+      "saveLifecycle": "保存生命周期配置",
+      "scheduleMode": "阶段进入方式",
+      "schedule": {
+        "manual": "手动进入",
+        "scheduled": "定时进入"
+      },
+      "stageStart": "阶段开启时间",
+      "stageStartRequired": "定时阶段必须填写开启时间",
+      "invalidStageStart": "阶段开启时间格式无效",
+      "stageStartBeforeCreation": "阶段开启时间不能早于赛事创建时间",
+      "stageStartOrder": "阶段开启时间必须按顺序排列",
+      "organizerCanEditArchived": "允许组织者修改已归档赛事",
       "recompute": "重新计算",
       "userId": "用户 ID",
       "role": "角色",

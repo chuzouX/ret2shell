@@ -32,6 +32,8 @@ impl MigratorTrait for Migrator {
       Box::new(migrations::m_20260729_000002_expand_tournament_chart_library::Migration),
       Box::new(migrations::m_20260729_000004_move_chart_visibility::Migration),
       Box::new(migrations::m_20260729_000005_remove_exclusive_chart_source::Migration),
+      Box::new(migrations::m_20260729_000006_add_phira_config::Migration),
+      Box::new(migrations::m_20260729_000007_add_tournament_lifecycle_schedule::Migration),
       Box::new(migrations::m_20250105_000001_create_oauth_provider::Migration),
       Box::new(migrations::m_20250114_000001_create_oauth_index::Migration),
       Box::new(migrations::m_20250721_000001_create_ip_time_info::Migration),

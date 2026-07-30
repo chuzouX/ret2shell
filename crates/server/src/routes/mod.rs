@@ -39,7 +39,7 @@ mod event;
 mod media;
 mod platform;
 mod rpc;
-mod tournament;
+pub(crate) mod tournament;
 mod user;
 mod wiki;
 

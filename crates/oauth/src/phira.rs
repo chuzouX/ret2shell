@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use thiserror::Error;
 
-const PHIRA_URL: &str = "https://phira.5wyxi.com";
+pub const DEFAULT_BASE_URL: &str = "https://phira.5wyxi.com";
 
 pub fn debug_event(hypothesis_id: &str, message: &str, data: Value) {
   let payload = serde_json::json!({
@@ -80,7 +80,14 @@ fn client() -> Result<reqwest::Client, PhiraError> {
     .map_err(PhiraError::Request)
 }
 
-pub async fn get_chart(id: i64) -> Result<Chart, PhiraError> {
+fn endpoint(base_url: Option<&str>, path: &str) -> String {
+  let base_url = base_url
+    .filter(|base_url| !base_url.trim().is_empty())
+    .unwrap_or(DEFAULT_BASE_URL);
+  format!("{}{path}", base_url.trim_end_matches('/'))
+}
+
+pub async fn get_chart(base_url: Option<&str>, id: i64) -> Result<Chart, PhiraError> {
   // #region debug-point D:request
   debug_event(
     "D",
@@ -89,7 +96,7 @@ pub async fn get_chart(id: i64) -> Result<Chart, PhiraError> {
   );
   // #endregion
   let response = client()?
-    .get(format!("{PHIRA_URL}/chart/{id}"))
+    .get(endpoint(base_url, &format!("/chart/{id}")))
     .header(reqwest::header::ACCEPT, "application/json")
     .send()
     .await
@@ -118,10 +125,13 @@ pub async fn get_chart(id: i64) -> Result<Chart, PhiraError> {
   Ok(chart)
 }
 
-pub async fn get_popular(page: u32, page_num: u32) -> Result<(i64, Vec<Chart>), PhiraError> {
+pub async fn get_popular(
+  base_url: Option<&str>, page: u32, page_num: u32,
+) -> Result<(i64, Vec<Chart>), PhiraError> {
   let response = client()?
     .get(format!(
-      "{PHIRA_URL}/chart?page={}&pageNum={}&type=-1",
+      "{}?page={}&pageNum={}&type=-1",
+      endpoint(base_url, "/chart"),
       page.max(1),
       page_num.clamp(1, 30)
     ))
@@ -139,11 +149,13 @@ pub async fn get_popular(page: u32, page_num: u32) -> Result<(i64, Vec<Chart>), 
   Ok((list.count, list.results))
 }
 
-pub async fn authenticate(email: &str, password: &str) -> Result<Identity, PhiraError> {
+pub async fn authenticate(
+  base_url: Option<&str>, email: &str, password: &str,
+) -> Result<Identity, PhiraError> {
   let client = client()?;
 
   let response = client
-    .post(format!("{PHIRA_URL}/login"))
+    .post(endpoint(base_url, "/login"))
     .header(reqwest::header::ACCEPT, "application/json")
     .json(&LoginRequest { email, password })
     .send()
@@ -177,7 +189,7 @@ pub async fn authenticate(email: &str, password: &str) -> Result<Identity, Phira
   }
 
   let response = client
-    .get(format!("{PHIRA_URL}/me"))
+    .get(endpoint(base_url, "/me"))
     .header(reqwest::header::ACCEPT, "application/json")
     .bearer_auth(&login.token)
     .send()

@@ -34,7 +34,16 @@ import {
   updateTournamentChartLibrary,
 } from "@api/tournament";
 import XLSX from "@e965/xlsx";
-import type { ChartSourceType, ChartVisibility, CompetitionMode, EvidencePolicy } from "@models/tournament";
+import type {
+  ChartSourceType,
+  ChartVisibility,
+  CompetitionMode,
+  EvidencePolicy,
+  LifecycleScheduleMode,
+  TournamentLifecycle,
+} from "@models/tournament";
+import { accountStore } from "@storage/account";
+import { Permission } from "@models/user";
 import { useParams } from "@solidjs/router";
 import { t } from "@storage/theme";
 import Button from "@widgets/button";
@@ -90,12 +99,17 @@ export default function () {
   const [libraryCover, setLibraryCover] = createSignal("");
   const [metadataLocked, setMetadataLocked] = createSignal(false);
   const [phiraDialogOpen, setPhiraDialogOpen] = createSignal(false);
-  // Confirm dialog
   const [confirmOpen, setConfirmOpen] = createSignal(false);
   const [confirmMsg, setConfirmMsg] = createSignal("");
+  const [confirmActionLabel, setConfirmActionLabel] = createSignal(t("general.actions.delete.title"));
   const [confirmAction, setConfirmAction] = createSignal<() => Promise<unknown>>(() => Promise.resolve());
-  const askConfirm = (msg: string, action: () => Promise<unknown>) => {
+  const askConfirm = (
+    msg: string,
+    action: () => Promise<unknown>,
+    actionLabel = t("general.actions.delete.title")
+  ) => {
     setConfirmMsg(msg);
+    setConfirmActionLabel(actionLabel);
     setConfirmAction(() => action);
     setConfirmOpen(true);
   };
@@ -113,7 +127,18 @@ export default function () {
   const [libraryVisibility, setLibraryVisibility] = createSignal<ChartVisibility>();
   const [editTeamMin, setEditTeamMin] = createSignal("1");
   const [editTeamMax, setEditTeamMax] = createSignal("5");
+  const [editLifecycle, setEditLifecycle] = createSignal<TournamentLifecycle>("draft");
+  const [registrationSchedule, setRegistrationSchedule] = createSignal<LifecycleScheduleMode>("manual");
+  const [registrationAt, setRegistrationAt] = createSignal("");
+  const [runningSchedule, setRunningSchedule] = createSignal<LifecycleScheduleMode>("manual");
+  const [runningAt, setRunningAt] = createSignal("");
+  const [reviewSchedule, setReviewSchedule] = createSignal<LifecycleScheduleMode>("manual");
+  const [reviewAt, setReviewAt] = createSignal("");
+  const [finishedSchedule, setFinishedSchedule] = createSignal<LifecycleScheduleMode>("manual");
+  const [finishedAt, setFinishedAt] = createSignal("");
+  const [organizerCanEditArchived, setOrganizerCanEditArchived] = createSignal(false);
   const [showEdit, setShowEdit] = createSignal(false);
+  const [showLifecycleEdit, setShowLifecycleEdit] = createSignal(false);
   const toggleEdit = () => {
     const next = !showEdit();
     if (next) {
@@ -132,7 +157,9 @@ export default function () {
   };
   const saveEdit = () =>
     run(
-      async () =>
+      async () => {
+        const current = tournament();
+        if (!current) return;
         await updateTournament(id(), {
           name: editName().trim(),
           brief: editBrief().trim(),
@@ -141,10 +168,74 @@ export default function () {
           evidence_policy: editEvidence(),
           team_size_min: Math.max(1, Number(editTeamMin()) || 1),
           team_size_max: Math.max(1, Number(editTeamMax()) || 1),
-        }),
+        });
+      },
       () => {
         refetchTournament();
         setShowEdit(false);
+      }
+    );
+
+  const openLifecycleEdit = () => {
+    const current = tournament();
+    if (!current) return;
+    setEditLifecycle(current.lifecycle);
+    setRegistrationSchedule(current.registration_schedule);
+    setRegistrationAt(toLocalDateTime(current.registration_at));
+    setRunningSchedule(current.running_schedule);
+    setRunningAt(toLocalDateTime(current.running_at));
+    setReviewSchedule(current.review_schedule);
+    setReviewAt(toLocalDateTime(current.review_at));
+    setFinishedSchedule(current.finished_schedule);
+    setFinishedAt(toLocalDateTime(current.finished_at));
+    setOrganizerCanEditArchived(current.organizer_can_edit_archived);
+    setShowLifecycleEdit((value) => !value);
+  };
+
+  const saveLifecycle = () =>
+    run(
+      async () => {
+        const current = tournament();
+        if (!current) return;
+        const stages = [
+          [registrationSchedule(), registrationAt()],
+          [runningSchedule(), runningAt()],
+          [reviewSchedule(), reviewAt()],
+          [finishedSchedule(), finishedAt()],
+        ] as const;
+        let previous: DateTime | undefined;
+        for (const [mode, value] of stages) {
+          const at = value ? DateTime.fromISO(value) : undefined;
+          if (mode === "scheduled" && !at?.isValid) {
+            throw new Error(t("tournament.admin.stageStartRequired"));
+          }
+          if (at && !at.isValid) {
+            throw new Error(t("tournament.admin.invalidStageStart"));
+          }
+          if (at && at < current.created_at) {
+            throw new Error(t("tournament.admin.stageStartBeforeCreation"));
+          }
+          if (at && previous && at < previous) {
+            throw new Error(t("tournament.admin.stageStartOrder"));
+          }
+          if (at) previous = at;
+        }
+        await updateTournament(id(), {
+          lifecycle: editLifecycle(),
+          registration_schedule: registrationSchedule(),
+          registration_at: fromLocalDateTime(registrationAt()),
+          running_schedule: runningSchedule(),
+          running_at: fromLocalDateTime(runningAt()),
+          review_schedule: reviewSchedule(),
+          review_at: fromLocalDateTime(reviewAt()),
+          finished_schedule: finishedSchedule(),
+          finished_at: fromLocalDateTime(finishedAt()),
+          organizer_can_edit_archived: organizerCanEditArchived(),
+        });
+      },
+      () => {
+        refetchTournament();
+        setShowLifecycleEdit(false);
       }
     );
 
@@ -159,17 +250,30 @@ export default function () {
       setBusy(false);
     }
   };
+  const lifecycleItems = ["draft", "registration", "running", "review", "finished", "archived"] as const;
+  const scheduleItems = ["manual", "scheduled"] as const;
+  const toLocalDateTime = (value?: DateTime) => value?.toLocal().toFormat("yyyy-MM-dd'T'HH:mm") || "";
+  const fromLocalDateTime = (value: string) => (value ? DateTime.fromISO(value).toUTC() : null);
   const nextLifecycle = () =>
-    (
-      ({
-        draft: "registration",
-        registration: "running",
-        running: "review",
-        review: "finished",
-        finished: "archived",
-        archived: "archived",
-      }) as const
-    )[tournament()?.lifecycle ?? "archived"];
+    ({
+      draft: "registration",
+      registration: "running",
+      running: "review",
+      review: "finished",
+      finished: "archived",
+    } as const)[tournament()?.lifecycle ?? "archived"];
+  const requestLifecycleChange = (next: TournamentLifecycle) => {
+    const current = tournament();
+    if (!current || current.lifecycle === next) return;
+    askConfirm(
+      `${t(`tournament.lifecycle.${current.lifecycle}`)} → ${t(`tournament.lifecycle.${next}`)}`,
+      async () => {
+        await updateTournament(id(), { lifecycle: next });
+        await refetchTournament();
+      },
+      t("tournament.admin.confirm")
+    );
+  };
   const chooseTemplate = (key: string) => {
     setTemplateKey(key);
     const value = templates()?.find((item) => item.key === key);
@@ -282,7 +386,7 @@ export default function () {
                     onInput={(e) => setEditDescription(e.currentTarget.value)}
                   />
                 </div>
-                <div class="grid sm:grid-cols-3 gap-3">
+                <div class="grid sm:grid-cols-2 gap-3">
                   <Select
                     label={t("tournament.fields.mode")}
                     value={[editMode()]}
@@ -303,30 +407,146 @@ export default function () {
                       { label: t("tournament.evidence.disabled"), value: "disabled" },
                     ]}
                   />
-                  <div class="flex gap-2 items-end">
-                    <Input
-                      title={t("tournament.fields.teamSizeMin")}
-                      type="number"
-                      size="sm"
-                      min="1"
-                      value={editTeamMin()}
-                      onInput={(e) => setEditTeamMin(e.currentTarget.value)}
-                    />
-                    <Input
-                      title={t("tournament.fields.teamSizeMax")}
-                      type="number"
-                      size="sm"
-                      min="1"
-                      value={editTeamMax()}
-                      onInput={(e) => setEditTeamMax(e.currentTarget.value)}
-                    />
-                  </div>
+                  <Show when={editMode() !== "individual"}>
+                    <div class="flex gap-2 items-end">
+                      <Input
+                        title={t("tournament.fields.teamSizeMin")}
+                        type="number"
+                        size="sm"
+                        min="1"
+                        value={editTeamMin()}
+                        onInput={(e) => setEditTeamMin(e.currentTarget.value)}
+                      />
+                      <Input
+                        title={t("tournament.fields.teamSizeMax")}
+                        type="number"
+                        size="sm"
+                        min="1"
+                        value={editTeamMax()}
+                        onInput={(e) => setEditTeamMax(e.currentTarget.value)}
+                      />
+                    </div>
+                  </Show>
                 </div>
                 <div class="flex justify-end">
                   <Button level="primary" loading={busy()} onClick={saveEdit}>
                     <span class="icon-[fluent--save-20-regular] w-5 h-5" />
                     {t("tournament.fields.save")}
                   </Button>
+                </div>
+              </Show>
+            </div>
+            <div class="border border-primary/25 rounded-lg p-5 space-y-5">
+              <div class="flex items-start gap-3">
+                <span class="icon-[fluent--arrow-sync-circle-20-regular] w-6 h-6 text-primary" />
+                <div class="min-w-0">
+                  <h3 class="font-bold">{t("tournament.admin.lifecycleControl")}</h3>
+                  <p class="text-sm opacity-60 mt-1">{t("tournament.admin.lifecycleControlDescription")}</p>
+                </div>
+                <span class="flex-1" />
+                <Button size="sm" ghost onClick={openLifecycleEdit}>
+                  <span class="icon-[fluent--settings-20-regular] w-4 h-4" />
+                  {showLifecycleEdit() ? t("general.actions.close.title") : t("tournament.admin.lifecycleSettings")}
+                </Button>
+              </div>
+              <div class="flex flex-wrap items-center gap-2">
+                <div class="px-3 py-2 rounded-md bg-primary/15 text-primary font-bold">
+                  {t(`tournament.lifecycle.${tournament()?.lifecycle}`)}
+                </div>
+                <span class="icon-[fluent--arrow-right-20-regular] w-5 h-5 opacity-40" />
+                <Show
+                  when={nextLifecycle()}
+                  fallback={<span class="text-sm opacity-60">{t("tournament.admin.lifecycleComplete")}</span>}
+                >
+                  {(next) => (
+                    <Button level="primary" loading={busy()} onClick={() => requestLifecycleChange(next())}>
+                      <span class="icon-[fluent--arrow-forward-20-regular] w-5 h-5" />
+                      {t("tournament.admin.advanceTo", { stage: t(`tournament.lifecycle.${next()}`) })}
+                    </Button>
+                  )}
+                </Show>
+              </div>
+              <div class="grid grid-cols-2 md:grid-cols-6 gap-2">
+                {lifecycleItems.map((stage, index) => (
+                  <div
+                    class="relative border rounded-md p-3 text-center"
+                    classList={{
+                      "border-primary bg-primary/10": tournament()?.lifecycle === stage,
+                      "border-layer-content/15 opacity-50": tournament()?.lifecycle !== stage,
+                    }}
+                  >
+                    <div class="text-xs opacity-60">{index + 1}</div>
+                    <div class="font-bold text-sm mt-1">{t(`tournament.lifecycle.${stage}`)}</div>
+                  </div>
+                ))}
+              </div>
+              <Show when={showLifecycleEdit()}>
+                <div class="border-t border-layer-content/15 pt-4 space-y-4">
+                  <div class="flex items-center gap-2">
+                    <span class="icon-[fluent--calendar-clock-20-regular] w-5 h-5 text-primary" />
+                    <h4 class="font-bold">{t("tournament.admin.lifecycleSettings")}</h4>
+                  </div>
+                  <Select
+                    label={t("tournament.fields.lifecycle")}
+                    value={[editLifecycle()]}
+                    disabled={tournament()?.lifecycle === "archived" && !accountStore.permissions.includes(Permission.DevOps)}
+                    onValueChange={(e) => setEditLifecycle(e.value[0] as TournamentLifecycle)}
+                    items={lifecycleItems.map((value) => ({
+                      label: t(`tournament.lifecycle.${value}`),
+                      value,
+                    }))}
+                  />
+                  <div class="grid md:grid-cols-2 gap-3">
+                    <For
+                      each={[
+                        ["registration", registrationSchedule, setRegistrationSchedule, registrationAt, setRegistrationAt],
+                        ["running", runningSchedule, setRunningSchedule, runningAt, setRunningAt],
+                        ["review", reviewSchedule, setReviewSchedule, reviewAt, setReviewAt],
+                        ["finished", finishedSchedule, setFinishedSchedule, finishedAt, setFinishedAt],
+                      ] as const}
+                    >
+                      {(stage) => (
+                        <div class="border border-layer-content/15 rounded-lg p-3 space-y-2">
+                          <div class="font-bold">{t(`tournament.lifecycle.${stage[0]}`)}</div>
+                          <Select
+                            label={t("tournament.admin.scheduleMode")}
+                            value={[stage[1]() ]}
+                            items={scheduleItems.map((value) => ({
+                              label: t(`tournament.admin.schedule.${value}`),
+                              value,
+                            }))}
+                            onValueChange={(e) => stage[2](e.value[0] as LifecycleScheduleMode)}
+                          />
+                          <Input
+                            title={t("tournament.admin.stageStart")}
+                            type="datetime-local"
+                            value={stage[3]()}
+                            disabled={stage[1]() !== "scheduled"}
+                            onInput={(e) => stage[4](e.currentTarget.value)}
+                          />
+                        </div>
+                      )}
+                    </For>
+                  </div>
+                  <Show when={accountStore.permissions.includes(Permission.DevOps)}>
+                    <label class="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={organizerCanEditArchived()}
+                        onChange={(e) => setOrganizerCanEditArchived(e.currentTarget.checked)}
+                      />
+                      <span>{t("tournament.admin.organizerCanEditArchived")}</span>
+                    </label>
+                  </Show>
+                  <div class="flex justify-end gap-2">
+                    <Button size="sm" ghost onClick={() => setShowLifecycleEdit(false)}>
+                      {t("general.actions.cancel.title")}
+                    </Button>
+                    <Button level="primary" loading={busy()} onClick={saveLifecycle}>
+                      <span class="icon-[fluent--save-20-regular] w-5 h-5" />
+                      {t("tournament.admin.saveLifecycle")}
+                    </Button>
+                  </div>
                 </div>
               </Show>
             </div>
@@ -340,15 +560,6 @@ export default function () {
                 <div class="font-bold mt-1">{t(`tournament.visibility.${tournament()?.leaderboard_visibility}`)}</div>
               </div>
               <div class="flex items-center justify-end gap-2">
-                <Button
-                  disabled={!nextLifecycle()}
-                  loading={busy()}
-                  onClick={() =>
-                    run(async () => await updateTournament(id(), { lifecycle: nextLifecycle() }), refetchTournament)
-                  }
-                >
-                  {t("tournament.admin.advance")}
-                </Button>
                 <Button
                   level="primary"
                   onClick={() =>
@@ -1145,6 +1356,7 @@ export default function () {
         class="hidden"
       >
         <div class="space-y-4 min-w-[280px]">
+          <p class="font-bold">{confirmActionLabel()}</p>
           <p class="text-sm">{confirmMsg()}</p>
           <div class="flex justify-end gap-2">
             <Button size="sm" ghost onClick={() => setConfirmOpen(false)}>
@@ -1152,7 +1364,7 @@ export default function () {
             </Button>
             <Button
               size="sm"
-              level="error"
+              level="primary"
               onClick={() =>
                 run(async () => {
                   await confirmAction()();
@@ -1160,7 +1372,7 @@ export default function () {
                 })
               }
             >
-              {t("general.actions.delete.title")}
+              {confirmActionLabel()}
             </Button>
           </div>
         </div>

@@ -28,14 +28,7 @@ pub enum Lifecycle {
 
 impl Lifecycle {
   pub fn can_transition_to(self, next: Self) -> bool {
-    matches!(
-      (self, next),
-      (Self::Draft, Self::Registration)
-        | (Self::Registration, Self::Running)
-        | (Self::Running, Self::Review)
-        | (Self::Review, Self::Finished)
-        | (Self::Finished, Self::Archived)
-    )
+    self == next || self != Self::Archived
   }
 
   pub fn locks_teams(self) -> bool {
@@ -44,6 +37,19 @@ impl Lifecycle {
       Self::Running | Self::Review | Self::Finished | Self::Archived
     )
   }
+}
+
+#[derive(
+  Clone, Copy, Debug, Default, PartialEq, Eq, Serialize, Deserialize, EnumIter, DeriveActiveEnum,
+)]
+#[sea_orm(rs_type = "String", db_type = "String(StringLen::N(16))")]
+#[serde(rename_all = "snake_case")]
+pub enum LifecycleScheduleMode {
+  #[default]
+  #[sea_orm(string_value = "manual")]
+  Manual,
+  #[sea_orm(string_value = "scheduled")]
+  Scheduled,
 }
 
 #[derive(
@@ -116,6 +122,15 @@ pub struct Model {
   pub start_at: Option<DateTime<Utc>>,
   #[serde(with = "ts_seconds_option")]
   pub end_at: Option<DateTime<Utc>>,
+  pub registration_schedule: LifecycleScheduleMode,
+  pub registration_at: Option<DateTime<Utc>>,
+  pub running_schedule: LifecycleScheduleMode,
+  pub running_at: Option<DateTime<Utc>>,
+  pub review_schedule: LifecycleScheduleMode,
+  pub review_at: Option<DateTime<Utc>>,
+  pub finished_schedule: LifecycleScheduleMode,
+  pub finished_at: Option<DateTime<Utc>>,
+  pub organizer_can_edit_archived: bool,
   #[serde(with = "ts_seconds")]
   pub created_at: DateTime<Utc>,
   #[serde(with = "ts_seconds")]
@@ -131,10 +146,11 @@ mod tests {
   use super::Lifecycle;
 
   #[test]
-  fn lifecycle_only_moves_forward_one_step() {
+  fn lifecycle_allows_non_archived_changes() {
     assert!(Lifecycle::Draft.can_transition_to(Lifecycle::Registration));
     assert!(Lifecycle::Review.can_transition_to(Lifecycle::Finished));
-    assert!(!Lifecycle::Draft.can_transition_to(Lifecycle::Running));
-    assert!(!Lifecycle::Finished.can_transition_to(Lifecycle::Review));
+    assert!(Lifecycle::Draft.can_transition_to(Lifecycle::Running));
+    assert!(Lifecycle::Finished.can_transition_to(Lifecycle::Review));
+    assert!(!Lifecycle::Archived.can_transition_to(Lifecycle::Finished));
   }
 }

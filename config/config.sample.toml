@@ -108,6 +108,10 @@ port = 4222
 # ping_interval = 5
 # tls = false
 
+# * Phira server config
+[phira]
+base_url = 'https://phira.5wyxi.com'
+
 # * Server config
 [server]
 api_base_path   = '/api'

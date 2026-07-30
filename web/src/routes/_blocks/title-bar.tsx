@@ -2,7 +2,7 @@ import { useAccountProfile } from "@api/account";
 import { getStaff, getTournament } from "@api/tournament";
 import type { Tournament } from "@models/tournament";
 import { Permission } from "@models/user";
-import { useLocation, useParams } from "@solidjs/router";
+import { useLocation } from "@solidjs/router";
 import { accountStore } from "@storage/account";
 import { t } from "@storage/theme";
 import Link from "@widgets/link";
@@ -22,10 +22,6 @@ function GlobalNav(props: { canAdmin: boolean }) {
       <Link href="/charts" activeMatch="exact" ghost size="sm">
         <span class="icon-[fluent--library-20-regular] w-5 h-5" />
         <span class="hidden md:inline">{t("tournament.charts.library")}</span>
-      </Link>
-      <Link href="/wiki" activeMatch="partial" ghost size="sm">
-        <span class="icon-[fluent--book-number-20-regular] w-5 h-5" />
-        <span class="hidden md:inline">{t("wiki.title")}</span>
       </Link>
       <Link href="/bulletin" activeMatch="partial" ghost size="sm">
         <span class="icon-[fluent--megaphone-20-regular] w-5 h-5" />
@@ -95,10 +91,10 @@ function TournamentNav(props: { tournamentId: number; tournament?: Tournament; c
 export default function TitleBar() {
   const account = useAccountProfile({ enabled: () => !!accountStore.token });
   const location = useLocation();
-  const params = useParams();
   const tournamentId = createMemo(() => {
-    if (!location.pathname.startsWith("/tournaments/")) return null;
-    const id = Number.parseInt(params.tournament || "", 10);
+    const match = location.pathname.match(/^\/tournaments\/([^/]+)/);
+    if (!match) return null;
+    const id = Number.parseInt(match[1], 10);
     return Number.isFinite(id) ? id : null;
   });
   const [tournament] = createResource(tournamentId, getTournament);
@@ -109,6 +105,11 @@ export default function TitleBar() {
     );
   const canManageTournament = () =>
     tournament()?.owner_id === accountStore.id || staff()?.some((member) => member.user_id === accountStore.id);
+  const tournamentName = () => {
+    const id = tournamentId();
+    const data = tournament();
+    return id && data?.id === id ? data.name : "Rhythm Arena";
+  };
 
   return (
     <>
@@ -121,7 +122,7 @@ export default function TitleBar() {
             class="font-bold shrink-0"
           >
             <span class="icon-[fluent--music-note-2-20-filled] w-6 h-6 text-primary shrink-0" />
-            <span class="hidden sm:inline max-w-48 truncate">{tournament()?.name || "Rhythm Arena"}</span>
+            <span class="hidden sm:inline max-w-48 truncate">{tournamentName()}</span>
           </Link>
           <nav class="flex items-center gap-1 overflow-x-auto">
             <Show when={tournamentId()} fallback={<GlobalNav canAdmin={!!canAdmin()} />}>

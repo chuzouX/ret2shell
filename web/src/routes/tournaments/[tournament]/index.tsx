@@ -90,7 +90,13 @@ export default function () {
         </div>
 
         {/* Mode / Evidence / Team size badges */}
-        <div class="grid grid-cols-3 gap-2 px-1 text-sm">
+        <div
+          class="grid gap-2 px-1 text-sm"
+          classList={{
+            "grid-cols-2": tournament()?.competition_mode === "individual",
+            "grid-cols-3": tournament()?.competition_mode !== "individual",
+          }}
+        >
           <div>
             <div class="text-xs opacity-40">{t("tournament.fields.mode")}</div>
             <div class="mt-0.5 font-bold text-sm">{t(`tournament.mode.${tournament()?.competition_mode}`)}</div>
@@ -99,12 +105,14 @@ export default function () {
             <div class="text-xs opacity-40">{t("tournament.fields.evidence")}</div>
             <div class="mt-0.5 font-bold text-sm">{t(`tournament.evidence.${tournament()?.evidence_policy}`)}</div>
           </div>
-          <div>
-            <div class="text-xs opacity-40">{t("tournament.fields.teamSize")}</div>
-            <div class="mt-0.5 font-bold text-sm">
-              {tournament()?.team_size_min}—{tournament()?.team_size_max}
+          <Show when={tournament()?.competition_mode !== "individual"}>
+            <div>
+              <div class="text-xs opacity-40">{t("tournament.fields.teamSize")}</div>
+              <div class="mt-0.5 font-bold text-sm">
+                {tournament()?.team_size_min}—{tournament()?.team_size_max}
+              </div>
             </div>
-          </div>
+          </Show>
         </div>
 
         {/* Registration / CTA */}

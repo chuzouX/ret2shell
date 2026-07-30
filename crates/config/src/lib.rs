@@ -38,6 +38,7 @@ pub mod database;
 pub mod email;
 pub mod logging;
 pub mod media;
+pub mod phira;
 pub mod queue;
 pub mod server;
 pub mod traits;
@@ -63,6 +64,7 @@ pub struct GlobalConfig {
   pub email: Option<email::Config>,
   pub logging: Option<logging::Config>,
   pub media: Option<media::Config>,
+  pub phira: Option<phira::Config>,
   pub queue: Option<queue::Config>,
   pub server: Option<server::Config>,
 }

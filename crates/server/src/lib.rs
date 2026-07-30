@@ -84,6 +84,8 @@ pub async fn up(config: GlobalConfig) -> anyhow::Result<()> {
   worker::event::spawn(queue.subscribe("event").await?, event.clone(), db.clone());
   info!("starting workers: < IP Record Worker >");
   worker::ip_record::spawn(queue.subscribe("ip-record").await?, db.clone());
+  info!("starting workers: < Tournament Lifecycle Worker >");
+  worker::tournament_lifecycle::spawn(db.clone());
 
   info!("setup panic event handler...");
   push_panic_event(queue.clone()).await;

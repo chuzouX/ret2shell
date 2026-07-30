@@ -8,7 +8,9 @@ use r2s_database::{
   chart, chart_tag,
   registration::{self, RegistrationStatus},
   team_member,
-  tournament::{self, CompetitionMode, EvidencePolicy, LeaderboardVisibility, Lifecycle},
+  tournament::{
+    self, CompetitionMode, EvidencePolicy, LeaderboardVisibility, Lifecycle, LifecycleScheduleMode,
+  },
   tournament_round,
   tournament_staff::{self, StaffRole},
   tournament_team,
@@ -93,6 +95,15 @@ pub async fn create(
     registration_end_at: Set(input.registration_end_at),
     start_at: Set(input.start_at),
     end_at: Set(input.end_at),
+    registration_schedule: Set(LifecycleScheduleMode::Manual),
+    registration_at: Set(None),
+    running_schedule: Set(LifecycleScheduleMode::Manual),
+    running_at: Set(None),
+    review_schedule: Set(LifecycleScheduleMode::Manual),
+    review_at: Set(None),
+    finished_schedule: Set(LifecycleScheduleMode::Manual),
+    finished_at: Set(None),
+    organizer_can_edit_archived: Set(false),
     created_at: Set(now),
     updated_at: Set(now),
   }
@@ -127,14 +138,78 @@ pub struct UpdateTournament {
   registration_end_at: Option<DateTime<Utc>>,
   start_at: Option<DateTime<Utc>>,
   end_at: Option<DateTime<Utc>>,
+  registration_schedule: Option<LifecycleScheduleMode>,
+  registration_at: Option<Option<DateTime<Utc>>>,
+  running_schedule: Option<LifecycleScheduleMode>,
+  running_at: Option<Option<DateTime<Utc>>>,
+  review_schedule: Option<LifecycleScheduleMode>,
+  review_at: Option<Option<DateTime<Utc>>>,
+  finished_schedule: Option<LifecycleScheduleMode>,
+  finished_at: Option<Option<DateTime<Utc>>>,
+  organizer_can_edit_archived: Option<bool>,
+}
+
+fn validate_lifecycle_schedule(
+  created_at: DateTime<Utc>, stages: [(LifecycleScheduleMode, Option<DateTime<Utc>>, &str); 4],
+) -> Result<(), ResponseError> {
+  let mut previous = None;
+  for (mode, at, name) in stages {
+    if mode == LifecycleScheduleMode::Scheduled && at.is_none() {
+      return Err(ResponseError::BadRequest(format!(
+        "{name} stage start time is required for scheduled stages"
+      )));
+    }
+    if let Some(value) = at {
+      if value < created_at {
+        return Err(ResponseError::BadRequest(format!(
+          "{name} stage start time cannot be earlier than tournament creation"
+        )));
+      }
+      if previous.is_some_and(|previous| value < previous) {
+        return Err(ResponseError::BadRequest(
+          "lifecycle stage start times must be in chronological order".to_owned(),
+        ));
+      }
+      previous = Some(value);
+    }
+  }
+  Ok(())
 }
 
 pub async fn update(
   State(db): State<Database>, Extension(token): Extension<Token>, Path(tournament_id): Path<i64>,
   Json(input): Json<UpdateTournament>,
 ) -> Result<impl IntoResponse, ResponseError> {
-  access::require_organizer(&db, tournament_id, &token).await?;
   let current = access::tournament(&db, tournament_id).await?;
+  let is_devops = token.permissions.0.contains(&Permission::DevOps);
+  let staff_role = access::role(&db, tournament_id, &token).await?;
+  let can_edit = matches!(staff_role, Some(StaffRole::Owner | StaffRole::Organizer)) || is_devops;
+  if !can_edit {
+    return Err(ResponseError::Forbidden(
+      "organizer access required".to_owned(),
+    ));
+  }
+  if current.lifecycle == Lifecycle::Archived && !is_devops && !current.organizer_can_edit_archived
+  {
+    return Err(ResponseError::Forbidden(
+      "archived tournament is locked".to_owned(),
+    ));
+  }
+  if input.organizer_can_edit_archived.is_some() && !is_devops {
+    return Err(ResponseError::Forbidden(
+      "devops access required".to_owned(),
+    ));
+  }
+  if current.lifecycle == Lifecycle::Archived
+    && input
+      .lifecycle
+      .is_some_and(|value| value != Lifecycle::Archived)
+    && !is_devops
+  {
+    return Err(ResponseError::Forbidden(
+      "only devops can reopen archived tournaments".to_owned(),
+    ));
+  }
   let recompute = input
     .lifecycle
     .is_some_and(|value| value != current.lifecycle)
@@ -156,6 +231,25 @@ pub async fn update(
       "invalid team size range".to_owned(),
     ));
   }
+  let registration_schedule = input
+    .registration_schedule
+    .unwrap_or(current.registration_schedule);
+  let registration_at = input.registration_at.unwrap_or(current.registration_at);
+  let running_schedule = input.running_schedule.unwrap_or(current.running_schedule);
+  let running_at = input.running_at.unwrap_or(current.running_at);
+  let review_schedule = input.review_schedule.unwrap_or(current.review_schedule);
+  let review_at = input.review_at.unwrap_or(current.review_at);
+  let finished_schedule = input.finished_schedule.unwrap_or(current.finished_schedule);
+  let finished_at = input.finished_at.unwrap_or(current.finished_at);
+  validate_lifecycle_schedule(
+    current.created_at,
+    [
+      (registration_schedule, registration_at, "registration"),
+      (running_schedule, running_at, "running"),
+      (review_schedule, review_at, "review"),
+      (finished_schedule, finished_at, "finished"),
+    ],
+  )?;
   let mut row = current.into_active_model();
   if let Some(value) = input.name {
     row.name = Set(value);
@@ -194,6 +288,33 @@ pub async fn update(
   }
   if input.end_at.is_some() {
     row.end_at = Set(input.end_at);
+  }
+  if input.registration_schedule.is_some() {
+    row.registration_schedule = Set(registration_schedule);
+  }
+  if input.registration_at.is_some() {
+    row.registration_at = Set(registration_at);
+  }
+  if input.running_schedule.is_some() {
+    row.running_schedule = Set(running_schedule);
+  }
+  if input.running_at.is_some() {
+    row.running_at = Set(running_at);
+  }
+  if input.review_schedule.is_some() {
+    row.review_schedule = Set(review_schedule);
+  }
+  if input.review_at.is_some() {
+    row.review_at = Set(review_at);
+  }
+  if input.finished_schedule.is_some() {
+    row.finished_schedule = Set(finished_schedule);
+  }
+  if input.finished_at.is_some() {
+    row.finished_at = Set(finished_at);
+  }
+  if let Some(value) = input.organizer_can_edit_archived {
+    row.organizer_can_edit_archived = Set(value);
   }
   row.updated_at = Set(Utc::now());
   let updated = row.update(&db.conn).await?;

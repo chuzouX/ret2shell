@@ -80,6 +80,7 @@ export const routes = {
         { path: "/captcha", component: lazy(() => import("./admin/captcha/index")) },
         { path: "/email", component: lazy(() => import("./admin/email/index")) },
         { path: "/edit", component: lazy(() => import("./admin/edit/index")) },
+        { path: "/phira", component: lazy(() => import("./admin/phira/index")) },
         { path: "/logs", component: lazy(() => import("./admin/logs/index")) },
         { path: "/media", component: lazy(() => import("./admin/media/index")) },
         { path: "/oauth", component: lazy(() => import("./admin/oauth/index")) },

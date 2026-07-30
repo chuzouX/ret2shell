@@ -347,7 +347,7 @@ export default function () {
                 }
               >
                 <Card
-                  class="aspect-video w-full lg:w-4/5 rounded-b-none lg:rounded-b-lg border-b-0 lg:border-b overflow-hidden relative"
+                  class="aspect-video w-full lg:w-11/12 rounded-b-none lg:rounded-b-lg border-b-0 lg:border-b overflow-hidden relative"
                   contentClass="relative"
                 >
                   <Show
@@ -383,7 +383,7 @@ export default function () {
                   </Show>
                 </Card>
                 <Card
-                  class="w-full lg:w-3/5 relative lg:-translate-y-8 lg:translate-x-1/2 rounded-t-none lg:rounded-t-lg border-t-0 lg:border-t"
+                  class="w-full lg:w-3/5 relative lg:translate-y-8 lg:translate-x-2/3 rounded-t-none lg:rounded-t-lg border-t-0 lg:border-t"
                   contentClass="p-6 lg:px-9 flex items-center gap-6"
                 >
                   <span class="hidden lg:block icon-[fluent--music-note-2-20-filled] w-14 h-14 text-primary shrink-0" />

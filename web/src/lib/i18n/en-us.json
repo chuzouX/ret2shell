@@ -254,6 +254,9 @@
   },
   "platform": {
     "name": "Rhythm Arena",
+    "phira": {
+      "title": "Phira server connection"
+    },
     "subject": "Return-oriented programming built the world",
     "cookiePolicy": "We do not use any cookies to track you.",
     "updated": "Ret 2 Shell has done an incompatible update and this page has been reloaded to apply the update. Please note that you need to log in again.",
@@ -387,6 +390,10 @@
       "record": {
         "placeholder": "Please enter the record",
         "label": "China MIIT ICP record"
+      },
+      "phiraBaseUrl": {
+        "placeholder": "For example https://phira.5wyxi.com",
+        "label": "Phira server URL"
       },
       "hideMaker": {
         "disabled": "This option is currently unavailable",
@@ -1153,6 +1160,21 @@
       "review": "Review",
       "import": "Import",
       "advance": "Advance lifecycle",
+      "confirm": "Confirm action",
+      "advanceTo": "Advance to {{stage}}",
+      "lifecycleControl": "Tournament lifecycle",
+      "lifecycleControlDescription": "Keep stage changes separate from basic information to reduce accidental changes.",
+      "lifecycleSettings": "Configure stage schedule",
+      "lifecycleComplete": "All tournament lifecycle stages are complete",
+      "saveLifecycle": "Save lifecycle settings",
+      "scheduleMode": "Stage entry mode",
+      "schedule": { "manual": "Manual", "scheduled": "Scheduled" },
+      "stageStart": "Stage start time",
+      "stageStartRequired": "Scheduled stages require a start time",
+      "invalidStageStart": "Invalid stage start time",
+      "stageStartBeforeCreation": "Stage start time cannot be earlier than tournament creation",
+      "stageStartOrder": "Stage start times must be chronological",
+      "organizerCanEditArchived": "Allow organizers to edit archived tournaments",
       "recompute": "Recompute",
       "userId": "User ID",
       "role": "Role",
