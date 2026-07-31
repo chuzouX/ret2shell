@@ -117,6 +117,10 @@ pub struct Model {
   pub brief: String,
   #[sea_orm(column_type = "Text", nullable)]
   pub description: Option<String>,
+  #[sea_orm(column_type = "Text", nullable)]
+  pub rules: Option<String>,
+  pub rules_visible: bool,
+  pub announcements_visible: bool,
   pub owner_id: i64,
   pub lifecycle: Lifecycle,
   pub competition_mode: CompetitionMode,

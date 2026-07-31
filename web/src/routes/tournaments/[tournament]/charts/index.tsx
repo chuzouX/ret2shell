@@ -13,17 +13,18 @@ import Picture from "@widgets/picture";
 import type { TreeNode } from "@widgets/treeview";
 import TreeView from "@widgets/treeview";
 import { OverlayScrollbarsComponent } from "overlayscrollbars-solid";
-import { createMemo, createResource, createSignal, Match, Show, Switch } from "solid-js";
+import { createEffect, createMemo, createResource, createSignal, For, Match, Show, Switch } from "solid-js";
 import { Transition } from "solid-transition-group";
 
 export default function () {
   const params = useParams();
   const tournamentId = () => Number(params.tournament);
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [rounds] = createResource(tournamentId, getRounds);
   const [tags] = createResource(tournamentId, getChartTags);
   const [chartLibrary] = createResource(tournamentId, getTournamentChartLibrary);
   const [search, setSearch] = createSignal("");
+  const [openCharts, setOpenCharts] = createSignal<number[]>([]);
   const [showLeftSidebar, setShowLeftSidebar] = createSignal(false);
   const matches = createBreakpoints(breakpoints);
 
@@ -33,6 +34,17 @@ export default function () {
   const selectedDescription = createMemo(() => selectedItem()?.link.description);
   const selectedRound = createMemo(() => rounds()?.find((round) => round.id === selectedItem()?.link.round_id));
   const selectedTag = createMemo(() => tags()?.find((tag) => tag.id === selectedItem()?.link.tag_id));
+  const openChartItems = createMemo(() =>
+    openCharts()
+      .map((id) => chartLibrary()?.find((item) => item.link.id === id))
+      .filter((item): item is NonNullable<typeof item> => Boolean(item))
+  );
+  createEffect(() => {
+    const selected = selectedChartId();
+    if (selected && chartLibrary()?.some((item) => item.link.id === selected)) {
+      setOpenCharts((items) => (items.includes(selected) ? items : [...items, selected]));
+    }
+  });
   const sourceLabel = (sourceType?: string, custom = false) => {
     if (custom) return t("tournament.charts.customSource");
     switch (sourceType) {
@@ -82,6 +94,19 @@ export default function () {
     }));
   });
 
+  const openChart = (id: number) => {
+    setOpenCharts((items) => (items.includes(id) ? items : [...items, id]));
+  };
+
+  const closeChart = (id: number) => {
+    const remaining = openCharts().filter((item) => item !== id);
+    setOpenCharts(remaining);
+    if (selectedChartId() === id) {
+      const next = remaining.at(-1);
+      setSearchParams({ chart: next ? String(next) : undefined });
+    }
+  };
+
   const leftBar = () => (
     <div class="h-full flex flex-col">
       <div class="border-b border-b-layer-content/10 px-2 h-16 flex items-center">
@@ -114,6 +139,9 @@ export default function () {
               <Match when={tree().length > 0}>
                 <TreeView
                   tree={tree()}
+                  onNodeClick={(node) => {
+                    if (node.type === "item") openChart(Number(node.id));
+                  }}
                   activeSearchParams="chart"
                   highlightPaths={
                     selectedItem()
@@ -141,6 +169,38 @@ export default function () {
       <Title page={t("tournament.charts.library")} route={`/tournaments/${tournamentId()}/charts`} />
       <SidebarLayout showLeftBar={showLeftSidebar()} leftBar={leftBar}>
         <div class="flex-1 min-w-0 flex flex-col">
+          <Show when={openChartItems().length > 0}>
+            <div class="h-12 shrink-0 border-b border-layer-content/10 flex items-stretch overflow-x-auto px-2 gap-1">
+              <For each={openChartItems()}>
+                {(item) => (
+                  <div
+                    class="group min-w-36 max-w-56 flex items-center gap-2 px-3 text-xs border-x border-transparent hover:bg-layer-content/5"
+                    classList={{ "bg-layer-content/10 border-layer-content/10": item.link.id === selectedChartId() }}
+                  >
+                    <button
+                      type="button"
+                      class="min-w-0 flex-1 truncate"
+                      onClick={() => {
+                        openChart(item.link.id);
+                        setSearchParams({ chart: String(item.link.id) });
+                      }}
+                    >
+                      <span class="icon-[fluent--music-note-2-20-regular] w-3.5 h-3.5 mr-1 align-text-bottom opacity-60" />
+                      {item.chart.title}
+                    </button>
+                    <button
+                      type="button"
+                      class="shrink-0 p-1 rounded opacity-50 hover:opacity-100 hover:bg-layer-content/10"
+                      aria-label={t("general.actions.close.title")}
+                      onClick={() => closeChart(item.link.id)}
+                    >
+                      <span class="icon-[fluent--dismiss-12-regular] w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                )}
+              </For>
+            </div>
+          </Show>
           <Show
             when={selectedChart()}
             fallback={

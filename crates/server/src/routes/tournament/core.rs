@@ -47,6 +47,9 @@ pub struct CreateTournament {
   registration_end_at: Option<DateTime<Utc>>,
   start_at: Option<DateTime<Utc>>,
   end_at: Option<DateTime<Utc>>,
+  rules: Option<String>,
+  rules_visible: Option<bool>,
+  announcements_visible: Option<bool>,
 }
 
 pub async fn list(State(db): State<Database>) -> Result<impl IntoResponse, ResponseError> {
@@ -87,6 +90,9 @@ pub async fn create(
     name: Set(input.name.trim().to_owned()),
     brief: Set(input.brief),
     description: Set(input.description),
+    rules: Set(input.rules),
+    rules_visible: Set(input.rules_visible.unwrap_or(false)),
+    announcements_visible: Set(input.announcements_visible.unwrap_or(false)),
     owner_id: Set(token.id),
     lifecycle: Set(Lifecycle::Draft),
     competition_mode: Set(input.competition_mode.unwrap_or_default()),
@@ -133,6 +139,9 @@ pub struct UpdateTournament {
   name: Option<String>,
   brief: Option<String>,
   description: Option<String>,
+  rules: Option<String>,
+  rules_visible: Option<bool>,
+  announcements_visible: Option<bool>,
   lifecycle: Option<Lifecycle>,
   competition_mode: Option<CompetitionMode>,
   evidence_policy: Option<EvidencePolicy>,
@@ -265,6 +274,15 @@ pub async fn update(
   }
   if input.description.is_some() {
     row.description = Set(input.description);
+  }
+  if input.rules.is_some() {
+    row.rules = Set(input.rules);
+  }
+  if let Some(value) = input.rules_visible {
+    row.rules_visible = Set(value);
+  }
+  if let Some(value) = input.announcements_visible {
+    row.announcements_visible = Set(value);
   }
   if let Some(value) = input.lifecycle {
     row.lifecycle = Set(value);

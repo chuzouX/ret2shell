@@ -15,7 +15,9 @@ import { accountStore } from "@storage/account";
 import { t } from "@storage/theme";
 import Article from "@widgets/article";
 import Button from "@widgets/button";
+import Card from "@widgets/card";
 import Input from "@widgets/input";
+import LifecycleCountdown from "@widgets/lifecycle-countdown";
 import Link from "@widgets/link";
 import Picture from "@widgets/picture";
 import Tag from "@widgets/tag";
@@ -60,8 +62,11 @@ export default function () {
     <main class="flex-1 flex flex-col lg:flex-row-reverse">
       {/* Sidebar — right side on desktop */}
       <aside class="lg:w-2/5 lg:max-h-[calc(100vh-4rem)] lg:sticky lg:top-16 flex flex-col p-3 lg:p-6 gap-4 overflow-y-auto">
-        {/* Cover image */}
-        <div class="aspect-video w-full overflow-hidden rounded-xl relative bg-layer-content/5">
+        {/* Cover image with title overlay */}
+        <Card
+          class="aspect-video w-full overflow-hidden relative bg-layer-content/5"
+          contentClass="relative w-full h-full"
+        >
           <Picture
             class="w-full h-full"
             src={tournament()?.cover ? mediaPath(tournament()?.cover) : bgTournamentDefault}
@@ -69,49 +74,36 @@ export default function () {
           />
           <Show when={tournament()}>
             {(item) => (
-              <Tag class="absolute top-3 right-3" level={lifecycleLevel()}>
-                {t(`tournament.lifecycle.${item().lifecycle}`)}
-              </Tag>
+              <>
+                <Tag class="absolute top-3 right-3 z-10" level={lifecycleLevel()}>
+                  {t(`tournament.lifecycle.${item().lifecycle}`)}
+                </Tag>
+                <div class="absolute bottom-0 left-0 right-0 bg-layer/50 backdrop-blur-sm p-4 space-y-1">
+                  <h1 class="text-2xl font-black">{item().name}</h1>
+                  <p class="opacity-80 text-sm">{item().brief || t("tournament.noBrief")}</p>
+                  <Show when={item().start_at || item().end_at}>
+                    <p class="text-sm text-info flex flex-wrap gap-x-2">
+                      <span>{item().start_at?.toFormat("yyyy-MM-dd HH:mm") || "--"}</span>
+                      <span class="opacity-50">—</span>
+                      <span>{item().end_at?.toFormat("yyyy-MM-dd HH:mm") || "--"}</span>
+                    </p>
+                  </Show>
+                </div>
+              </>
             )}
           </Show>
-        </div>
+        </Card>
 
-        {/* Name + brief + dates */}
-        <div class="px-1 space-y-2">
-          <h1 class="text-2xl font-black">{tournament()?.name || t("tournament.title")}</h1>
-          <p class="opacity-60 text-sm">{tournament()?.brief || t("tournament.noBrief")}</p>
-          <Show when={tournament()?.start_at || tournament()?.end_at}>
-            <p class="text-sm text-info flex flex-wrap gap-x-2">
-              <span>{tournament()?.start_at?.toFormat("yyyy-MM-dd HH:mm") || "--"}</span>
-              <span class="opacity-50">—</span>
-              <span>{tournament()?.end_at?.toFormat("yyyy-MM-dd HH:mm") || "--"}</span>
-            </p>
-          </Show>
-        </div>
+        <LifecycleCountdown tournament={tournament()} />
 
-        {/* Mode / Evidence / Team size badges */}
-        <div
-          class="grid gap-2 px-1 text-sm"
-          classList={{
-            "grid-cols-2": tournament()?.competition_mode === "individual",
-            "grid-cols-3": tournament()?.competition_mode !== "individual",
-          }}
-        >
-          <div>
-            <div class="text-xs opacity-40">{t("tournament.fields.mode")}</div>
-            <div class="mt-0.5 font-bold text-sm">{t(`tournament.mode.${tournament()?.competition_mode}`)}</div>
-          </div>
-          <div>
-            <div class="text-xs opacity-40">{t("tournament.fields.evidence")}</div>
-            <div class="mt-0.5 font-bold text-sm">{t(`tournament.evidence.${tournament()?.evidence_policy}`)}</div>
-          </div>
+        {/* Mode / Evidence / Team size tags */}
+        <div class="flex flex-wrap gap-2 px-1">
+          <Tag level="info">{t(`tournament.mode.${tournament()?.competition_mode}`)}</Tag>
+          <Tag level="success">{t(`tournament.evidence.${tournament()?.evidence_policy}`)}</Tag>
           <Show when={tournament()?.competition_mode !== "individual"}>
-            <div>
-              <div class="text-xs opacity-40">{t("tournament.fields.teamSize")}</div>
-              <div class="mt-0.5 font-bold text-sm">
-                {tournament()?.team_size_min}—{tournament()?.team_size_max}
-              </div>
-            </div>
+            <Tag level="warning">
+              {tournament()?.team_size_min}—{tournament()?.team_size_max}
+            </Tag>
           </Show>
         </div>
 
@@ -155,11 +147,16 @@ export default function () {
             >
               {(record) => (
                 <div class="space-y-3">
-                  <div class="flex items-center gap-2">
-                    <span class="icon-[fluent--checkmark-circle-20-filled] text-success w-5 h-5 shrink-0" />
-                    <strong class="flex-1 truncate">{record().display_name}</strong>
-                    <span class="text-xs opacity-50">{t(`tournament.registration.status.${record().status}`)}</span>
-                  </div>
+                  <Card contentClass="p-3 flex items-center gap-3">
+                    <span class="icon-[fluent--person-20-filled] w-8 h-8 text-primary shrink-0" />
+                    <div class="flex-1 min-w-0">
+                      <div class="font-bold truncate">{record().display_name}</div>
+                      <div class="text-xs opacity-60">{t(`tournament.registration.status.${record().status}`)}</div>
+                    </div>
+                    <Show when={record().status === "approved"}>
+                      <span class="icon-[fluent--checkmark-circle-20-filled] text-success w-5 h-5 shrink-0" />
+                    </Show>
+                  </Card>
                   <div class="grid grid-cols-2 gap-2">
                     <Link href={`/tournaments/${id()}/results`} level="primary">
                       <span class="icon-[fluent--document-checkmark-20-regular] w-5 h-5" />

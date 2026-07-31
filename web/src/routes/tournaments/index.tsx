@@ -19,6 +19,7 @@ import Button from "@widgets/button";
 import Card from "@widgets/card";
 import Divider from "@widgets/divider";
 import Input from "@widgets/input";
+import LifecycleCountdown from "@widgets/lifecycle-countdown";
 import Picture from "@widgets/picture";
 import Popover from "@widgets/popover";
 import Select from "@widgets/select";
@@ -333,12 +334,7 @@ export default function () {
                       <Button ghost onClick={() => setSearchParams({ create: undefined })}>
                         {t("general.actions.cancel.title")}
                       </Button>
-                      <Button
-                        level="primary"
-                        loading={creating()}
-                        disabled={!name().trim()}
-                        onClick={create}
-                      >
+                      <Button level="primary" loading={creating()} disabled={!name().trim()} onClick={create}>
                         <span class="icon-[fluent--add-20-regular] w-5 h-5" />
                         <span>{t("tournament.actions.create")}</span>
                       </Button>
@@ -397,6 +393,7 @@ export default function () {
                         {selectedTournament()?.end_at?.toFormat("yyyy-MM-dd HH:mm") || "--"}
                       </p>
                     </Show>
+                    <LifecycleCountdown tournament={selectedTournament()} compact />
                   </div>
                   <Show when={selectedTournament()}>
                     {(item) => (

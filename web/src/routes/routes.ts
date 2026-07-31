@@ -6,6 +6,7 @@ export const routes = {
   children: [
     { path: "/", component: lazy(() => import("./index")) },
     { path: "/charts", component: lazy(() => import("./charts/index")) },
+    { path: "/charts/review", component: lazy(() => import("./charts/review")) },
     {
       path: "/tournaments",
       component: lazy(() => import("./tournaments/layout")),

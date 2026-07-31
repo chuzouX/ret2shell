@@ -28,6 +28,7 @@ pub enum Permission {
   User,
   Statistics,
   DevOps,
+  ChartLibrary,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Eq, Serialize, Deserialize, FromJsonQueryResult)]

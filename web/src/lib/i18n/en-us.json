@@ -602,7 +602,8 @@
       "host": "Hosting",
       "statistics": "Statistics",
       "devOps": "DevOps",
-      "user": "User management"
+      "user": "User management",
+      "chartLibrary": "Chart library"
     },
     "form": {
       "account": {
@@ -1026,6 +1027,15 @@
       "finished": "Finished",
       "archived": "Archived"
     },
+    "lifecycleCountdown": {
+      "title": "Lifecycle countdown",
+      "days": "d",
+      "until": "Until {{stage}}",
+      "waitingManual": "Waiting for an administrator to enter {{stage}}",
+      "waitingRefresh": "The scheduled time has arrived; waiting for the tournament status to update",
+      "finished": "Tournament finished; waiting for archive",
+      "archived": "Tournament archived"
+    },
     "mode": {
       "individual": "Individual",
       "team": "Team",
@@ -1052,7 +1062,21 @@
       "results": "Results",
       "individual": "Individual board",
       "team": "Team board",
-      "admin": "Manage"
+      "admin": "Manage",
+      "rules": "Rules",
+      "announcements": "Announcements"
+    },
+    "rules": {
+      "title": "Rules",
+      "empty": "The organizer has not published the rules yet."
+    },
+    "announcements": {
+      "title": "Announcements",
+      "empty": "No announcements yet.",
+      "publish": "Publish announcement",
+      "titleField": "Title",
+      "contentField": "Content",
+      "publishedAt": "Published at {{time}}"
     },
     "registration": {
       "title": "Registration",
@@ -1105,7 +1129,25 @@
       "phiraImport": "Phira import",
       "phiraId": "Phira chart ID",
       "description": "Description (Markdown)",
-      "cover": "Cover"
+      "cover": "Cover",
+      "upload": "Upload chart",
+      "uploadChart": "Upload chart to library",
+      "review": "Review charts",
+      "reviewQueue": "Review queue",
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "approve": "Approve",
+      "reject": "Reject",
+      "delete": "Delete chart",
+      "confirmDelete": "Are you sure you want to delete this chart? This action cannot be undone.",
+      "status": "Status",
+      "noPendingCharts": "No pending charts",
+      "uploadSuccess": "Chart uploaded, pending review",
+      "deleteSuccess": "Chart deleted",
+      "reviewSuccess": "Chart status updated",
+      "uploadedBy": "Uploaded by",
+      "manage": "Manage"
     },
     "teams": {
       "title": "Teams",
@@ -1153,6 +1195,10 @@
       "title": "Tournament management",
       "subtitle": "Configure operations, review results, and control publishing.",
       "settings": "Settings",
+      "content": "Content",
+      "showRulesTab": "Show rules tab",
+      "showAnnouncementsTab": "Show announcements tab",
+      "publishAnnouncement": "Publish announcement",
       "staff": "Staff",
       "rounds": "Rounds and tags",
       "charts": "Charts",
@@ -1171,12 +1217,24 @@
       "enterRound": "Enter round",
       "roundOnlyRunning": "The current round can only be changed while the tournament is running",
       "releaseTiming": "Chart release timing",
-      "releaseTimingOptions": { "immediate": "Release immediately", "onEnter": "Release on round entry", "onEnd": "Release when round ends" },
+      "releaseTimingOptions": {
+        "immediate": "Release immediately",
+        "onEnter": "Release on round entry",
+        "onEnd": "Release when round ends"
+      },
       "roundEndMode": "Round end mode",
       "roundEndAt": "Round end time",
-      "roundEndOptions": { "onNextRound": "When entering next round", "atTime": "At scheduled time", "manual": "End manually" },
+      "roundEndOptions": {
+        "onNextRound": "When entering next round",
+        "atTime": "At scheduled time",
+        "manual": "End manually"
+      },
       "releaseAudience": "Release audience",
-      "releaseAudienceOptions": { "public": "All visitors", "participants": "Participants", "staff": "Tournament staff" },
+      "releaseAudienceOptions": {
+        "public": "All visitors",
+        "participants": "Participants",
+        "staff": "Tournament staff"
+      },
       "manuallyReleased": "Released early",
       "roundEnded": "Ended",
       "endRound": "End round",

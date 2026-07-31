@@ -31,10 +31,7 @@ async fn advance_due(db: &Database) -> Result<(), sea_orm::DbErr> {
 
   for current in rows {
     let mut lifecycle = current.lifecycle;
-    loop {
-      let Some((next, schedule, at)) = next_schedule(&current, lifecycle) else {
-        break;
-      };
+    while let Some((next, schedule, at)) = next_schedule(&current, lifecycle) {
       if schedule != LifecycleScheduleMode::Scheduled || at.is_none_or(|value| value > now) {
         break;
       }

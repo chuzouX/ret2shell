@@ -602,7 +602,8 @@
       "host": "比賽舉辦",
       "statistics": "數據統計",
       "devOps": "平臺運維",
-      "user": "用戶管理"
+      "user": "用戶管理",
+      "chartLibrary": "譜面庫"
     },
     "form": {
       "account": {
@@ -1026,6 +1027,15 @@
       "finished": "Finished",
       "archived": "Archived"
     },
+    "lifecycleCountdown": {
+      "title": "生命週期倒數",
+      "days": "天",
+      "until": "距離進入 {{stage}}",
+      "waitingManual": "等待管理員手動進入{{stage}}",
+      "waitingRefresh": "階段時間已到，等待賽事狀態更新",
+      "finished": "賽事已結束，等待歸檔",
+      "archived": "賽事已歸檔"
+    },
     "mode": {
       "individual": "Individual",
       "team": "Team",
@@ -1052,7 +1062,21 @@
       "results": "Results",
       "individual": "Individual board",
       "team": "Team board",
-      "admin": "Manage"
+      "admin": "Manage",
+      "rules": "規則",
+      "announcements": "公告"
+    },
+    "rules": {
+      "title": "規則",
+      "empty": "主辦方尚未發布規則。"
+    },
+    "announcements": {
+      "title": "公告",
+      "empty": "暫無公告。",
+      "publish": "發布公告",
+      "titleField": "標題",
+      "contentField": "內容",
+      "publishedAt": "發布於 {{time}}"
     },
     "registration": {
       "title": "Registration",
@@ -1105,7 +1129,25 @@
       "phiraImport": "Phira 導入",
       "phiraId": "Phira 譜面 ID",
       "description": "簡介（Markdown）",
-      "cover": "封面"
+      "cover": "封面",
+      "upload": "上傳譜面",
+      "uploadChart": "上傳譜面到譜面庫",
+      "review": "審核譜面",
+      "reviewQueue": "審核佇列",
+      "pending": "待審核",
+      "approved": "已通過",
+      "rejected": "已拒絕",
+      "approve": "通過",
+      "reject": "拒絕",
+      "delete": "刪除譜面",
+      "confirmDelete": "確定要刪除這張譜面嗎？此操作不可撤銷。",
+      "status": "狀態",
+      "noPendingCharts": "暫無待審核譜面",
+      "uploadSuccess": "譜面已上傳，等待審核",
+      "deleteSuccess": "譜面已刪除",
+      "reviewSuccess": "譜面狀態已更新",
+      "uploadedBy": "上傳者",
+      "manage": "管理"
     },
     "teams": {
       "title": "Teams",
@@ -1153,6 +1195,10 @@
       "title": "Tournament management",
       "subtitle": "Configure operations, review results, and control publishing.",
       "settings": "Settings",
+      "content": "內容",
+      "showRulesTab": "顯示規則標籤頁",
+      "showAnnouncementsTab": "顯示公告標籤頁",
+      "publishAnnouncement": "發布公告",
       "staff": "Staff",
       "rounds": "賽段與標籤",
       "charts": "譜面",

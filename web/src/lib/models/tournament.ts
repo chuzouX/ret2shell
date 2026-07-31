@@ -10,12 +10,16 @@ export type EvidencePolicy = "required" | "optional" | "disabled";
 export type LeaderboardVisibility = "live" | "frozen" | "after_end";
 export type ChartVisibility = "public" | "after_archive" | "private";
 export type ChartSourceType = "personal" | "phigros" | "phira";
+export type ChartLibraryStatus = "pending" | "approved" | "rejected";
 
 export interface Tournament {
   id: number;
   name: string;
   brief: string;
   description?: string;
+  rules?: string;
+  rules_visible: boolean;
+  announcements_visible: boolean;
   owner_id: number;
   lifecycle: TournamentLifecycle;
   competition_mode: CompetitionMode;
@@ -41,6 +45,15 @@ export interface Tournament {
   round_control_mode: "manual_assisted";
   created_at: DateTime;
   updated_at: DateTime;
+}
+
+export interface TournamentNotification {
+  id: number;
+  tournament_id: number;
+  title: string;
+  content: string;
+  publisher_id: number;
+  published_at: DateTime;
 }
 
 export interface TournamentRound {
@@ -105,6 +118,12 @@ export interface ChartLibrary {
   source?: string;
   source_type?: ChartSourceType | string;
   tournaments?: string;
+  status?: ChartLibraryStatus;
+  created_by?: number;
+  external_id?: string | null;
+  source_id?: number;
+  created_at?: DateTime;
+  updated_at?: DateTime;
 }
 export interface TournamentChartLibrary {
   link: {

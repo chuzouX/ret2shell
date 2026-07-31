@@ -29,6 +29,7 @@ export type TreeViewProps = {
   highlightPaths?: string[];
   activeMatch?: "exact" | "partial";
   activeSearchParams?: string;
+  onNodeClick?: (node: TreeNode) => void;
 };
 
 export default function TreeView(props: TreeViewProps) {
@@ -62,6 +63,7 @@ export default function TreeView(props: TreeViewProps) {
                 !!props.activeSearchParams &&
                 searchParams[props.activeSearchParams] === node.searchValue
               }
+              onClick={() => props.onNodeClick?.(node)}
             >
               <span class={clsx("w-5 h-5", node.icon)} />
               <span class="flex-1 text-start truncate">{node.name}</span>

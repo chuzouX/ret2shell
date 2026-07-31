@@ -602,7 +602,8 @@
       "host": "大会開催",
       "statistics": "データ統計",
       "devOps": "プラットフォーム運用",
-      "user": "ユーザー管理"
+      "user": "ユーザー管理",
+      "chartLibrary": "譜面ライブラリ"
     },
     "form": {
       "account": {
@@ -1026,6 +1027,15 @@
       "finished": "Finished",
       "archived": "Archived"
     },
+    "lifecycleCountdown": {
+      "title": "ライフサイクルのカウントダウン",
+      "days": "日",
+      "until": "{{stage}} まで",
+      "waitingManual": "管理者による{{stage}}への移行を待っています",
+      "waitingRefresh": "予定時刻になりました。大会ステータスの更新を待っています",
+      "finished": "大会は終了しました。アーカイブを待っています",
+      "archived": "大会はアーカイブ済みです"
+    },
     "mode": {
       "individual": "Individual",
       "team": "Team",
@@ -1052,7 +1062,21 @@
       "results": "Results",
       "individual": "Individual board",
       "team": "Team board",
-      "admin": "Manage"
+      "admin": "Manage",
+      "rules": "ルール",
+      "announcements": "お知らせ"
+    },
+    "rules": {
+      "title": "ルール",
+      "empty": "主催者はまだルールを発表していません。"
+    },
+    "announcements": {
+      "title": "お知らせ",
+      "empty": "お知らせはまだありません。",
+      "publish": "お知らせを公開",
+      "titleField": "タイトル",
+      "contentField": "本文",
+      "publishedAt": "公開日時 {{time}}"
     },
     "registration": {
       "title": "Registration",
@@ -1105,7 +1129,25 @@
       "phiraImport": "Phiraからインポート",
       "phiraId": "Phira譜面ID",
       "description": "説明（Markdown）",
-      "cover": "カバー"
+      "cover": "カバー",
+      "upload": "譜面アップロード",
+      "uploadChart": "譜面ライブラリにアップロード",
+      "review": "譜面レビュー",
+      "reviewQueue": "レビュー待ち",
+      "pending": "審査中",
+      "approved": "承認済み",
+      "rejected": "却下",
+      "approve": "承認",
+      "reject": "却下",
+      "delete": "譜面削除",
+      "confirmDelete": "この譜面を削除してもよろしいですか？この操作は取り消せません。",
+      "status": "ステータス",
+      "noPendingCharts": "審査中の譜面はありません",
+      "uploadSuccess": "譜面がアップロードされ、審査待ちです",
+      "deleteSuccess": "譜面が削除されました",
+      "reviewSuccess": "譜面ステータスが更新されました",
+      "uploadedBy": "アップロード者",
+      "manage": "管理"
     },
     "teams": {
       "title": "Teams",
@@ -1153,6 +1195,10 @@
       "title": "Tournament management",
       "subtitle": "Configure operations, review results, and control publishing.",
       "settings": "Settings",
+      "content": "コンテンツ",
+      "showRulesTab": "ルールタブを表示",
+      "showAnnouncementsTab": "お知らせタブを表示",
+      "publishAnnouncement": "お知らせを公開",
       "staff": "Staff",
       "rounds": "ラウンドとタグ",
       "charts": "譜面",
@@ -1171,7 +1217,11 @@
       "enterRound": "ラウンドへ移行",
       "roundOnlyRunning": "大会が進行中の場合のみ現在のラウンドを変更できます",
       "releaseTiming": "譜面公開のタイミング",
-      "releaseTimingOptions": { "immediate": "すぐに公開", "onEnter": "ラウンド開始時に公開", "onEnd": "ラウンド終了時に公開" },
+      "releaseTimingOptions": {
+        "immediate": "すぐに公開",
+        "onEnter": "ラウンド開始時に公開",
+        "onEnd": "ラウンド終了時に公開"
+      },
       "roundEndMode": "ラウンド終了方式",
       "roundEndAt": "ラウンド終了時刻",
       "roundEndOptions": { "onNextRound": "次のラウンドへ移行時", "atTime": "指定時刻", "manual": "手動で終了" },

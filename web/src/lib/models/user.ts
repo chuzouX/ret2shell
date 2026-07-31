@@ -12,6 +12,7 @@ export enum Permission {
   User = 7,
   Statistics = 8,
   DevOps = 9,
+  ChartLibrary = 10,
 }
 
 export type User = {
@@ -51,6 +52,8 @@ export function permissionToString(permission: Permission): string {
       return t("account.permission.statistics");
     case Permission.DevOps:
       return t("account.permission.devOps");
+    case Permission.ChartLibrary:
+      return t("account.permission.chartLibrary");
   }
 }
 
@@ -76,6 +79,8 @@ export function permissionToIcon(permission: Permission): string {
       return "icon-[fluent--data-pie-20-filled] w-5 h-5 text-info";
     case Permission.DevOps:
       return "icon-[fluent--settings-20-filled] w-5 h-5 text-error";
+    case Permission.ChartLibrary:
+      return "icon-[fluent--music-20-filled] w-5 h-5 text-info";
   }
 }
 

@@ -52,6 +52,11 @@ pub struct PhiraImportInput {
 }
 
 #[derive(Deserialize)]
+pub struct ReviewInput {
+  status: chart_library::Status,
+}
+
+#[derive(Deserialize)]
 pub struct LinkInput {
   chart_library_id: Option<i64>,
   round_id: i64,
@@ -140,6 +145,7 @@ fn imported_chart(
     level_constant: Set(chart.difficulty),
     cover: Set(chart.illustration),
     metadata: Set(serde_json::Value::Object(metadata)),
+    status: Set(chart_library::Status::Pending),
     created_at: Set(now),
     updated_at: Set(now),
   }
@@ -161,17 +167,18 @@ pub async fn list(State(db): State<Database>) -> Result<impl IntoResponse, Respo
       LEFT JOIN tournament t ON t.id = tcl.tournament_id
         AND (tcl.visibility = 'public'
           OR (tcl.visibility = 'after_archive' AND t.lifecycle = 'archived'))
-      WHERE (
-        NOT EXISTS (
+      WHERE cl.status = 'approved' AND (
+        (NOT EXISTS (
           SELECT 1 FROM tournament_chart_library hidden_link WHERE hidden_link.chart_library_id = cl.id
+        ))
+        OR EXISTS (
+          SELECT 1
+          FROM tournament_chart_library visible_link
+          JOIN tournament visible_t ON visible_t.id = visible_link.tournament_id
+          WHERE visible_link.chart_library_id = cl.id
+            AND (visible_link.visibility = 'public'
+              OR (visible_link.visibility = 'after_archive' AND visible_t.lifecycle = 'archived'))
         )
-      ) OR EXISTS (
-        SELECT 1
-        FROM tournament_chart_library visible_link
-        JOIN tournament visible_t ON visible_t.id = visible_link.tournament_id
-        WHERE visible_link.chart_library_id = cl.id
-          AND (visible_link.visibility = 'public'
-            OR (visible_link.visibility = 'after_archive' AND visible_t.lifecycle = 'archived'))
       )
       GROUP BY cl.id, cs.name, cs.source_type
       ORDER BY cl.id ASC
@@ -186,11 +193,7 @@ pub async fn create(
   State(db): State<Database>, Extension(token): Extension<Token>,
   Json(input): Json<ChartLibraryInput>,
 ) -> Result<impl IntoResponse, ResponseError> {
-  if token.id <= 0 {
-    return Err(ResponseError::Unauthorized(
-      "authentication required".to_owned(),
-    ));
-  }
+  access::require_chart_manager(&token)?;
   let source_id = source_id(&db, input.source_type.as_deref(), input.source_id).await?;
   let now = Utc::now();
   Ok(Json(
@@ -206,6 +209,7 @@ pub async fn create(
       level_constant: Set(input.level_constant),
       cover: Set(input.cover),
       metadata: Set(input.metadata),
+      status: Set(chart_library::Status::Pending),
       created_at: Set(now),
       updated_at: Set(now),
     }
@@ -218,11 +222,7 @@ pub async fn import_phira(
   State(db): State<Database>, Extension(config): Extension<r2s_database::config::Model>,
   Extension(token): Extension<Token>, Json(input): Json<PhiraImportInput>,
 ) -> Result<impl IntoResponse, ResponseError> {
-  if token.id <= 0 {
-    return Err(ResponseError::Unauthorized(
-      "authentication required".to_owned(),
-    ));
-  }
+  access::require_chart_manager(&token)?;
   let source_id = phira_source_id(&db).await?;
   let chart = phira::get_chart(
     config.phira.as_ref().map(|config| config.base_url.as_str()),
@@ -249,15 +249,11 @@ pub async fn update(
   State(db): State<Database>, Extension(token): Extension<Token>, Path(id): Path<i64>,
   Json(input): Json<ChartLibraryPatch>,
 ) -> Result<impl IntoResponse, ResponseError> {
-  if token.id <= 0 {
-    return Err(ResponseError::Unauthorized(
-      "authentication required".to_owned(),
-    ));
-  }
   let current = chart_library::Entity::find_by_id(id)
     .one(&db.conn)
     .await?
     .ok_or_else(|| ResponseError::NotFound("chart library entry not found".to_owned()))?;
+  access::require_chart_modifier(&token, current.created_by)?;
   let mut row = current.into_active_model();
   if let Some(value) = input.title {
     row.title = Set(value);
@@ -286,15 +282,61 @@ pub async fn update(
 pub async fn delete(
   State(db): State<Database>, Extension(token): Extension<Token>, Path(id): Path<i64>,
 ) -> Result<impl IntoResponse, ResponseError> {
-  if token.id <= 0 {
-    return Err(ResponseError::Unauthorized(
-      "authentication required".to_owned(),
-    ));
-  }
+  let chart = chart_library::Entity::find_by_id(id)
+    .one(&db.conn)
+    .await?
+    .ok_or_else(|| ResponseError::NotFound("chart library entry not found".to_owned()))?;
+  access::require_chart_modifier(&token, chart.created_by)?;
   chart_library::Entity::delete_by_id(id)
     .exec(&db.conn)
     .await?;
   Ok(())
+}
+
+pub async fn list_pending(
+  State(db): State<Database>, Extension(token): Extension<Token>,
+) -> Result<impl IntoResponse, ResponseError> {
+  access::require_chart_manager(&token)?;
+  Ok(Json(
+    ChartLibraryListItem::find_by_statement(Statement::from_string(
+      DatabaseBackend::Postgres,
+      r#"
+      SELECT
+        cl.*,
+        COALESCE(cs.name, cs.source_type, 'Unknown') AS source,
+        COALESCE(cs.source_type, 'unknown') AS source_type,
+        COALESCE(string_agg(DISTINCT t.name, ', ' ORDER BY t.name), '') AS tournaments
+      FROM chart_library cl
+      LEFT JOIN chart_source cs ON cs.id = cl.source_id
+      LEFT JOIN tournament_chart_library tcl ON tcl.chart_library_id = cl.id
+      LEFT JOIN tournament t ON t.id = tcl.tournament_id
+      WHERE cl.status = 'pending'
+      GROUP BY cl.id, cs.name, cs.source_type
+      ORDER BY cl.id ASC
+      "#,
+    ))
+    .all(&db.conn)
+    .await?,
+  ))
+}
+
+pub async fn review(
+  State(db): State<Database>, Extension(token): Extension<Token>, Path(id): Path<i64>,
+  Json(input): Json<ReviewInput>,
+) -> Result<impl IntoResponse, ResponseError> {
+  access::require_chart_manager(&token)?;
+  if input.status == chart_library::Status::Pending {
+    return Err(ResponseError::BadRequest(
+      "cannot review a chart as pending".to_owned(),
+    ));
+  }
+  let current = chart_library::Entity::find_by_id(id)
+    .one(&db.conn)
+    .await?
+    .ok_or_else(|| ResponseError::NotFound("chart library entry not found".to_owned()))?;
+  let mut row = current.into_active_model();
+  row.status = Set(input.status);
+  Ok(Json(row.update(&db.conn).await?))
 }
 
 async fn ensure_link_target(
@@ -467,6 +509,7 @@ pub async fn create_link(
       level_constant: Set(input.level_constant.unwrap_or_default()),
       cover: Set(input.cover.clone()),
       metadata: Set(input.metadata.clone().unwrap_or_else(empty_object)),
+      status: Set(chart_library::Status::Approved),
       created_at: Set(now),
       updated_at: Set(now),
     }

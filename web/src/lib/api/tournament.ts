@@ -1,14 +1,16 @@
 import type {
   ChartLibrary,
+  ChartLibraryStatus,
   ChartTag,
   ChartVisibility,
-  LifecycleScheduleMode,
   LeaderboardSnapshot,
+  LifecycleScheduleMode,
   Registration,
   ScoringScript,
   Tournament,
   TournamentChart,
   TournamentChartLibrary,
+  TournamentNotification,
   TournamentResult,
   TournamentRound,
   TournamentRoundConflict,
@@ -25,7 +27,9 @@ export const getTournament = async (id: number) => await api.get(`${root}/${id}`
 type CreateTournamentInput = Partial<Tournament> & Pick<Tournament, "name">;
 export const createTournament = async (input: CreateTournamentInput) =>
   await api.post(root, { json: input }).json<Tournament>();
-export type UpdateTournamentInput = Partial<Omit<Tournament, "registration_at" | "running_at" | "review_at" | "finished_at">> & {
+export type UpdateTournamentInput = Partial<
+  Omit<Tournament, "registration_at" | "running_at" | "review_at" | "finished_at">
+> & {
   registration_at?: DateTime | null;
   running_at?: DateTime | null;
   review_at?: DateTime | null;
@@ -43,6 +47,13 @@ export const addStaff = async (id: number, user_id: number, role: TournamentStaf
   await api.post(`${root}/${id}/staff`, { json: { user_id, role } }).json<TournamentStaff>();
 export const removeStaff = async (id: number, user: number) =>
   await safeJson(api.delete(`${root}/${id}/staff/${user}`).json<null>());
+
+export const getNotifications = async (id: number) =>
+  await api.get(`${root}/${id}/notifications`).json<TournamentNotification[]>();
+export const publishNotification = async (id: number, input: { title: string; content: string }) =>
+  await api.post(`${root}/${id}/notifications`, { json: input }).json<TournamentNotification>();
+export const deleteNotification = async (id: number, notification: number) =>
+  await safeJson(api.delete(`${root}/${id}/notifications/${notification}`).json<null>());
 
 export const getRounds = async (id: number) => await api.get(`${root}/${id}/rounds`).json<TournamentRound[]>();
 export const createRound = async (id: number, input: RoundInput) =>
@@ -63,7 +74,9 @@ export interface RoundInput {
 export const updateRound = async (id: number, round: number, input: RoundInput) =>
   await api.patch(`${root}/${id}/rounds/${round}`, { json: input }).json<TournamentRound>();
 export const enterRound = async (id: number, round: number, force = false) =>
-  await api.post(`${root}/${id}/rounds/${round}/enter`, { json: { force } }).json<TournamentRound | TournamentRoundConflict>();
+  await api
+    .post(`${root}/${id}/rounds/${round}/enter`, { json: { force } })
+    .json<TournamentRound | TournamentRoundConflict>();
 export const releaseRound = async (id: number, round: number) =>
   await api.post(`${root}/${id}/rounds/${round}/release`, { json: {} }).json<TournamentRound>();
 export const withdrawRoundRelease = async (id: number, round: number) =>
@@ -112,6 +125,30 @@ export const createLibraryChart = async (input: ChartLibraryInput) =>
   await api.post(`${api_root}/charts/library`, { json: input }).json<ChartLibrary>();
 export const importPhiraChart = async (external_id: number) =>
   await api.post(`${api_root}/charts/library/import/phira`, { json: { external_id } }).json<ChartLibrary>();
+export const getPendingCharts = async () => {
+  const items = await api.get(`${api_root}/charts/library/pending`).json<ChartLibraryListItem[]>();
+  return items.map(({ chart, source, source_type, tournaments }) => ({
+    ...chart,
+    source,
+    source_type,
+    tournaments,
+  }));
+};
+export interface ChartLibraryPatch {
+  title?: string;
+  artist?: string;
+  charter?: string;
+  difficulty?: string;
+  level_constant?: number;
+  cover?: string;
+  metadata?: Record<string, unknown>;
+}
+export const updateLibraryChart = async (id: number, input: ChartLibraryPatch) =>
+  await api.patch(`${api_root}/charts/library/${id}`, { json: input }).json<ChartLibrary>();
+export const deleteLibraryChart = async (id: number) =>
+  await safeJson(api.delete(`${api_root}/charts/library/${id}`).json<null>());
+export const reviewLibraryChart = async (id: number, status: ChartLibraryStatus) =>
+  await api.patch(`${api_root}/charts/library/${id}/review`, { json: { status } }).json<ChartLibrary>();
 export const getTournamentChartLibrary = async (id: number) =>
   await api.get(`${root}/${id}/chart-library`).json<TournamentChartLibrary[]>();
 export interface TournamentChartLibraryInput {

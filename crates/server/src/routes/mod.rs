@@ -79,10 +79,15 @@ fn construct_router(state: &GlobalState) -> Router<GlobalState> {
     .nest("/account", account::router(state))
     .nest("/bulletin", bulletin::router(state))
     .route("/charts/library", get(chart_library::list).post(chart_library::create))
+    .route("/charts/library/pending", get(chart_library::list_pending))
     .route("/charts/library/import/phira", axum::routing::post(chart_library::import_phira))
     .route(
       "/charts/library/{id}",
       axum::routing::patch(chart_library::update).delete(chart_library::delete),
+    )
+    .route(
+      "/charts/library/{id}/review",
+      axum::routing::patch(chart_library::review),
     )
     .nest("/calendar", calendar::router(state))
     .nest("/event", event::router(state))

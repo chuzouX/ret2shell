@@ -602,7 +602,8 @@
       "host": "比赛举办",
       "statistics": "数据统计",
       "devOps": "平台运维",
-      "user": "用户管理"
+      "user": "用户管理",
+      "chartLibrary": "谱面库"
     },
     "form": {
       "account": {
@@ -1026,6 +1027,15 @@
       "finished": "已结束",
       "archived": "已归档"
     },
+    "lifecycleCountdown": {
+      "title": "生命周期倒计时",
+      "days": "天",
+      "until": "距离进入 {{stage}}",
+      "waitingManual": "等待管理员手动进入{{stage}}",
+      "waitingRefresh": "阶段时间已到，等待赛事状态更新",
+      "finished": "赛事已结束，等待归档",
+      "archived": "赛事已归档"
+    },
     "mode": {
       "individual": "个人",
       "team": "团队",
@@ -1052,7 +1062,21 @@
       "results": "成绩",
       "individual": "个人榜",
       "team": "团队榜",
-      "admin": "管理"
+      "admin": "管理",
+      "rules": "规则",
+      "announcements": "公告"
+    },
+    "rules": {
+      "title": "规则",
+      "empty": "主办方尚未发布规则。"
+    },
+    "announcements": {
+      "title": "公告",
+      "empty": "暂无公告。",
+      "publish": "发布公告",
+      "titleField": "标题",
+      "contentField": "内容",
+      "publishedAt": "发布于 {{time}}"
     },
     "registration": {
       "title": "报名",
@@ -1105,7 +1129,25 @@
       "phiraImport": "Phira 导入",
       "phiraId": "Phira 谱面 ID",
       "description": "简介（Markdown）",
-      "cover": "封面"
+      "cover": "封面",
+      "upload": "上传谱面",
+      "uploadChart": "上传谱面到谱面库",
+      "review": "审核谱面",
+      "reviewQueue": "审核队列",
+      "pending": "待审核",
+      "approved": "已通过",
+      "rejected": "已拒绝",
+      "approve": "通过",
+      "reject": "拒绝",
+      "delete": "删除谱面",
+      "confirmDelete": "确定要删除这张谱面吗？此操作不可撤销。",
+      "status": "状态",
+      "noPendingCharts": "暂无待审核谱面",
+      "uploadSuccess": "谱面已上传，等待审核",
+      "deleteSuccess": "谱面已删除",
+      "reviewSuccess": "谱面状态已更新",
+      "uploadedBy": "上传者",
+      "manage": "管理"
     },
     "teams": {
       "title": "队伍",
@@ -1153,6 +1195,10 @@
       "title": "赛事管理",
       "subtitle": "配置赛事运营、审核成绩并控制发布。",
       "settings": "设置",
+      "content": "内容",
+      "showRulesTab": "显示规则标签页",
+      "showAnnouncementsTab": "显示公告标签页",
+      "publishAnnouncement": "发布公告",
       "staff": "工作人员",
       "rounds": "赛段与标签",
       "charts": "谱面",

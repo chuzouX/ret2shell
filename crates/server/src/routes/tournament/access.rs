@@ -1,6 +1,7 @@
 use r2s_database::{
   tournament,
   tournament_staff::{self, StaffRole},
+  user::Permission,
 };
 use r2s_migrator::Database;
 use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
@@ -21,6 +22,35 @@ pub fn authenticated(token: &Token) -> Result<(), ResponseError> {
     ))
   } else {
     Ok(())
+  }
+}
+
+/// Allows upload/review. Requires `ChartLibrary` or `DevOps` permission.
+pub fn require_chart_manager(token: &Token) -> Result<(), ResponseError> {
+  authenticated(token)?;
+  if token.permissions.0.contains(&Permission::DevOps)
+    || token.permissions.0.contains(&Permission::ChartLibrary)
+  {
+    Ok(())
+  } else {
+    Err(ResponseError::Forbidden(
+      "chart library permission required".to_owned(),
+    ))
+  }
+}
+
+/// Allows update/delete. `DevOps` can modify any chart; `ChartLibrary` holders
+/// can only modify charts they uploaded (`created_by == token.id`).
+pub fn require_chart_modifier(token: &Token, created_by: i64) -> Result<(), ResponseError> {
+  authenticated(token)?;
+  if token.permissions.0.contains(&Permission::DevOps)
+    || (token.permissions.0.contains(&Permission::ChartLibrary) && created_by == token.id)
+  {
+    Ok(())
+  } else {
+    Err(ResponseError::Forbidden(
+      "can only modify your own charts".to_owned(),
+    ))
   }
 }
 
